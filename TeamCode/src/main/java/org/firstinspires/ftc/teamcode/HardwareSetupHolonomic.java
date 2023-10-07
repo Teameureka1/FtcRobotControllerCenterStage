@@ -4,20 +4,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 
-/**
- * Created by TeameurekaRobotics on 12/30/2016, updated 10/1/2019
- *
- * This file contains an example Hardware Setup Class for a 4 motor Holonomic drive.
- *
- * It can be customized to match the configuration of your Bot by adding/removing hardware, and then used to instantiate
- * your bot hardware configuration in all your OpModes. This will clean up OpMode code by putting all
- * the configuration here, needing only a single instantiation inside your OpModes and avoid having to change configuration
- * in all OpModes when hardware is changed on robot.
- *
- * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
- *
- */
-
 public class HardwareSetupHolonomic {
 
    /* Declare Public OpMode members.

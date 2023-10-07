@@ -1,9 +1,4 @@
 package org.firstinspires.ftc.teamcode;
-/** This is the code used for the field-centric driving tutorial
- This is by no means a perfect code
- There are a number of improvements that can be made
- So, feel free to add onto this and make it better
- */
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -83,8 +78,9 @@ public class FieldCentric extends LinearOpMode
     }
 
 
-/************** A couple helper methods used above*********/
-    /**********************************************************/
+/************** A couple helper methods used above*******
+ */
+
     void composeTelemetry() {
         telemetry.addAction(new Runnable() {
             @Override
