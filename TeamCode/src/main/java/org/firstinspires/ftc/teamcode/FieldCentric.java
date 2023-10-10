@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -12,7 +13,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 /**
  * feel free to change the name or group of your class to better fit your robot
  */
+
 @TeleOp(name = "FieldCentricControl", group = "practice")
+@Disabled
 public class FieldCentric extends LinearOpMode
 {
 
@@ -54,7 +57,7 @@ public class FieldCentric extends LinearOpMode
             double rx = gamepad1.right_stick_x;
 
             // Read inverse IMU heading, as the IMU heading is CW positive
-            double botHeading = -imu.getAngularOrientation().firstAngle;
+            double botHeading = -imu.getAngularOrientation().thirdAngle;
 
             double rotX = x * Math.cos(botHeading) - y * Math.sin(botHeading);
             double rotY = x * Math.sin(botHeading) + y * Math.cos(botHeading);

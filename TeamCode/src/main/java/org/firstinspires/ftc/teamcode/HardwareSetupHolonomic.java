@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.motors.NeveRest40Gearmotor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 
@@ -17,10 +19,13 @@ public class HardwareSetupHolonomic {
     public DcMotor motorBackLeft = null;
 
     //Accessories motors
-    public DcMotor armMotor = null;
+    public DcMotor motorBottomArm = null;
+
+    //public  armMotorTop = null;
 
     //servos
         //Add servos here
+
 
     //sensors
         //Add sensors here
@@ -57,19 +62,23 @@ public class HardwareSetupHolonomic {
         motorBackLeft = hwMap.get(DcMotor.class,"motorBL");
         motorBackRight = hwMap.get(DcMotor.class,"motorBR");
 
-        //armMotor = hwMap.dcMotor.get ("armMotor");
+        motorBottomArm = hwMap.get(DcMotor.class, "armMotor");
+
+
 
         // Set the drive motor directions:
         motorFrontRight.setDirection(DcMotor.Direction.REVERSE);
-        //motorFrontRight.setDirection(DcMotor.Direction.REVERSE);
+
         motorFrontLeft.setDirection(DcMotor.Direction.REVERSE);
-        //motorBackRight.setDirection(DcMotor.Direction.REVERSE);
 
         //Keep the motors from moving during initialize.
         motorFrontLeft.setPower(MOTOR_STOP);
         motorFrontRight.setPower(MOTOR_STOP);
         motorBackLeft.setPower(MOTOR_STOP);
         motorBackRight.setPower(MOTOR_STOP);
+        motorBottomArm.setPower(MOTOR_STOP);
+
+
 
         /************************************************************
          * SERVO SECTION
