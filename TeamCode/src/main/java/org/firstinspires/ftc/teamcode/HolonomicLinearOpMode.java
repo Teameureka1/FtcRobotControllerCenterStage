@@ -60,6 +60,7 @@ public class HolonomicLinearOpMode extends LinearOpMode
             float gamepad1LeftY = -gamepad1.left_stick_y;   // drives spin left/right
             float gamepad1LeftX = gamepad1.left_stick_x;    // strafe direction (side to side)
             float gamepad1RightX = gamepad1.right_stick_x;  //drives forwards and backwards
+            float gamepad2RightY = -gamepad2.left_stick_y;  //Controls the bottom arm motor
 
             // holonomic formulas
 
@@ -73,6 +74,7 @@ public class HolonomicLinearOpMode extends LinearOpMode
             float BackLeft = -gamepad1LeftY + gamepad1LeftX - gamepad1RightX; 
             //float BackLeft = -gamepad1LeftY + gamepad1LeftX - gamepad1RightX;
 
+
             // clip the right/left values so that the values never exceed +/- 1
             FrontRight = Range.clip(FrontRight, -1, 1);
             FrontLeft = Range.clip(FrontLeft, -1, 1);
@@ -85,6 +87,7 @@ public class HolonomicLinearOpMode extends LinearOpMode
             robot.motorBackLeft.setPower(BackLeft);
             robot.motorBackRight.setPower(BackRight);
 
+            robot.motorBottomArm.setPower(gamepad2RightY);
             /*
              * Display Telemetry for debugging
              */
