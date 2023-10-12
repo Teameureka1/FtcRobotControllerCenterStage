@@ -15,15 +15,12 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.ExampleCode.ExampleHardwareSetupHolonomic;
-
-@Autonomous(name="AutoDrive", group="Red")
+@Autonomous(name="BlueBack", group="Blue")
 //@Disabled
-public class AutoDriveByTime extends LinearOpMode {
+public class BlueAutoBack extends LinearOpMode {
 
     private ElapsedTime runtime = new ElapsedTime();
 
@@ -34,7 +31,7 @@ public class AutoDriveByTime extends LinearOpMode {
     /**
      * Constructor
      */
-    public AutoDriveByTime() {
+    public BlueAutoBack() {
     }
 
     @Override
@@ -52,7 +49,7 @@ public class AutoDriveByTime extends LinearOpMode {
         /************************
          * Autonomous Code Below://
          *************************/
-        StrafeRight(DRIVE_POWER, 2000);
+        StrafeLeft(DRIVE_POWER, 2000);
 
         StopDriving();
     }
