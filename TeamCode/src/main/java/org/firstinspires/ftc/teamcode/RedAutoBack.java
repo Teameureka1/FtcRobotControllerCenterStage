@@ -63,7 +63,7 @@ public class RedAutoBack extends LinearOpMode {
 
     /** Below: Basic Drive Methods used in Autonomous code...**/
     //set Drive Power variable
-    double DRIVE_POWER = 1.0;
+    double DRIVE_POWER = 0.5;
 
     public void DriveForward(double power)
     {

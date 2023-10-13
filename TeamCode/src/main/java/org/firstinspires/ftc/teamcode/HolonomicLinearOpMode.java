@@ -43,7 +43,7 @@ public class HolonomicLinearOpMode extends LinearOpMode
     double FrontRight = 0;
     double BackLeft = 0;
     double BackRight = 0;
-    boolean deboucne = false;
+
     int motor = 0;
 
     @Override
@@ -69,6 +69,8 @@ public class HolonomicLinearOpMode extends LinearOpMode
             double gamepad1RightX = gamepad1.right_stick_x;  //drives forwards and backwards
             double gamepad2RightY = -gamepad2.left_stick_y;  //Controls the bottom arm motor
 
+            double gamePad2Trigger = gamepad2.right_trigger;
+            boolean gamePad2Button = gamepad2.right_bumper;
 
             // holonomic formulas
             FrontLeft = gamepad1LeftY + gamepad1LeftX + gamepad1RightX;
@@ -84,7 +86,18 @@ public class HolonomicLinearOpMode extends LinearOpMode
             robot.motorBackLeft.setPower(BackLeft);
             robot.motorBackRight.setPower(BackRight);
 
-            robot.motorBottomArm.setPower(gamepad2RightY);
+            robot.motorBottomArm.setPower(-gamepad2RightY);
+
+            //if button pressed the arm will retract, else it will extend.
+            if(gamePad2Button)//Add sensor
+            {
+                robot.motorTopArm.setPower(-gamePad2Trigger);
+            }
+            else
+            {
+                robot.motorTopArm.setPower(gamePad2Trigger);
+
+            }
             /*
              * Display Telemetry for debugging
              */

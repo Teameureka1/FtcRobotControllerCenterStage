@@ -50,7 +50,7 @@ public class RedAutoFront extends LinearOpMode {
          * Autonomous Code Below://
          *************************/
         DriveForwardTime(DRIVE_POWER, 500);
-        StrafeLeft(DRIVE_POWER, 4000);
+        StrafeLeft(DRIVE_POWER, 3000);
 
         StopDriving();
     }
@@ -64,7 +64,7 @@ public class RedAutoFront extends LinearOpMode {
 
     /** Below: Basic Drive Methods used in Autonomous code...**/
     //set Drive Power variable
-    double DRIVE_POWER = 1.0;
+    double DRIVE_POWER = 0.5;
 
     public void DriveForward(double power)
     {

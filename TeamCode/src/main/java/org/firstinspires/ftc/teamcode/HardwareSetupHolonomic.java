@@ -20,6 +20,7 @@ public class HardwareSetupHolonomic {
 
     //Accessories motors
     public DcMotor motorBottomArm = null;
+    public DcMotor motorTopArm = null;
 
     //public  armMotorTop = null;
 
@@ -63,7 +64,7 @@ public class HardwareSetupHolonomic {
         motorBackRight = hwMap.get(DcMotor.class,"motorBR");
 
         motorBottomArm = hwMap.get(DcMotor.class, "armMotor");
-
+        motorTopArm = hwMap.get(DcMotor.class, "topArm");
 
 
         // Set the drive motor directions:
@@ -77,7 +78,9 @@ public class HardwareSetupHolonomic {
         motorFrontRight.setPower(MOTOR_STOP);
         motorBackLeft.setPower(MOTOR_STOP);
         motorBackRight.setPower(MOTOR_STOP);
+
         motorBottomArm.setPower(MOTOR_STOP);
+        motorTopArm.setPower(MOTOR_STOP);
 
 
 

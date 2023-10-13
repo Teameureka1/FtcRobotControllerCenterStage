@@ -49,7 +49,7 @@ public class BlueAutoBack extends LinearOpMode {
         /************************
          * Autonomous Code Below://
          *************************/
-        StrafeLeft(DRIVE_POWER, 2000);
+        StrafeLeft(DRIVE_POWER, 1000);
 
         StopDriving();
     }
@@ -63,7 +63,7 @@ public class BlueAutoBack extends LinearOpMode {
 
     /** Below: Basic Drive Methods used in Autonomous code...**/
     //set Drive Power variable
-    double DRIVE_POWER = 1.0;
+    double DRIVE_POWER = 0.5;
 
     public void DriveForward(double power)
     {
