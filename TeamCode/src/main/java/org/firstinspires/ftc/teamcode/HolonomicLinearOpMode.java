@@ -39,6 +39,13 @@ public class HolonomicLinearOpMode extends LinearOpMode
     //  DON'T FORGET TO RENAME HARDWARE CONFIG FILE NAME HERE!!!!!!
     HardwareSetupHolonomic robot = new HardwareSetupHolonomic();
 
+    double FrontLeft = 0;
+    double FrontRight = 0;
+    double BackLeft = 0;
+    double BackRight = 0;
+    boolean deboucne = false;
+    int motor = 0;
+
     @Override
     public void runOpMode() throws InterruptedException
     {
@@ -57,29 +64,19 @@ public class HolonomicLinearOpMode extends LinearOpMode
         {
             // left stick: X controls Strafe & Y controls Spin Direction
             // right stick: Y controls drive Forward/Backward
-            float gamepad1LeftY = -gamepad1.left_stick_y;   // drives spin left/right
-            float gamepad1LeftX = gamepad1.left_stick_x;    // strafe direction (side to side)
-            float gamepad1RightX = gamepad1.right_stick_x;  //drives forwards and backwards
-            float gamepad2RightY = -gamepad2.left_stick_y;  //Controls the bottom arm motor
+            double gamepad1LeftY = -gamepad1.left_stick_y;   // drives spin left/right
+            double gamepad1LeftX = gamepad1.left_stick_x;    // strafe direction (side to side)
+            double gamepad1RightX = gamepad1.right_stick_x;  //drives forwards and backwards
+            double gamepad2RightY = -gamepad2.left_stick_y;  //Controls the bottom arm motor
+
 
             // holonomic formulas
-
-            //float FrontLeft = -gamepad1RightY - gamepad1LeftX - gamepad1LeftY;
-            float FrontLeft = -gamepad1LeftY - gamepad1LeftX - gamepad1RightX;
-            //float FrontRight = gamepad1RightY - gamepad1LeftX - gamepad1LeftY;
-            float FrontRight = gamepad1LeftY - gamepad1LeftX - gamepad1RightX;
-            //float BackRight = gamepad1RightY + gamepad1LeftX - gamepad1LeftY;
-            float BackRight = gamepad1LeftY + gamepad1LeftX - gamepad1RightX;
-            //float BackLeft = -gamepad1RightY + gamepad1LeftX - gamepad1LeftY;
-            float BackLeft = -gamepad1LeftY + gamepad1LeftX - gamepad1RightX; 
-            //float BackLeft = -gamepad1LeftY + gamepad1LeftX - gamepad1RightX;
+            FrontLeft = gamepad1LeftY + gamepad1LeftX + gamepad1RightX;
+            FrontRight = gamepad1LeftY - gamepad1LeftX - gamepad1RightX;
+            BackLeft = gamepad1LeftY - gamepad1LeftX + gamepad1RightX;
+            BackRight = gamepad1LeftY + gamepad1LeftX - gamepad1RightX;
 
 
-            // clip the right/left values so that the values never exceed +/- 1
-            FrontRight = Range.clip(FrontRight, -1, 1);
-            FrontLeft = Range.clip(FrontLeft, -1, 1);
-            BackLeft = Range.clip(BackLeft, -1, 1);
-            BackRight = Range.clip(BackRight, -1, 1);
 
             // write the clipped values from the formula to the motors
             robot.motorFrontRight.setPower(FrontRight);
