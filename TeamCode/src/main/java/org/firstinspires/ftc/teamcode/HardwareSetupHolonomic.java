@@ -1,9 +1,11 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.motors.NeveRest40Gearmotor;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 
 
 public class HardwareSetupHolonomic {
@@ -27,6 +29,7 @@ public class HardwareSetupHolonomic {
     //servos
         //Add servos here
 
+    public Servo servoHandR = null;
 
     //sensors
         //Add sensors here
@@ -36,12 +39,15 @@ public class HardwareSetupHolonomic {
 
     //Create and set default servo positions & MOTOR STOP variables.
     //Possible servo values: 0.0 - 1.0  For CRServo 0.5=stop greater or less than will spin in that direction
-    //final static double CLOSED = 0.2;
-    //final static double OPEN = 0.8;
+    final static double CLOSED = 0.2;
+    final static double OPEN = 0.8;
     final static double MOTOR_STOP = 0.0; // sets motor power to zero
 
     //CR servo variables
         //Add servo variable here
+    double SpinLeft = 0.1;
+    double SpinRight = 0.6;
+    double STOP = 0.5;
 
    /* Constructor   // this is not required as JAVA does it for you, but useful if you want to add
     * function to this method when called in OpModes.
@@ -89,6 +95,9 @@ public class HardwareSetupHolonomic {
          ************************************************************/
 
             //Add servo configuration
+        Servo servoHandR = hwMap.servo.get("servoHandR");
+
+        servoHandR.setPosition(OPEN);
 
         /************************************************************
          * SENSOR SECTION**************************************************

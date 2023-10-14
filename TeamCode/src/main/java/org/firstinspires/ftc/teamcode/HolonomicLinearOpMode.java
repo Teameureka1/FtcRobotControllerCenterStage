@@ -70,6 +70,7 @@ public class HolonomicLinearOpMode extends LinearOpMode
             double gamepad2RightY = -gamepad2.left_stick_y;  //Controls the bottom arm motor
 
             double gamePad2Trigger = gamepad2.right_trigger;
+
             boolean gamePad2Button = gamepad2.right_bumper;
 
             // holonomic formulas
@@ -87,6 +88,15 @@ public class HolonomicLinearOpMode extends LinearOpMode
             robot.motorBackRight.setPower(BackRight);
 
             robot.motorBottomArm.setPower(-gamepad2RightY);
+
+            if(gamepad2.a)
+            {
+                robot.servoHandR.setPosition(robot.CLOSED);
+            }
+            else if (gamepad2.b)
+            {
+                robot.servoHandR.setPosition(robot.OPEN);
+            }
 
             //if button pressed the arm will retract, else it will extend.
             if(gamePad2Button)//Add sensor
