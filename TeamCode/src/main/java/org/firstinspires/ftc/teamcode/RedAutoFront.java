@@ -49,8 +49,9 @@ public class RedAutoFront extends LinearOpMode {
         /************************
          * Autonomous Code Below://
          *************************/
-        DriveForwardTime(DRIVE_POWER, 500);
-        StrafeLeft(DRIVE_POWER, 3000);
+        DriveForwardTime(DRIVE_POWER, 800);
+        StopDriving();
+        StrafeRight(DRIVE_POWER, 3500);
 
         StopDriving();
     }

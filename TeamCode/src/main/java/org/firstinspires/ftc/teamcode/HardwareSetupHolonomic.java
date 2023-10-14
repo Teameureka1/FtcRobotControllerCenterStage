@@ -91,7 +91,7 @@ public class HardwareSetupHolonomic {
             //Add servo configuration
 
         /************************************************************
-         * SENSOR SECTION
+         * SENSOR SECTION**************************************************
          ************************************************************/
             //Add sensors
 

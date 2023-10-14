@@ -49,8 +49,9 @@ public class BlueAutoFront extends LinearOpMode {
         /************************
          * Autonomous Code Below://
          *************************/
-        DriveForwardTime(DRIVE_POWER, 500);
-        StrafeRight(DRIVE_POWER, 3000);
+        DriveForwardTime(DRIVE_POWER, 800);
+        StopDriving();
+        StrafeLeft(DRIVE_POWER, 3500);
 
         StopDriving();
     }
