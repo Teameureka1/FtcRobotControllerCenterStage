@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 
 
 public class HardwareSetupHolonomic {
@@ -29,13 +30,15 @@ public class HardwareSetupHolonomic {
     //servos
         //Add servos here
 
-    public Servo servoHandR;
+    public Servo servoHandR = null;
 
     //sensors
         //Add sensors here
-
+    public TouchSensor MagIn = null;
+    public TouchSensor MagOut = null;
     /* local OpMode members. */
     HardwareMap hwMap        = null;
+
 
     //Create and set default servo positions & MOTOR STOP variables.
     //Possible servo values: 0.0 - 1.0  For CRServo 0.5=stop greater or less than will spin in that direction
@@ -95,7 +98,7 @@ public class HardwareSetupHolonomic {
          ************************************************************/
 
             //Add servo configuration
-        Servo servoHandR = hwMap.servo.get("servoHandR");
+        servoHandR = hwMap.servo.get("servoHandR");
 
         servoHandR.setPosition(OPEN);
 
@@ -103,6 +106,8 @@ public class HardwareSetupHolonomic {
          * SENSOR SECTION**************************************************
          ************************************************************/
             //Add sensors
+        MagIn = hwMap.touchSensor.get("MagIn");
+        MagOut = hwMap.touchSensor.get("MagOut");
 
 
    }

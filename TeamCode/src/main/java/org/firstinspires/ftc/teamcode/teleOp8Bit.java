@@ -3,9 +3,6 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
-
-import org.firstinspires.ftc.teamcode.HardwareSetupHolonomic;
 
 
 /**
@@ -28,11 +25,10 @@ import org.firstinspires.ftc.teamcode.HardwareSetupHolonomic;
         X           X
           X       X
 */
-@TeleOp(name = "practice drive", group = "practice")
+@TeleOp(name = "8Bit drive", group = "comp")
 //@Disabled
-public class HolonomicLinearOpMode extends LinearOpMode
+public class teleOp8Bit extends LinearOpMode
 {
-
     // create timer
     private ElapsedTime runtime = new ElapsedTime();
 
@@ -91,23 +87,60 @@ public class HolonomicLinearOpMode extends LinearOpMode
 
             if(gamepad2.a)
             {
-                robot.servoHandR.setPosition(0.2);
+                robot.servoHandR.setPosition(robot.OPEN);
             }
             else if (gamepad2.b)
             {
-                robot.servoHandR.setPosition(0.8);
+                robot.servoHandR.setPosition(robot.CLOSED);
             }
 
-            //if button pressed the arm will retract, else it will extend.
-            if(gamePad2Button)//Add sensor
+
+            if(!robot.MagIn.isPressed() && !robot.MagOut.isPressed())
             {
-                robot.motorTopArm.setPower(-gamePad2Trigger);
+                robot.motorTopArm.setPower(-gamepad2.left_stick_y);
             }
             else
             {
-                robot.motorTopArm.setPower(gamePad2Trigger);
+                if (robot.MagIn.isPressed() == true)
+                {
+                    telemetry.addData("DETECTED", "MagIN - reverse direction");
+                    if(gamepad2.left_stick_y > 0)
+                    {
+                        telemetry.addData("Joystick Y", gamepad2.left_stick_y);
+                        robot.motorTopArm.setPower(-gamepad2.left_stick_y);
 
+                    }
+                    else
+                    {
+                        robot.motorTopArm.setPower(0);
+                    }
+                }
+                else if (robot.MagOut.isPressed() == true)
+                {
+                    telemetry.addData("DETECTED", "magOut - reverse direction");
+                    if (gamepad2.left_stick_y < 0)
+                    {
+                        telemetry.addData("Motor", gamepad2.left_stick_y);
+                        robot.motorTopArm.setPower(-gamepad2.left_stick_y);
+                    }
+                    else
+                    {
+                        robot.motorTopArm.setPower(0);
+
+                    }
+
+                }
             }
+            //if button pressed the arm will retract, else it will extend.
+            //if(gamePad2Button)//Add sensor
+            //{
+            //    robot.motorTopArm.setPower(-gamePad2Trigger);
+            //}
+            //else
+            //{
+            //    robot.motorTopArm.setPower(gamePad2Trigger);
+            //}
+
             /*
              * Display Telemetry for debugging
              */
