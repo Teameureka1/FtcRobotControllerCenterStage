@@ -91,11 +91,11 @@ public class HolonomicLinearOpMode extends LinearOpMode
 
             if(gamepad2.a)
             {
-                robot.servoHandR.setPosition(robot.CLOSED);
+                robot.servoHandR.setPosition(0.2);
             }
             else if (gamepad2.b)
             {
-                robot.servoHandR.setPosition(robot.OPEN);
+                robot.servoHandR.setPosition(0.8);
             }
 
             //if button pressed the arm will retract, else it will extend.

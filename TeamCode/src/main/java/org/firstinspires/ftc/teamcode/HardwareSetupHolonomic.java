@@ -29,7 +29,7 @@ public class HardwareSetupHolonomic {
     //servos
         //Add servos here
 
-    public Servo servoHandR = null;
+    public Servo servoHandR;
 
     //sensors
         //Add sensors here
@@ -103,6 +103,7 @@ public class HardwareSetupHolonomic {
          * SENSOR SECTION**************************************************
          ************************************************************/
             //Add sensors
+
 
    }
 
