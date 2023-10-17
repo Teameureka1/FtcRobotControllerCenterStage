@@ -51,18 +51,28 @@ public class teleOp8Bit extends LinearOpMode
          * configured your robot and configuration file.
          */
         robot.init(hardwareMap);  //Initialize hardware from the Hardware Setup Class
-
+        telemetry.addData("Status", "Initialized - Waiting for Start");
+        telemetry.addData("armPostion: ", +robot.motorBottomArm.getCurrentPosition());
+        telemetry.addData("HoldPostion: ", +robot.armHold);
+        telemetry.update();
 
         waitForStart();
         runtime.reset(); // starts timer once start button is pressed
+        while(!opModeIsActive())
+        {
+            robot.armHold = robot.motorBottomArm.getCurrentPosition();
 
+
+            waitForStart();
+
+        }
         while(opModeIsActive())
         {
             // left stick: X controls Strafe & Y controls Spin Direction
             // right stick: Y controls drive Forward/Backward
             double gamepad1LeftY = -gamepad1.left_stick_y;   // drives spin left/right
             double gamepad1LeftX = gamepad1.left_stick_x;    // strafe direction (side to side)
-            double gamepad1RightX = gamepad1.right_stick_x;  //drives forwards and backwards
+            double gamepad1RightX = -gamepad1.right_stick_x;  //drives forwards and backwards
             double gamepad2RightY = -gamepad2.right_stick_y;  //Controls the bottom arm motor
 
             double gamePad2Trigger = gamepad2.right_trigger;
@@ -83,8 +93,21 @@ public class teleOp8Bit extends LinearOpMode
             robot.motorBackLeft.setPower(BackLeft);
             robot.motorBackRight.setPower(BackRight);
 
-            robot.motorBottomArm.setPower(-gamepad2.left_stick_y);
+            robot.motorBottomArm.setPower(gamepad2.left_stick_y);
 
+            if (gamepad2.left_stick_y != 0) // && robot.armMotor.getCurrentPositionJ() > 0 && robot.armMotor.getCurrentPosition() < 100 //add this to check encoder within limits
+            {
+                robot.motorBottomArm.setPower(gamepad2.left_stick_y); // let stick drive UP (note this is positive value on joystick)
+                robot.armHold = robot.motorBottomArm.getCurrentPosition(); // while the lift is moving, continuously reset the arm holding position
+            }
+
+            else //joystick is released - try to maintain the current position
+            {
+                robot.motorBottomArm.setPower((robot.armHold - robot.motorBottomArm.getCurrentPosition()) / robot.slopeVal);   // Note depending on encoder/motor values it may be necessary to reverse sign for motor power by making neg -slopeVal
+                // the difference between hold and current positions will
+                // attempt to drive the motor back to be equal with holdPosition.
+                // By adjusting slopeVal you can achieved perfect hold power
+            }
             //the claw servos open a and close b.
             if(gamepad2.a)
             {
@@ -96,6 +119,7 @@ public class teleOp8Bit extends LinearOpMode
                 robot.servoHandR.setPosition(robot.CLOSED);
                 robot.servoHandL.setPosition(robot.CLOSED);
             }
+
 
 
             if(!robot.MagIn.isPressed() && !robot.MagOut.isPressed())

@@ -26,6 +26,8 @@ public class HardwareSetupHolonomic {
     public DcMotor motorTopArm = null;
 
     //public  armMotorTop = null;
+    public int armHold;
+    public double  slopeVal         = 2000.0;
 
     //servos
         //Add servos here
@@ -64,6 +66,7 @@ public class HardwareSetupHolonomic {
         // Save reference to Hardware map
         hwMap = ahwMap;
 
+
         /************************************************************
          * MOTOR SECTION
          ************************************************************/
@@ -82,6 +85,8 @@ public class HardwareSetupHolonomic {
         motorFrontRight.setDirection(DcMotor.Direction.FORWARD);
         motorBackLeft.setDirection(DcMotor.Direction.FORWARD);
         motorBackRight.setDirection(DcMotor.Direction.FORWARD);
+
+        motorBottomArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         //Keep the motors from moving during initialize.
         motorFrontLeft.setPower(MOTOR_STOP);
