@@ -85,7 +85,7 @@ public class teleOp8Bit extends LinearOpMode
 
             robot.motorBottomArm.setPower(-gamepad2RightY);
 
-            //the claw servos open a and close b. 
+            //the claw servos open a and close b.
             if(gamepad2.a)
             {
                 robot.servoHandR.setPosition(robot.OPEN);
