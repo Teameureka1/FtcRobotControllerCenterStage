@@ -40,7 +40,7 @@ public class teleOp8Bit extends LinearOpMode
     double BackLeft = 0;
     double BackRight = 0;
 
-    int motor = 0;
+
 
     @Override
     public void runOpMode() throws InterruptedException
@@ -83,7 +83,7 @@ public class teleOp8Bit extends LinearOpMode
             robot.motorBackLeft.setPower(BackLeft);
             robot.motorBackRight.setPower(BackRight);
 
-            robot.motorBottomArm.setPower(-gamepad2RightY);
+            robot.motorBottomArm.setPower(-gamepad2.left_stick_y);
 
             //the claw servos open a and close b.
             if(gamepad2.a)
@@ -100,17 +100,17 @@ public class teleOp8Bit extends LinearOpMode
 
             if(!robot.MagIn.isPressed() && !robot.MagOut.isPressed())
             {
-                robot.motorTopArm.setPower(-gamepad2.left_stick_y);
+                robot.motorTopArm.setPower(-gamepad2.right_stick_y);
             }
             else
             {
                 if (robot.MagIn.isPressed() == true)
                 {
                     telemetry.addData("DETECTED", "MagIN - reverse direction");
-                    if(gamepad2.left_stick_y > 0)
+                    if(gamepad2.right_stick_y > 0)
                     {
-                        telemetry.addData("Joystick Y", gamepad2.left_stick_y);
-                        robot.motorTopArm.setPower(-gamepad2.left_stick_y);
+                        telemetry.addData("Joystick Y", gamepad2.right_stick_y);
+                        robot.motorTopArm.setPower(-gamepad2.right_stick_y);
 
                     }
                     else
@@ -121,10 +121,10 @@ public class teleOp8Bit extends LinearOpMode
                 else if (robot.MagOut.isPressed() == true)
                 {
                     telemetry.addData("DETECTED", "magOut - reverse direction");
-                    if (gamepad2.left_stick_y < 0)
+                    if (gamepad2.right_stick_y < 0)
                     {
-                        telemetry.addData("Motor", gamepad2.left_stick_y);
-                        robot.motorTopArm.setPower(-gamepad2.left_stick_y);
+                        telemetry.addData("Motor", gamepad2.right_stick_y);
+                        robot.motorTopArm.setPower(-gamepad2.right_stick_y);
                     }
                     else
                     {
@@ -134,15 +134,6 @@ public class teleOp8Bit extends LinearOpMode
 
                 }
             }
-            //if button pressed the arm will retract, else it will extend.
-            //if(gamePad2Button)//Add sensor
-            //{
-            //    robot.motorTopArm.setPower(-gamePad2Trigger);
-            //}
-            //else
-            //{
-            //    robot.motorTopArm.setPower(gamePad2Trigger);
-            //}
 
             /*
              * Display Telemetry for debugging
