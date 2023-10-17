@@ -63,7 +63,7 @@ public class teleOp8Bit extends LinearOpMode
             double gamepad1LeftY = -gamepad1.left_stick_y;   // drives spin left/right
             double gamepad1LeftX = gamepad1.left_stick_x;    // strafe direction (side to side)
             double gamepad1RightX = gamepad1.right_stick_x;  //drives forwards and backwards
-            double gamepad2RightY = -gamepad2.left_stick_y;  //Controls the bottom arm motor
+            double gamepad2RightY = -gamepad2.right_stick_y;  //Controls the bottom arm motor
 
             double gamePad2Trigger = gamepad2.right_trigger;
 
@@ -85,13 +85,16 @@ public class teleOp8Bit extends LinearOpMode
 
             robot.motorBottomArm.setPower(-gamepad2RightY);
 
+            //the claw servos open a and close b. 
             if(gamepad2.a)
             {
                 robot.servoHandR.setPosition(robot.OPEN);
+                robot.servoHandL.setPosition(robot.OPEN);
             }
             else if (gamepad2.b)
             {
                 robot.servoHandR.setPosition(robot.CLOSED);
+                robot.servoHandL.setPosition(robot.CLOSED);
             }
 
 
