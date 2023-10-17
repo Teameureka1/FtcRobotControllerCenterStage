@@ -35,7 +35,8 @@ public class BlueAutoBack extends LinearOpMode {
     }
 
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() throws InterruptedException
+    {
         robot.init(hardwareMap);  //Initialize hardware from the Hardware Setup Class
 
         //adds feedback telemetry to DS
@@ -50,8 +51,8 @@ public class BlueAutoBack extends LinearOpMode {
          * Autonomous Code Below://
          *************************/
         StrafeLeft(DRIVE_POWER, 1000);
-
         StopDriving();
+        OpenClaw();
     }
 
 /* currently no Servo configured on bot
@@ -121,18 +122,20 @@ public class BlueAutoBack extends LinearOpMode {
     }
 
 
-/*** Currently no Servo configured in Holonomic Hardware setup
 
-    public void RaiseArm()
+
+    public void OpenClaw()
     {
-        robot.armServo.setPosition(.8); //note: uses servo instead of motor.
+        robot.servoHandR.setPosition(robot.OPEN); //note: uses servo instead of motor.
+        robot.servoHandL.setPosition(robot.OPEN);
     }
 
-    public void LowerArm()
+    public void CloseClaw()
     {
-        robot.armServo.setPosition(.2);
+        robot.servoHandR.setPosition(robot.CLOSED);
+        robot.servoHandL.setPosition(robot.CLOSED);
     }
-*/
 
 
-}//TestAutoDriveByTime
+
+}
