@@ -52,8 +52,8 @@ public class teleOp8Bit extends LinearOpMode
          */
         robot.init(hardwareMap);  //Initialize hardware from the Hardware Setup Class
         telemetry.addData("Status", "Initialized - Waiting for Start");
-        telemetry.addData("armPostion: ", +robot.motorBottomArm.getCurrentPosition());
-        telemetry.addData("HoldPostion: ", +robot.armHold);
+        telemetry.addData("armPosition: ", +robot.motorBottomArm.getCurrentPosition());
+        telemetry.addData("HoldPosition: ", +robot.armHold);
         telemetry.update();
 
         waitForStart();
@@ -75,9 +75,7 @@ public class teleOp8Bit extends LinearOpMode
             double gamepad1RightX = -gamepad1.right_stick_x;  //drives forwards and backwards
             double gamepad2RightY = -gamepad2.right_stick_y;  //Controls the bottom arm motor
 
-            double gamePad2Trigger = gamepad2.right_trigger;
 
-            boolean gamePad2Button = gamepad2.right_bumper;
 
             // holonomic formulas
             FrontLeft = gamepad1LeftY + gamepad1LeftX + gamepad1RightX;
@@ -93,11 +91,11 @@ public class teleOp8Bit extends LinearOpMode
             robot.motorBackLeft.setPower(BackLeft);
             robot.motorBackRight.setPower(BackRight);
 
-            robot.motorBottomArm.setPower(gamepad2.left_stick_y);
+            robot.motorBottomArm.setPower(-gamepad2.left_stick_y);
 
             if (gamepad2.left_stick_y != 0) // && robot.armMotor.getCurrentPositionJ() > 0 && robot.armMotor.getCurrentPosition() < 100 //add this to check encoder within limits
             {
-                robot.motorBottomArm.setPower(gamepad2.left_stick_y); // let stick drive UP (note this is positive value on joystick)
+                robot.motorBottomArm.setPower(-gamepad2.left_stick_y); // let stick drive UP (note this is positive value on joystick)
                 robot.armHold = robot.motorBottomArm.getCurrentPosition(); // while the lift is moving, continuously reset the arm holding position
             }
 
