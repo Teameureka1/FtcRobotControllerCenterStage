@@ -46,6 +46,7 @@ public class RedAutoFront extends LinearOpMode {
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
+        robot.motorBottomArm.setPower((robot.armHold - robot.motorBottomArm.getCurrentPosition()) / robot.slopeVal);
 
         /************************
          * Autonomous Code Below://
@@ -54,7 +55,7 @@ public class RedAutoFront extends LinearOpMode {
         StopDriving();
         StrafeRight(DRIVE_POWER, 3500);
         StopDriving();
-        SpinRight(DRIVE_POWER, 1000);
+        SpinLeft(DRIVE_POWER, 500);
         StopDriving();
         OpenClaw();
     }
