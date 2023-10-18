@@ -95,6 +95,8 @@ public class HardwareSetupHolonomic {
         motorBackRight.setPower(MOTOR_STOP);
 
         motorBottomArm.setPower(MOTOR_STOP);
+        motorBottomArm.setPower((armHold - motorBottomArm.getCurrentPosition()) / slopeVal);
+
         motorTopArm.setPower(MOTOR_STOP);
 
 
