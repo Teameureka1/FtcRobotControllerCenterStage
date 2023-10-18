@@ -27,7 +27,7 @@ public class HardwareSetupHolonomic {
 
     //public  armMotorTop = null;
     public int armHold;
-    public double  slopeVal         = 2000.0;
+    public double  slopeVal         = 7000.0;
 
     //servos
         //Add servos here
