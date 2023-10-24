@@ -45,8 +45,8 @@ public class HardwareSetupHolonomic {
 
     //Create and set default servo positions & MOTOR STOP variables.
     //Possible servo values: 0.0 - 1.0  For CRServo 0.5=stop greater or less than will spin in that direction
-    final static double OPEN = 0.55;
-    final static double CLOSED = 0.7;
+    final static double OPEN = 0.6 ;
+    final static double CLOSED = 0.8;
     final static double MOTOR_STOP = 0.0; // sets motor power to zero
 
     //CR servo variables
@@ -58,8 +58,6 @@ public class HardwareSetupHolonomic {
    /* Constructor   // this is not required as JAVA does it for you, but useful if you want to add
     * function to this method when called in OpModes.
     */
-    public HardwareSetupHolonomic() {
-    }
 
     //Initialize standard Hardware interfaces
     public void init(HardwareMap ahwMap) {
@@ -109,6 +107,8 @@ public class HardwareSetupHolonomic {
             //Add servo configuration
         servoHandR = hwMap.servo.get("servoHandR");
         servoHandL = hwMap.servo.get("servoHandL");
+
+
 
         servoHandR.setPosition(CLOSED);
         servoHandL.setPosition(CLOSED);
