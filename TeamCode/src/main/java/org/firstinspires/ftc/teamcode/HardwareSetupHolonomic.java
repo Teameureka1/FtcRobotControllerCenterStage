@@ -85,8 +85,9 @@ public class HardwareSetupHolonomic {
         motorBackLeft.setDirection(DcMotor.Direction.FORWARD);
         motorBackRight.setDirection(DcMotor.Direction.FORWARD);
 
-        motorBottomArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motorBottomArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        motorBottomArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         //Keep the motors from moving during initialize.
         motorFrontLeft.setPower(MOTOR_STOP);

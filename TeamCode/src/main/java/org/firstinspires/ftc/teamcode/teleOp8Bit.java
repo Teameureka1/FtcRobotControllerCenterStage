@@ -79,8 +79,6 @@ public class teleOp8Bit extends LinearOpMode
             double gamepad1LeftY = -gamepad1.left_stick_y;   // drives spin left/right
             double gamepad1LeftX = gamepad1.left_stick_x;    // strafe direction (side to side)
             double gamepad1RightX = -gamepad1.right_stick_x;  //drives forwards and backwards
-            double gamepad2RightY = -gamepad2.right_stick_y;  //Controls the bottom arm motor
-
 
 
             // holonomic formulas
@@ -166,13 +164,14 @@ public class teleOp8Bit extends LinearOpMode
             /*
              * Display Telemetry for debugging
              */
+            telemetry.addData("gamePad2 LeftY", gamepad2.left_stick_y);
             telemetry.addData("Text", "*** Robot Data***");
             telemetry.addData("Joy XL YL XR", String.format("%.2f", gamepad1LeftX) + " " + String.format("%.2f", gamepad1LeftY) + " " + String.format("%.2f", gamepad1RightX));
             telemetry.addData("f left pwr", "front left  pwr: " + String.format("%.2f", FrontLeft));
             telemetry.addData("f right pwr", "front right pwr: " + String.format("%.2f", FrontRight));
             telemetry.addData("b right pwr", "back right pwr: " + String.format("%.2f", BackRight));
             telemetry.addData("b left pwr", "back left pwr: " + String.format("%.2f", BackLeft));
-
+            telemetry.update();
         }
     }
 }
