@@ -97,11 +97,11 @@ public class teleOp8Bit extends LinearOpMode
             robot.motorBackLeft.setPower(BackLeft);
             robot.motorBackRight.setPower(BackRight);
 
-            robot.motorBottomArm.setPower(gamepad2.left_stick_y - 0.3);
+            robot.motorBottomArm.setPower(gamepad2.left_stick_y - 0.2);
 
             if (gamepad2.left_stick_y != 0) // && robot.armMotor.getCurrentPositionJ() > 0 && robot.armMotor.getCurrentPosition() < 100 //add this to check encoder within limits
             {
-                robot.motorBottomArm.setPower(gamepad2.left_stick_y - 0.3); // let stick drive UP (note this is positive value on joystick)
+                robot.motorBottomArm.setPower(gamepad2.left_stick_y - 0.2); // let stick drive UP (note this is positive value on joystick)
                 robot.armHold = robot.motorBottomArm.getCurrentPosition(); // while the lift is moving, continuously reset the arm holding position
             }
 

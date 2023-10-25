@@ -45,8 +45,9 @@ public class HardwareSetupHolonomic {
 
     //Create and set default servo positions & MOTOR STOP variables.
     //Possible servo values: 0.0 - 1.0  For CRServo 0.5=stop greater or less than will spin in that direction
-    final static double OPEN = 0.6 ;
-    final static double CLOSED = 0.8;
+    final static double OPEN = 1;
+    final static double CLOSED = 0.6;
+    //I wanna make closed be 0-0.3 and open a higher value
     final static double MOTOR_STOP = 0.0; // sets motor power to zero
 
     //CR servo variables
@@ -85,6 +86,7 @@ public class HardwareSetupHolonomic {
         motorBackRight.setDirection(DcMotor.Direction.FORWARD);
 
         motorBottomArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorBottomArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         //Keep the motors from moving during initialize.
         motorFrontLeft.setPower(MOTOR_STOP);
