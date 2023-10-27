@@ -87,13 +87,24 @@ public class teleOp8Bit extends LinearOpMode
             BackLeft = gamepad1LeftY - gamepad1LeftX + gamepad1RightX;
             BackRight = gamepad1LeftY + gamepad1LeftX - gamepad1RightX;
 
-
+            if(gamepad1.right_bumper)
+            {
+                robot.motorFrontRight.setPower(FrontRight - 0.2);
+                robot.motorFrontLeft.setPower(FrontLeft - 0.2);
+                robot.motorBackLeft.setPower(BackLeft - 0.2);
+                robot.motorBackRight.setPower(BackRight - 0.2);
+            }
+            else
+            {
+                robot.motorFrontRight.setPower(FrontRight);
+                robot.motorFrontLeft.setPower(FrontLeft);
+                robot.motorBackLeft.setPower(BackLeft);
+                robot.motorBackRight.setPower(BackRight);
+            }
 
             // write the clipped values from the formula to the motors
-            robot.motorFrontRight.setPower(FrontRight);
-            robot.motorFrontLeft.setPower(FrontLeft);
-            robot.motorBackLeft.setPower(BackLeft);
-            robot.motorBackRight.setPower(BackRight);
+
+
 
             robot.motorBottomArm.setPower(gamepad2.left_stick_y - 0.2);
 
@@ -121,6 +132,7 @@ public class teleOp8Bit extends LinearOpMode
                 robot.servoHandR.setPosition(robot.CLOSED);
                 robot.servoHandL.setPosition(robot.CLOSED);
             }
+
 
 
 
