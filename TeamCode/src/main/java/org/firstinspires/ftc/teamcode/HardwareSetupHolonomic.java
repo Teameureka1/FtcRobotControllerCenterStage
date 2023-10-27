@@ -27,7 +27,7 @@ public class HardwareSetupHolonomic {
 
     //public  armMotorTop = null;
     public int armHold;
-    public double  slopeVal         = 7000.0;
+    public double  slopeVal         = 2000.0;
 
     //servos
         //Add servos here
@@ -45,8 +45,8 @@ public class HardwareSetupHolonomic {
 
     //Create and set default servo positions & MOTOR STOP variables.
     //Possible servo values: 0.0 - 1.0  For CRServo 0.5=stop greater or less than will spin in that direction
-    final static double OPEN = 1;
-    final static double CLOSED = 0.6;
+    final static double OPEN = 0.5;//original servo 0.8
+    final static double CLOSED = 0.3;//original servo 0.6
     //I wanna make closed be 0-0.3 and open a higher value
     final static double MOTOR_STOP = 0.0; // sets motor power to zero
 
@@ -113,8 +113,10 @@ public class HardwareSetupHolonomic {
 
 
 
+
+
         servoHandR.setPosition(CLOSED);
-        servoHandL.setPosition(CLOSED);
+        servoHandL.setPosition(OPEN);
 
         /************************************************************
          * SENSOR SECTION**************************************************

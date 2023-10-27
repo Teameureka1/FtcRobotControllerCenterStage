@@ -87,19 +87,22 @@ public class teleOp8Bit extends LinearOpMode
             BackLeft = gamepad1LeftY - gamepad1LeftX + gamepad1RightX;
             BackRight = gamepad1LeftY + gamepad1LeftX - gamepad1RightX;
 
+
+
+
             if(gamepad1.right_bumper)
-            {
-                robot.motorFrontRight.setPower(FrontRight - 0.2);
-                robot.motorFrontLeft.setPower(FrontLeft - 0.2);
-                robot.motorBackLeft.setPower(BackLeft - 0.2);
-                robot.motorBackRight.setPower(BackRight - 0.2);
-            }
-            else
             {
                 robot.motorFrontRight.setPower(FrontRight);
                 robot.motorFrontLeft.setPower(FrontLeft);
                 robot.motorBackLeft.setPower(BackLeft);
                 robot.motorBackRight.setPower(BackRight);
+            }
+            else
+            {
+                robot.motorFrontRight.setPower(FrontRight / 2);
+                robot.motorFrontLeft.setPower(FrontLeft / 2);
+                robot.motorBackLeft.setPower(BackLeft / 2);
+                robot.motorBackRight.setPower(BackRight / 2);
             }
 
             // write the clipped values from the formula to the motors
@@ -124,12 +127,12 @@ public class teleOp8Bit extends LinearOpMode
             //the claw servos open a and close b.
             if(gamepad2.a)
             {
-                robot.servoHandR.setPosition(robot.OPEN);
+                robot.servoHandR.setPosition(robot.CLOSED);
                 robot.servoHandL.setPosition(robot.OPEN);
             }
             else if (gamepad2.b)
             {
-                robot.servoHandR.setPosition(robot.CLOSED);
+                robot.servoHandR.setPosition(robot.OPEN);
                 robot.servoHandL.setPosition(robot.CLOSED);
             }
 
@@ -176,6 +179,8 @@ public class teleOp8Bit extends LinearOpMode
             /*
              * Display Telemetry for debugging
              */
+            telemetry.addData("armPos", robot.motorBottomArm.getCurrentPosition());
+
             telemetry.addData("gamePad2 LeftY", gamepad2.left_stick_y);
             telemetry.addData("Text", "*** Robot Data***");
             telemetry.addData("Joy XL YL XR", String.format("%.2f", gamepad1LeftX) + " " + String.format("%.2f", gamepad1LeftY) + " " + String.format("%.2f", gamepad1RightX));

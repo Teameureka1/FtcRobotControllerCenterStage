@@ -16,6 +16,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Autonomous(name="RedFront", group="Red")
@@ -51,12 +52,15 @@ public class RedAutoFront extends LinearOpMode {
         /************************
          * Autonomous Code Below://
          *************************/
+        CloseClaw();
+        armMove(-.3,-300);
+        armHold();
         DriveForwardTime(DRIVE_POWER, 800);
         StopDriving();
         StrafeRight(DRIVE_POWER, 3500);
         StopDriving();
         SpinLeft(DRIVE_POWER, 500);
-        StopDriving();
+        StopDrivingTime(500);
         OpenClaw();
     }
 
@@ -129,16 +133,35 @@ public class RedAutoFront extends LinearOpMode {
 
     public void OpenClaw()
     {
-        robot.servoHandR.setPosition(robot.OPEN); //note: uses servo instead of motor.
+        robot.servoHandR.setPosition(robot.CLOSED); //note: uses servo instead of motor.
         robot.servoHandL.setPosition(robot.OPEN);
     }
 
     public void CloseClaw()
     {
-        robot.servoHandR.setPosition(robot.CLOSED);
+        robot.servoHandR.setPosition(robot.OPEN);
         robot.servoHandL.setPosition(robot.CLOSED);
     }
+    private void armHold()
+    {
+        robot.motorBottomArm.setPower((robot.armHold - robot.motorBottomArm.getCurrentPosition()) / robot.slopeVal);
 
+    }
+    private void armMove(double power, int pos) {
+        robot.motorBottomArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.motorBottomArm.setTargetPosition(pos);
+        robot.motorBottomArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.motorBottomArm.setPower(power);
+        while (robot.motorBottomArm.isBusy()) {
+            telemetry.addData("armPos", robot.motorBottomArm.getCurrentPosition());
+            telemetry.update();
+            idle();
+        }
+        robot.motorBottomArm.setPower(0);
+        // Set the arm hold position to the final position of the arm
+        robot.armHold = robot.motorBottomArm.getCurrentPosition();
+        sleep(100);
+    }
 
 
 }
