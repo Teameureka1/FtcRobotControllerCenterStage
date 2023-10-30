@@ -53,9 +53,9 @@ public class RedAutoBack extends LinearOpMode {
          * Autonomous Code Below://
          *************************/
         CloseClaw();
+        StopDrivingTime(500);
         armMove(-.3,-300);
         armHold();
-
         StrafeRight(DRIVE_POWER, 2000);
         StopDrivingTime(500);
         OpenClaw();

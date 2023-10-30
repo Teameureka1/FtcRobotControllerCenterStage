@@ -51,10 +51,10 @@ public class BlueAutoBack extends LinearOpMode {
          * Autonomous Code Below://
          *************************/
         CloseClaw();
+        StopDrivingTime(500);
         armMove(-.3,-300);
         armHold();
-
-        StrafeLeft(DRIVE_POWER, 1000);
+        StrafeLeft(DRIVE_POWER, 2000);
         StopDrivingTime(500);
         OpenClaw();
     }
