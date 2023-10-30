@@ -54,11 +54,13 @@ public class BlueAutoFront extends LinearOpMode {
         CloseClaw();
         armMove(-.3,-300);
         armHold();
-        DriveForwardTime(DRIVE_POWER, 800);
+        DriveForwardTime(DRIVE_POWER, 900);
         StopDriving();
-        StrafeLeft(DRIVE_POWER, 3500);
-        StopDriving();
-        SpinRight(DRIVE_POWER, 500);
+        //StrafeLeft(DRIVE_POWER, 3500);
+        SpinRight(DRIVE_POWER, 650);
+        StopDrivingTime(500);
+        DriveForwardTime(DRIVE_POWER,2550);
+        //SpinRight(DRIVE_POWER, 500);
         StopDrivingTime(500);
         OpenClaw();
         StopDriving();
@@ -135,12 +137,16 @@ public class BlueAutoFront extends LinearOpMode {
     {
         robot.servoHandR.setPosition(robot.CLOSED); //note: uses servo instead of motor.
         robot.servoHandL.setPosition(robot.OPEN);
+        sleep(100);
+
     }
 
     public void CloseClaw()
     {
         robot.servoHandR.setPosition(robot.OPEN);
         robot.servoHandL.setPosition(robot.CLOSED);
+        sleep(100);
+
     }
     private void armHold()
     {

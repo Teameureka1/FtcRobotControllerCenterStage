@@ -121,11 +121,15 @@ public class BlueAutoBack extends LinearOpMode {
     public void OpenClaw() {
         robot.servoHandR.setPosition(robot.CLOSED); //note: uses servo instead of motor.
         robot.servoHandL.setPosition(robot.OPEN);
+        sleep(100);
+
     }
 
     public void CloseClaw() {
         robot.servoHandR.setPosition(robot.OPEN);
         robot.servoHandL.setPosition(robot.CLOSED);
+        sleep(100);
+
     }
     //        robot.motorBottomArm.setPower((robot.armHold - robot.motorBottomArm.getCurrentPosition()) / robot.slopeVal);
 

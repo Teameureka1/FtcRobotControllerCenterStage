@@ -132,12 +132,16 @@ public class RedAutoBack extends LinearOpMode {
     {
         robot.servoHandR.setPosition(robot.CLOSED); //note: uses servo instead of motor.
         robot.servoHandL.setPosition(robot.OPEN);
+        sleep(100);
+
     }
 
     public void CloseClaw()
     {
         robot.servoHandR.setPosition(robot.OPEN);
         robot.servoHandL.setPosition(robot.CLOSED);
+        sleep(100);
+
     }
     private void armHold()
     {

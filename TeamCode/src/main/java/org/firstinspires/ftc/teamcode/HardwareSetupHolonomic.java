@@ -96,7 +96,6 @@ public class HardwareSetupHolonomic {
         motorBackRight.setPower(MOTOR_STOP);
 
         motorBottomArm.setPower(MOTOR_STOP);
-        motorBottomArm.setPower((armHold - motorBottomArm.getCurrentPosition()) / slopeVal);
 
         motorTopArm.setPower(MOTOR_STOP);
 
@@ -114,7 +113,7 @@ public class HardwareSetupHolonomic {
 
 
 
-
+        //open claw
         servoHandR.setPosition(CLOSED);
         servoHandL.setPosition(OPEN);
 
