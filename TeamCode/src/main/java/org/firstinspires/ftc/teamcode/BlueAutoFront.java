@@ -48,26 +48,35 @@ public class BlueAutoFront extends LinearOpMode {
         waitForStart();
         runtime.reset();
 
-        /************************
+        /*************************
          * Autonomous Code Below://
          *************************/
         CloseClaw();
         armMove(-.3,-300);
         armHold();
-        DriveForwardTime(DRIVE_POWER, 900);
-        StopDriving();
-        //StrafeLeft(DRIVE_POWER, 3500);
-        SpinRight(DRIVE_POWER, 650);
-        StopDrivingTime(500);
+        DriveForwardTime(DRIVE_POWER, 650);
+        StopDrivingTime(2000);
+        //add spike mark pixel here
+        DriveForwardTime(-DRIVE_POWER, 500);
+        SpinLeft(0.3, 150);
+        DriveForwardTime(DRIVE_POWER, 50);
+        SpinRight(0.3, 150);
+        DriveForwardTime(DRIVE_POWER, 1100);
+        SpinRight(DRIVE_POWER, 150);
         DriveForwardTime(DRIVE_POWER,2550);
-        //SpinRight(DRIVE_POWER, 500);
-        StopDrivingTime(500);
-        OpenClaw();
-        StopDriving();
+        SpinRight(DRIVE_POWER, 150);
+        DriveForwardTime(DRIVE_POWER, 300);
+        SpinLeft(DRIVE_POWER, 250);
+        //OpenClaw();
+        armMove(-.3, -600);
+        DriveForwardTime(0.3, 100);
+        // OpenClaw();
+
+
     }
 
 /* currently no Servo configured on bot
-        RaiseArm();
+        extendArm();
 
         StopDriving();
 
@@ -90,6 +99,7 @@ public class BlueAutoFront extends LinearOpMode {
     {
         DriveForward(power);
         Thread.sleep(time);
+        sleep(500);
     }
 
     public void StopDriving()
@@ -110,11 +120,13 @@ public class BlueAutoFront extends LinearOpMode {
         robot.motorBackRight.setPower(-power);
         robot.motorBackLeft.setPower(power);
         Thread.sleep(time);
+        sleep(500);
     }
 
     public void StrafeRight(double power, long time) throws InterruptedException
     {
         StrafeLeft(-power, time);
+        sleep(500);
     }
 
     public void SpinRight (double power, long time) throws InterruptedException
@@ -125,11 +137,13 @@ public class BlueAutoFront extends LinearOpMode {
         robot.motorBackRight.setPower(-power);
         robot.motorBackLeft.setPower(power);
         Thread.sleep(time);
+        sleep(500);
     }
 
     public void SpinLeft (double power, long time) throws InterruptedException
     {
         SpinRight(-power, time);
+        sleep(500);
     }
 
 

@@ -41,6 +41,7 @@ public class BlueAutoBack extends LinearOpMode {
 
         //adds feedback telemetry to DS
         telemetry.addData("Status", "Initialized");
+
         telemetry.update();
 
         // Wait for the game to start (driver presses PLAY)

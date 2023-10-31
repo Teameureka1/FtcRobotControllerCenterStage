@@ -14,10 +14,15 @@
 */
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 
 @Autonomous(name="RedFront", group="Red")
 //@Disabled
@@ -38,10 +43,12 @@ public class RedAutoFront extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException
     {
-        robot.init(hardwareMap);  //Initialize hardware from the Hardware Setup Class
+        robot.init(hardwareMap);//Initialize hardware from the Hardware Setup Class
+
 
         //adds feedback telemetry to DS
         telemetry.addData("Status", "Initialized");
+
         telemetry.update();
 
         // Wait for the game to start (driver presses PLAY)
@@ -57,17 +64,16 @@ public class RedAutoFront extends LinearOpMode {
         armHold();
         DriveForwardTime(DRIVE_POWER, 900);
         StopDriving();
-        //StrafeRight(DRIVE_POWER, 3500);
+        //add spike mark pixel here
         SpinLeft(DRIVE_POWER, 650);
         StopDrivingTime(500);
         DriveForwardTime(DRIVE_POWER,2550);
-        //SpinLeft(DRIVE_POWER, 500);
         StopDrivingTime(500);
         OpenClaw();
     }
 
 /* currently no Servo configured on bot
-        RaiseArm();
+        ExtendArm();
 
         StopDriving();
 

@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.motors.NeveRest40Gearmotor;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -8,6 +9,9 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
+import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+
 
 public class HardwareSetupHolonomic {
 
@@ -15,6 +19,7 @@ public class HardwareSetupHolonomic {
     *these are the null statements to make sure nothing is stored in the variables.
     */
 
+    private BNO055IMU imu;
     //Drive motors
     public DcMotor motorFrontRight = null;
     public DcMotor motorFrontLeft = null;
@@ -60,10 +65,27 @@ public class HardwareSetupHolonomic {
     * function to this method when called in OpModes.
     */
 
+
     //Initialize standard Hardware interfaces
     public void init(HardwareMap ahwMap) {
         // Save reference to Hardware map
         hwMap = ahwMap;
+
+        BNO055IMU.Parameters imuParameters;
+        Orientation angles;
+        Acceleration gravity;
+
+        // Create new IMU Parameters object.
+        imuParameters = new BNO055IMU.Parameters();
+        // Use degrees as angle unit.
+        imuParameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        // Express acceleration as m/s^2.
+        imuParameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        // Disable logging.
+        imuParameters.loggingEnabled = false;
+        // Initialize IMU.
+        imu.initialize(imuParameters);
+
 
 
         /************************************************************
