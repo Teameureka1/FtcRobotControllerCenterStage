@@ -2,10 +2,12 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.motors.NeveRest40Gearmotor;
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
@@ -13,13 +15,42 @@ import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 
-public class HardwareSetupHolonomic {
+public class HardwareSetupHolonomic
+{
 
    /* Declare Public OpMode members.
     *these are the null statements to make sure nothing is stored in the variables.
     */
+   // Calculate the COUNTS_PER_INCH for your specific drive train.
+   // Go to your motor vendor website to determine your motor's COUNTS_PER_MOTOR_REV
+   // For external drive gearing, set DRIVE_GEAR_REDUCTION as needed.
+   // For example, use a value of 2.0 for a 12-tooth spur gear driving a 24-tooth spur gear.
+   // This is gearing DOWN for less speed and more torque.
+   // For gearing UP, use a gear ratio less than 1.0. Note this will affect the direction of wheel rotation.
+    static final double     COUNTS_PER_MOTOR_REV    = 1440 ;// eg: GoBILDA 312 RPM Yellow Jacket
+    //1440
+    static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // No External Gearing.
+    static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
+    static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
+            (WHEEL_DIAMETER_INCHES * 3.1415);
 
-    private BNO055IMU imu;
+    static final double     TURN_SPEED              = 0.2;     // Max Turn speed to limit turn rate
+    static final double     HEADING_THRESHOLD       = 1.0 ;    // How close must the heading get to the target before moving to next step.
+    // Requiring more accuracy (a smaller number) will often make the turn take longer to get into the final position.
+    // Define the Proportional control coefficient (or GAIN) for "heading control".
+    // We define one value when Turning (larger errors), and the other is used when Driving straight (smaller errors).
+    // Increase these numbers if the heading does not corrects strongly enough (eg: a heavy robot or using tracks)
+    // Decrease these numbers if the heading does not settle on the correct value (eg: very agile robot with omni wheels)
+    static final double     P_TURN_GAIN            = 0.02;     // Larger is more responsive, but also less stable
+    static final double     P_DRIVE_GAIN           = 0.03;     // Larger is more responsive, but also less stable
+    static double  targetHeading = 0;
+    static double  driveSpeed    = 0;
+    static double  turnSpeed    = 0;
+    static double  leftSpeed     = 0;
+    static double  rightSpeed    = 0;
+    static final int     leftTarget    = 0;
+    static final int     rightTarget   = 0;
+
     //Drive motors
     public DcMotor motorFrontRight = null;
     public DcMotor motorFrontLeft = null;
@@ -44,6 +75,10 @@ public class HardwareSetupHolonomic {
         //Add sensors here
     public TouchSensor MagIn = null;
     public TouchSensor MagOut = null;
+
+    IMU             imu         = null;      // Control/Expansion Hub IMU
+    static double          headingError  = 0;
+
     /* local OpMode members. */
     HardwareMap hwMap        = null;
 
@@ -71,20 +106,15 @@ public class HardwareSetupHolonomic {
         // Save reference to Hardware map
         hwMap = ahwMap;
 
-        BNO055IMU.Parameters imuParameters;
-        Orientation angles;
-        Acceleration gravity;
 
-        // Create new IMU Parameters object.
-        imuParameters = new BNO055IMU.Parameters();
-        // Use degrees as angle unit.
-        imuParameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
-        // Express acceleration as m/s^2.
-        imuParameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
-        // Disable logging.
-        imuParameters.loggingEnabled = false;
-        // Initialize IMU.
-        imu.initialize(imuParameters);
+        /* The next two lines define Hub orientation.
+         * The Default Orientation (shown) is when a hub is mounted horizontally with the printed logo pointing UP and the USB port pointing FORWARD.
+         *
+         * To Do:  EDIT these two lines to match YOUR mounting configuration.
+         */
+        RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.UP;
+        RevHubOrientationOnRobot.UsbFacingDirection  usbDirection  = RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
+        RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
 
 
 
@@ -111,6 +141,13 @@ public class HardwareSetupHolonomic {
 
         motorBottomArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
+        motorFrontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorFrontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorBackLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorBackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+
+
         //Keep the motors from moving during initialize.
         motorFrontLeft.setPower(MOTOR_STOP);
         motorFrontRight.setPower(MOTOR_STOP);
@@ -121,6 +158,12 @@ public class HardwareSetupHolonomic {
 
         motorTopArm.setPower(MOTOR_STOP);
 
+        motorFrontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motorFrontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motorBackLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motorBackRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        imu.resetYaw();
 
 
 
@@ -145,6 +188,11 @@ public class HardwareSetupHolonomic {
             //Add sensors
         MagIn = hwMap.touchSensor.get("MagIn");
         MagOut = hwMap.touchSensor.get("MagOut");
+
+        // Now initialize the IMU with this mounting orientation
+        // This sample expects the IMU to be in a REV Hub and named "imu".
+        imu = hwMap.get(IMU.class, "imu");
+        imu.initialize(new IMU.Parameters(orientationOnRobot));
 
 
    }
