@@ -44,7 +44,7 @@ public class RedAutoFrontNew extends LinearOpMode
     public void runOpMode() throws InterruptedException
     {
         robot.init(hardwareMap);  //Initialize hardware from the Hardware Setup Class
-
+        robot.imu.resetYaw();
         //adds feedback telemetry to DS
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -52,7 +52,6 @@ public class RedAutoFrontNew extends LinearOpMode
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
-
         /*************************
          * Autonomous Code Below://
          *************************/
@@ -60,6 +59,7 @@ public class RedAutoFrontNew extends LinearOpMode
         armMove(-.3,-300);
         armHold();
         moveRobot(10,0);
+        driveStraight(.4, 15, 15);
 
         // DriveForwardTime(DRIVE_POWER, 650);
         //StopDrivingTime(2000);

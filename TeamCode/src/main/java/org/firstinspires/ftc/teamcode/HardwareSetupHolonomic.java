@@ -163,7 +163,6 @@ public class HardwareSetupHolonomic
         motorBackLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motorBackRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        imu.resetYaw();
 
 
 
