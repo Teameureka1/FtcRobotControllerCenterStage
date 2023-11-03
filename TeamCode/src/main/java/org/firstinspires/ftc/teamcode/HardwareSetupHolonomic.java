@@ -48,8 +48,8 @@ public class HardwareSetupHolonomic
     static double  turnSpeed    = 0;
     static double  leftSpeed     = 0;
     static double  rightSpeed    = 0;
-    static final int     leftTarget    = 0;
-    static final int     rightTarget   = 0;
+    static int     leftTarget    = 0;
+    static int     rightTarget   = 0;
 
     //Drive motors
     public DcMotor motorFrontRight = null;

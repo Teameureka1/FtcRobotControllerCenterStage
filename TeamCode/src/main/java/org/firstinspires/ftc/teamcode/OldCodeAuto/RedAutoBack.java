@@ -12,41 +12,47 @@
         X           X
           X       X
 */
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.OldCodeAuto;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@Autonomous(name="BlueBack", group="Blue")
-//@Disabled
-public class BlueAutoBack extends LinearOpMode {
+import org.firstinspires.ftc.teamcode.HardwareSetupHolonomic;
+
+@Autonomous(name="RedBack", group="Red")
+@Disabled
+public class RedAutoBack extends LinearOpMode {
 
     private ElapsedTime runtime = new ElapsedTime();
 
     /* Define Hardware setup */
     // assumes left motors are reversed
     HardwareSetupHolonomic robot = new HardwareSetupHolonomic();
+    final static double OPEN = 0.5;//original servo 0.8
+    final static double CLOSED = 0.3;//original servo 0.6
 
     /**
      * Constructor
      */
-    public BlueAutoBack() {
+    public RedAutoBack() {
     }
 
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() throws InterruptedException
+    {
         robot.init(hardwareMap);  //Initialize hardware from the Hardware Setup Class
 
         //adds feedback telemetry to DS
         telemetry.addData("Status", "Initialized");
-
         telemetry.update();
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
+        robot.motorBottomArm.setPower((robot.armHold - robot.motorBottomArm.getCurrentPosition()) / robot.slopeVal);
 
         /************************
          * Autonomous Code Below://
@@ -55,23 +61,24 @@ public class BlueAutoBack extends LinearOpMode {
         StopDrivingTime(500);
         armMove(-.3,-300);
         armHold();
-        StrafeLeft(DRIVE_POWER, 2000);
+        StrafeRight(DRIVE_POWER, 2000);
         StopDrivingTime(500);
         OpenClaw();
     }
 
-    /* currently no Servo configured on bot
-            RaiseArm();
+/* currently no Servo configured on bot
+        RaiseArm();
 
-            StopDriving();
+        StopDriving();
 
-        }//runOpMode
+    }//runOpMode
 
-        /** Below: Basic Drive Methods used in Autonomous code...**/
+    /** Below: Basic Drive Methods used in Autonomous code...**/
     //set Drive Power variable
     double DRIVE_POWER = 0.5;
 
-    public void DriveForward(double power) {
+    public void DriveForward(double power)
+    {
         // write the values to the motors
         robot.motorFrontRight.setPower(power);//still need to test motor directions for desired movement
         robot.motorFrontLeft.setPower(power);
@@ -79,20 +86,24 @@ public class BlueAutoBack extends LinearOpMode {
         robot.motorBackLeft.setPower(power);
     }
 
-    public void DriveForwardTime(double power, long time) throws InterruptedException {
+    public void DriveForwardTime(double power, long time) throws InterruptedException
+    {
         DriveForward(power);
         Thread.sleep(time);
     }
 
-    public void StopDriving() {
+    public void StopDriving()
+    {
         DriveForward(0);
     }
 
-    public void StopDrivingTime(long time) throws InterruptedException {
+    public void StopDrivingTime(long time) throws InterruptedException
+    {
         DriveForwardTime(0, time);
     }
 
-    public void StrafeLeft(double power, long time) throws InterruptedException {
+    public void StrafeLeft(double power, long time) throws InterruptedException
+    {
         // write the values to the motors
         robot.motorFrontRight.setPower(power);
         robot.motorFrontLeft.setPower(-power);
@@ -101,11 +112,13 @@ public class BlueAutoBack extends LinearOpMode {
         Thread.sleep(time);
     }
 
-    public void StrafeRight(double power, long time) throws InterruptedException {
+    public void StrafeRight(double power, long time) throws InterruptedException
+    {
         StrafeLeft(-power, time);
     }
 
-    public void SpinRight(double power, long time) throws InterruptedException {
+    public void SpinRight (double power, long time) throws InterruptedException
+    {
         // write the values to the motors
         robot.motorFrontRight.setPower(-power);
         robot.motorFrontLeft.setPower(power);
@@ -114,38 +127,33 @@ public class BlueAutoBack extends LinearOpMode {
         Thread.sleep(time);
     }
 
-    public void SpinLeft(double power, long time) throws InterruptedException {
+    public void SpinLeft (double power, long time) throws InterruptedException
+    {
         SpinRight(-power, time);
     }
 
 
-    public void OpenClaw() {
-        robot.servoHandR.setPosition(robot.CLOSED); //note: uses servo instead of motor.
-        robot.servoHandL.setPosition(robot.OPEN);
+    public void OpenClaw()
+    {
+        robot.servoHandR.setPosition(CLOSED); //note: uses servo instead of motor.
+        robot.servoHandL.setPosition(OPEN);
         sleep(100);
 
     }
 
-    public void CloseClaw() {
-        robot.servoHandR.setPosition(robot.OPEN);
-        robot.servoHandL.setPosition(robot.CLOSED);
+    public void CloseClaw()
+    {
+        robot.servoHandR.setPosition(OPEN);
+        robot.servoHandL.setPosition(CLOSED);
         sleep(100);
 
     }
-    //        robot.motorBottomArm.setPower((robot.armHold - robot.motorBottomArm.getCurrentPosition()) / robot.slopeVal);
-
-    /**
-     * Set motorArm power based on hold position
-     */
     private void armHold()
     {
         robot.motorBottomArm.setPower((robot.armHold - robot.motorBottomArm.getCurrentPosition()) / robot.slopeVal);
 
     }
 
-    /**
-     * Run robot.motorBottomArm to pos @ power
-     */
     private void armMove(double power, int pos) {
         robot.motorBottomArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.motorBottomArm.setTargetPosition(pos);
@@ -161,7 +169,5 @@ public class BlueAutoBack extends LinearOpMode {
         robot.armHold = robot.motorBottomArm.getCurrentPosition();
         sleep(100);
     }
+
 }
-
-
-

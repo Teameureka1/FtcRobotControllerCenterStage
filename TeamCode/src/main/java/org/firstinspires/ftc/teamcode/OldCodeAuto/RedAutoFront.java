@@ -12,36 +12,47 @@
         X           X
           X       X
 */
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.OldCodeAuto;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@Autonomous(name="RedBack", group="Red")
-//@Disabled
-public class RedAutoBack extends LinearOpMode {
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.teamcode.HardwareSetupHolonomic;
+
+@Autonomous(name="RedFront", group="Red")
+@Disabled
+public class RedAutoFront extends LinearOpMode {
 
     private ElapsedTime runtime = new ElapsedTime();
 
     /* Define Hardware setup */
     // assumes left motors are reversed
     HardwareSetupHolonomic robot = new HardwareSetupHolonomic();
+    final static double OPEN = 0.5;//original servo 0.8
+    final static double CLOSED = 0.3;//original servo 0.6
 
     /**
      * Constructor
      */
-    public RedAutoBack() {
+    public RedAutoFront() {
     }
 
     @Override
     public void runOpMode() throws InterruptedException
     {
-        robot.init(hardwareMap);  //Initialize hardware from the Hardware Setup Class
+        robot.init(hardwareMap);//Initialize hardware from the Hardware Setup Class
+
 
         //adds feedback telemetry to DS
         telemetry.addData("Status", "Initialized");
+
         telemetry.update();
 
         // Wait for the game to start (driver presses PLAY)
@@ -53,16 +64,20 @@ public class RedAutoBack extends LinearOpMode {
          * Autonomous Code Below://
          *************************/
         CloseClaw();
-        StopDrivingTime(500);
         armMove(-.3,-300);
         armHold();
-        StrafeRight(DRIVE_POWER, 2000);
+        DriveForwardTime(DRIVE_POWER, 900);
+        StopDriving();
+        //add spike mark pixel here
+        SpinLeft(DRIVE_POWER, 650);
+        StopDrivingTime(500);
+        DriveForwardTime(DRIVE_POWER,2550);
         StopDrivingTime(500);
         OpenClaw();
     }
 
 /* currently no Servo configured on bot
-        RaiseArm();
+        ExtendArm();
 
         StopDriving();
 
@@ -130,16 +145,16 @@ public class RedAutoBack extends LinearOpMode {
 
     public void OpenClaw()
     {
-        robot.servoHandR.setPosition(robot.CLOSED); //note: uses servo instead of motor.
-        robot.servoHandL.setPosition(robot.OPEN);
+        robot.servoHandR.setPosition(CLOSED); //note: uses servo instead of motor.
+        robot.servoHandL.setPosition(OPEN);
         sleep(100);
 
     }
 
     public void CloseClaw()
     {
-        robot.servoHandR.setPosition(robot.OPEN);
-        robot.servoHandL.setPosition(robot.CLOSED);
+        robot.servoHandR.setPosition(OPEN);
+        robot.servoHandL.setPosition(CLOSED);
         sleep(100);
 
     }
@@ -148,7 +163,6 @@ public class RedAutoBack extends LinearOpMode {
         robot.motorBottomArm.setPower((robot.armHold - robot.motorBottomArm.getCurrentPosition()) / robot.slopeVal);
 
     }
-
     private void armMove(double power, int pos) {
         robot.motorBottomArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.motorBottomArm.setTargetPosition(pos);
@@ -164,5 +178,6 @@ public class RedAutoBack extends LinearOpMode {
         robot.armHold = robot.motorBottomArm.getCurrentPosition();
         sleep(100);
     }
+
 
 }
