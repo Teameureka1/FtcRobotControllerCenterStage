@@ -1,22 +1,20 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.hardware.motors.NeveRest40Gearmotor;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
-import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-
 
 public class HardwareSetupHolonomic
 {
+    IMU.Parameters myIMUparameters;
+    myIMUparameters = new IMU.Parameters(
+        new RevHubOrientationOnRobot(
+        RevHubOrientationOnRobot.LogoFacingDirection.UP,
+        RevHubOrientationOnRobot.UsbFacingDirection.FORWARD));
 
    /* Declare Public OpMode members.
     *these are the null statements to make sure nothing is stored in the variables.
@@ -99,6 +97,8 @@ public class HardwareSetupHolonomic
    /* Constructor   // this is not required as JAVA does it for you, but useful if you want to add
     * function to this method when called in OpModes.
     */
+
+
 
 
     //Initialize standard Hardware interfaces

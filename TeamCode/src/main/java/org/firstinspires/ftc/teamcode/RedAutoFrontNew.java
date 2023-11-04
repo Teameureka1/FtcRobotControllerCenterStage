@@ -48,7 +48,7 @@ public class RedAutoFrontNew extends LinearOpMode
         //adds feedback telemetry to DS
         telemetry.addData("Status", "Initialized");
         telemetry.update();
-
+        robot.imu.initialize(robot.myIMUparameters);
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
@@ -59,7 +59,8 @@ public class RedAutoFrontNew extends LinearOpMode
         armMove(-.3,-300);
         armHold();
         moveRobot(10,0);
-        driveStraight(.4, 15, 15);
+        StopDrivingTime(2000);
+        driveStraight(.2, 15, 15);
 
         // DriveForwardTime(DRIVE_POWER, 650);
         //StopDrivingTime(2000);
@@ -243,6 +244,9 @@ public class RedAutoFrontNew extends LinearOpMode
                     moveRobot(robot.driveSpeed, robot.turnSpeed);
                 }
                 // Display drive status for the driver.
+                double rotation = robot.motorBackLeft.getCurrentPosition();
+                telemetry.addData("encoder position", rotation);
+                telemetry.update();
             }
 
             // Stop all motion & Turn off RUN_TO_POSITION
@@ -339,7 +343,9 @@ public class RedAutoFrontNew extends LinearOpMode
 
         robot.motorBackRight.setPower(robot.rightSpeed);
         robot.motorFrontRight.setPower(robot.rightSpeed);
-
+        double position = robot.motorBackLeft.getCurrentPosition();
+        telemetry.addData("encoder position", position);
+        //reminder to make the encoders display telemetry
     }
     /**
      * read the Robot heading directly from the IMU (in degrees)
