@@ -10,11 +10,11 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 
 public class HardwareSetupHolonomic
 {
-    IMU.Parameters myIMUparameters;
-    myIMUparameters = new IMU.Parameters(
-        new RevHubOrientationOnRobot(
-        RevHubOrientationOnRobot.LogoFacingDirection.UP,
-        RevHubOrientationOnRobot.UsbFacingDirection.FORWARD));
+    //IMU.Parameters myIMUparameters;
+    //myIMUparameters = new IMU.Parameters(
+       // new RevHubOrientationOnRobot(
+       // RevHubOrientationOnRobot.LogoFacingDirection.FORWARD,
+       // RevHubOrientationOnRobot.UsbFacingDirection.DOWN));
 
    /* Declare Public OpMode members.
     *these are the null statements to make sure nothing is stored in the variables.
@@ -27,7 +27,7 @@ public class HardwareSetupHolonomic
    // For gearing UP, use a gear ratio less than 1.0. Note this will affect the direction of wheel rotation.
     static final double     COUNTS_PER_MOTOR_REV    = 1440 ;// eg: GoBILDA 312 RPM Yellow Jacket
     //1440
-    static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // No External Gearing.
+    static final double     DRIVE_GEAR_REDUCTION    = 60.0 ;     // No External Gearing.
     static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
     static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_INCHES * 3.1415);
@@ -69,6 +69,8 @@ public class HardwareSetupHolonomic
     public Servo servoHandR = null;
     public Servo servoHandL = null;
 
+    public Servo servoDR = null;
+
     //sensors
         //Add sensors here
     public TouchSensor MagIn = null;
@@ -105,7 +107,6 @@ public class HardwareSetupHolonomic
     public void init(HardwareMap ahwMap) {
         // Save reference to Hardware map
         hwMap = ahwMap;
-
 
         /* The next two lines define Hub orientation.
          * The Default Orientation (shown) is when a hub is mounted horizontally with the printed logo pointing UP and the USB port pointing FORWARD.
@@ -174,12 +175,15 @@ public class HardwareSetupHolonomic
         servoHandR = hwMap.servo.get("servoHandR");
         servoHandL = hwMap.servo.get("servoHandL");
 
+        servoDR = hwMap.servo.get("servoDR");
 
 
 
         //open claw
         servoHandR.setPosition(CLOSED);
         servoHandL.setPosition(OPEN);
+
+        servoDR.setPosition(OPEN);
 
         /************************************************************
          * SENSOR SECTION**************************************************
@@ -192,6 +196,8 @@ public class HardwareSetupHolonomic
         // This sample expects the IMU to be in a REV Hub and named "imu".
         imu = hwMap.get(IMU.class, "imu");
         imu.initialize(new IMU.Parameters(orientationOnRobot));
+
+
 
 
    }

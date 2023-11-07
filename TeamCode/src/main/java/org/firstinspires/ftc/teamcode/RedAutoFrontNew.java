@@ -21,6 +21,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
 @Autonomous(name="RedFront", group="Red")
@@ -48,7 +49,7 @@ public class RedAutoFrontNew extends LinearOpMode
         //adds feedback telemetry to DS
         telemetry.addData("Status", "Initialized");
         telemetry.update();
-        robot.imu.initialize(robot.myIMUparameters);
+        //robot.imu.initialize(robot.myIMUparameters);
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
@@ -58,9 +59,8 @@ public class RedAutoFrontNew extends LinearOpMode
         CloseClaw();
         armMove(-.3,-300);
         armHold();
-        moveRobot(10,0);
-        StopDrivingTime(2000);
-        driveStraight(.2, 15, 15);
+        turnToHeading(0.2, 45);
+        //driveStraight(.2, 70, 0);
 
         // DriveForwardTime(DRIVE_POWER, 650);
         //StopDrivingTime(2000);
@@ -193,6 +193,7 @@ public class RedAutoFrontNew extends LinearOpMode
 
     public void driveStraight(double maxDriveSpeed, double distance, double heading)
     {
+        robot.imu.resetYaw();
 
         // Ensure that the OpMode is still active
         if (opModeIsActive())
@@ -201,10 +202,10 @@ public class RedAutoFrontNew extends LinearOpMode
             // Determine new target position, and pass to motor controller
             int moveCounts = (int) (distance * robot.COUNTS_PER_INCH);
             robot.leftTarget = robot.motorFrontLeft.getCurrentPosition() + moveCounts;
-            robot.leftTarget = robot.motorBackLeft.getCurrentPosition() + moveCounts;
+            //robot.leftTarget = robot.motorBackLeft.getCurrentPosition() + moveCounts;
 
             robot.rightTarget = robot.motorBackRight.getCurrentPosition() + moveCounts;
-            robot.rightTarget = robot.motorFrontRight.getCurrentPosition() + moveCounts;
+            //robot.rightTarget = robot.motorFrontRight.getCurrentPosition() + moveCounts;
 
 
             // Set Target FIRST, then turn on RUN_TO_POSITION
@@ -245,7 +246,11 @@ public class RedAutoFrontNew extends LinearOpMode
                 }
                 // Display drive status for the driver.
                 double rotation = robot.motorBackLeft.getCurrentPosition();
+
+
                 telemetry.addData("encoder position", rotation);
+                telemetry.addData("Yaw (Z)", "%.2f Deg. (Heading)", getHeading());
+
                 telemetry.update();
             }
 
@@ -270,6 +275,7 @@ public class RedAutoFrontNew extends LinearOpMode
      */
     public void turnToHeading(double maxTurnSpeed, double heading)
     {
+        robot.imu.resetYaw();
 
         // Run getSteeringCorrection() once to pre-calculate the current error
         getSteeringCorrection(heading, robot.P_DRIVE_GAIN);
@@ -287,6 +293,9 @@ public class RedAutoFrontNew extends LinearOpMode
             // Pivot in place by applying the turning correction
             moveRobot(0, robot.turnSpeed);
 
+            telemetry.addData("Yaw (Z)", "%.2f Deg. (Heading)", getHeading());
+
+            telemetry.update();
             // Display drive status for the driver.
         }
 
@@ -327,8 +336,8 @@ public class RedAutoFrontNew extends LinearOpMode
         robot.driveSpeed = drive;     // save this value as a class member so it can be used by telemetry.
         robot.turnSpeed  = turn;      // save this value as a class member so it can be used by telemetry.
 
-        robot.leftSpeed  = drive - turn;
-        robot.rightSpeed = drive + turn;
+        robot.leftSpeed  = drive + turn;
+        robot.rightSpeed = drive - turn;
 
         // Scale speeds down if either one exceeds +/- 1.0;
         double max = Math.max(Math.abs(robot.leftSpeed), Math.abs(robot.rightSpeed));
@@ -338,11 +347,11 @@ public class RedAutoFrontNew extends LinearOpMode
             robot.rightSpeed /= max;
         }
 
-        robot.motorBackLeft.setPower(robot.leftSpeed);
-        robot.motorFrontLeft.setPower(robot.leftSpeed);
+        robot.motorBackLeft.setPower(-robot.leftSpeed);
+        robot.motorFrontLeft.setPower(-robot.leftSpeed);
 
-        robot.motorBackRight.setPower(robot.rightSpeed);
-        robot.motorFrontRight.setPower(robot.rightSpeed);
+        robot.motorBackRight.setPower(-robot.rightSpeed);
+        robot.motorFrontRight.setPower(-robot.rightSpeed);
         double position = robot.motorBackLeft.getCurrentPosition();
         telemetry.addData("encoder position", position);
         //reminder to make the encoders display telemetry
