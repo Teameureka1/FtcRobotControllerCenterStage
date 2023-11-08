@@ -78,7 +78,7 @@ public class teleOp8Bit extends LinearOpMode
             // right stick: Y controls drive Forward/Backward
             double gamepad1LeftY = -gamepad1.left_stick_y;   // drives spin left/right
             double gamepad1LeftX = gamepad1.left_stick_x;    // strafe direction (side to side)
-            double gamepad1RightX = -gamepad1.right_stick_x;  //drives forwards and backwards
+            double gamepad1RightX = gamepad1.right_stick_x;  //drives forwards and backwards
 
 
             // holonomic formulas
@@ -116,7 +116,6 @@ public class teleOp8Bit extends LinearOpMode
                 robot.motorBottomArm.setPower(gamepad2.left_stick_y / 2); // let stick drive UP (note this is positive value on joystick)
                 robot.armHold = robot.motorBottomArm.getCurrentPosition(); // while the lift is moving, continuously reset the arm holding position
             }
-
             else //joystick is released - try to maintain the current position
             {
                 robot.motorBottomArm.setPower((robot.armHold - robot.motorBottomArm.getCurrentPosition() / 2) / robot.slopeVal);   // Note depending on encoder/motor values it may be necessary to reverse sign for motor power by making neg -slopeVal

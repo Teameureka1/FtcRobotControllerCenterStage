@@ -58,11 +58,13 @@ public class SimpleTurn extends LinearOpMode
         CloseClaw();
         armMove(-.3,-300);
         armHold();
-        simpleTurn(90);
+        simpleTurn(45);
 
         // DriveForwardTime(DRIVE_POWER, 650);
         //StopDrivingTime(2000);
+
         //add spike mark pixel here
+
         //DriveForwardTime(-DRIVE_POWER, 500);
 
 
@@ -70,18 +72,11 @@ public class SimpleTurn extends LinearOpMode
          * Autonomous Code Above://
          *************************/
 
-    }
-
-/* currently no Servo configured on bot
-        extendArm();
-
-        StopDriving();
-
-    //runOpMode
+    }//EndOpMode
 
     /** Below: Basic Drive Methods used in Autonomous code...**/
     //set Drive Power variable
-    double DRIVE_POWER = 0.5;
+    double DRIVE_POWER = 0.3;
 
     public void DriveForward(double power)
     {
@@ -189,37 +184,54 @@ public class SimpleTurn extends LinearOpMode
     //Below are the Gyro and Encoder methods
     //////////////////////////////////////////////////////////////////////////////
 
-    private void simpleTurn(double position) {
+    private  void driveEncoder(double speed, double distance){
+        if (opModeIsActive()) {
+            //reset the two motor encoders being monitored
+            robot.motorBackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            robot.motorBackLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        }
+        //Determine new target
+        int moveCounts = (int)(distance*robot.COUNTS_PER_INCH);
+        robot.leftTarget = robot.motorBackLeft.getCurrentPosition()+moveCounts;
+        robot.rightTarget = robot.motorBackRight.getCurrentPosition()+moveCounts;
+
+        //Set Target, then turn on "RUN_TO_POSITION"
+
+    }
+
+    private void simpleTurn(double position)
+    {
+        position = Math.abs(position);
         robot.imu.resetYaw();
-        if(position > 0) {
-            robot.motorBackRight.setPower(-DRIVE_POWER);
-            robot.motorFrontRight.setPower(-DRIVE_POWER);
-            robot.motorBackLeft.setPower(DRIVE_POWER);
-            robot.motorFrontLeft.setPower(DRIVE_POWER);
+        if(position > 0)
+        {   robot.motorBackRight.setPower(-0.3);
+            robot.motorFrontRight.setPower(-0.3);
+            robot.motorBackLeft.setPower(0.3);
+            robot.motorFrontLeft.setPower(0.3);
             //Turns right
         }
 
-        if(position < 0)
+        else if(position < 0)
         {
-            robot.motorBackRight.setPower(DRIVE_POWER);
-            robot.motorFrontRight.setPower(DRIVE_POWER);
-            robot.motorBackLeft.setPower(-DRIVE_POWER);
-            robot.motorFrontLeft.setPower(-DRIVE_POWER);
+            robot.motorBackRight.setPower(0.3);
+            robot.motorFrontRight.setPower(0.3);
+            robot.motorBackLeft.setPower(-0.3);
+            robot.motorFrontLeft.setPower(-0.3);
             //Turns Left
         }
 
-        while (opModeIsActive() && !isStopRequested() && Math.abs(position) > getHeading())
+        while (opModeIsActive() && !isStopRequested() && getHeading() < position)
         {
-            telemetry.addData("position", robot.imu);
+            telemetry.addData("target: ", position);
+            telemetry.addData("position", getHeading());
             telemetry.update();
-
         }
 
         //deactivates the motors
-        robot.motorFrontLeft.setPower(robot.MOTOR_STOP);
-        robot.motorFrontRight.setPower(robot.MOTOR_STOP);
-        robot.motorBackLeft.setPower(robot.MOTOR_STOP);
-        robot.motorBackRight.setPower(robot.MOTOR_STOP);
+        robot.motorFrontLeft.setPower(0);
+        robot.motorFrontRight.setPower(0);
+        robot.motorBackLeft.setPower(0);
+        robot.motorBackRight.setPower(0);
 
 
     }

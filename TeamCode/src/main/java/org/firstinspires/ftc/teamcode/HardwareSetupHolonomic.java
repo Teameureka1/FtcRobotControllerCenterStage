@@ -46,8 +46,8 @@ public class HardwareSetupHolonomic
     static double  turnSpeed    = 0;
     static double  leftSpeed     = 0;
     static double  rightSpeed    = 0;
-    static int     leftTarget    = 0;
-    static int     rightTarget   = 0;
+    public int     leftTarget    = 0;
+    public int     rightTarget   = 0;
 
     //Drive motors
     public DcMotor motorFrontRight = null;
@@ -61,7 +61,7 @@ public class HardwareSetupHolonomic
 
     //public  armMotorTop = null;
     public int armHold;
-    public double  slopeVal         = 2000.0;
+    public double  slopeVal  = 2000.0;
 
     //servos
         //Add servos here
@@ -139,14 +139,7 @@ public class HardwareSetupHolonomic
         motorBackRight.setDirection(DcMotor.Direction.FORWARD);
 
         motorBottomArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
         motorBottomArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-        motorFrontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorFrontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorBackLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorBackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
 
 
         //Keep the motors from moving during initialize.
@@ -155,16 +148,10 @@ public class HardwareSetupHolonomic
         motorBackLeft.setPower(MOTOR_STOP);
         motorBackRight.setPower(MOTOR_STOP);
 
+
         motorBottomArm.setPower(MOTOR_STOP);
 
         motorTopArm.setPower(MOTOR_STOP);
-
-        motorFrontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motorFrontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motorBackLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motorBackRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-
 
 
         /************************************************************
