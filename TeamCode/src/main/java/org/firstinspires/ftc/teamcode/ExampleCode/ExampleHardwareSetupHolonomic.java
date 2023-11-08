@@ -73,6 +73,7 @@ public class ExampleHardwareSetupHolonomic {
         motorFrontRight = hwMap.dcMotor.get("motorFR");
         motorBackLeft = hwMap.dcMotor.get("motorBL");
         motorBackRight = hwMap.dcMotor.get("motorBR");
+        motorBackLeft = hwMap.get(DcMotor.class,"motorBL");
 
         armMotor = hwMap.dcMotor.get ("armMotor");
 

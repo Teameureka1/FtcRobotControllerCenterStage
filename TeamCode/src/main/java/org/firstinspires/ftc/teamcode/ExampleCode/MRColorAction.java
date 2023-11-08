@@ -34,6 +34,7 @@ package org.firstinspires.ftc.teamcode.ExampleCode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -58,6 +59,7 @@ public class MRColorAction extends LinearOpMode {
     // Initialize Hardware Device Objects
   ColorSensor colorSensor;
   Servo servoHandL;
+  CRServo vexMotor;
 
     //Create and set default servo positions variables.
     //Possible servo values: 0.0 - 1.0  For CRServo 0.5=stop greater or less than will spin in that direction
@@ -75,7 +77,7 @@ public class MRColorAction extends LinearOpMode {
     // Map devices to robot hardware
         colorSensor = hardwareMap.colorSensor.get("sensor_color");
         servoHandL = hardwareMap.servo.get("servoHandL");
-
+        vexMotor = hardwareMap.crservo.get("vex");
 
     // wait for the start button to be pressed.
     waitForStart();
