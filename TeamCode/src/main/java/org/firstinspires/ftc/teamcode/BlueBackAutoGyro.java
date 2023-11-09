@@ -243,6 +243,7 @@ public class BlueBackAutoGyro extends LinearOpMode
 
     private void gyroTurn(double position)
     {
+        //Left is positive
 
         robot.imu.resetYaw();
         if(position > 0)
@@ -258,6 +259,7 @@ public class BlueBackAutoGyro extends LinearOpMode
 
         if(position < 0)
         {
+
             robot.motorBackRight.setPower(-0.3);
             robot.motorFrontRight.setPower(-0.3);
             robot.motorBackLeft.setPower(0.3);

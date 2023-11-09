@@ -242,6 +242,7 @@ public class BlueFrontAutoGyro extends LinearOpMode
 
     private void gyroTurn(double position)
     {
+        //left is negative
 
         robot.imu.resetYaw();
         if(position > 0)

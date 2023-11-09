@@ -242,6 +242,7 @@ public class RedFrontAutoGyro extends LinearOpMode
     private void gyroTurn(double position)
     {
 
+        //left is positive
         robot.imu.resetYaw();
         if(position > 0)
         {   robot.motorBackRight.setPower(0.3);
