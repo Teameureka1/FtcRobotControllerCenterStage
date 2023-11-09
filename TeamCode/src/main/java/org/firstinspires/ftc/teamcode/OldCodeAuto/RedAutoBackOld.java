@@ -22,7 +22,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.HardwareSetupHolonomic;
 
-@Autonomous(name="RedBack", group="Red")
+@Autonomous(name="Red", group="Red")
 @Disabled
 public class RedAutoBackOld extends LinearOpMode {
 

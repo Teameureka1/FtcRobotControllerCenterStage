@@ -18,14 +18,13 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
-@Autonomous(name="turn", group="Red")
+@Autonomous(name="RedBack", group="Red")
 //@Disabled
-public class SimpleTurn extends LinearOpMode
+public class RedBackAutoGyro extends LinearOpMode
 {
 
     private ElapsedTime runtime = new ElapsedTime();
@@ -37,7 +36,7 @@ public class SimpleTurn extends LinearOpMode
     /**
      * Constructor
      */
-    public SimpleTurn() {
+    public RedBackAutoGyro() {
     }
 
     @Override
@@ -56,9 +55,26 @@ public class SimpleTurn extends LinearOpMode
          * Autonomous Code Below://
          *************************/
         CloseClaw();
-        armMove(-.3,-300);
+        armMove(.3,-300);
         armHold();
-        simpleTurn(45);
+        DriveForwardTime(DRIVE_POWER, 1000);
+        StopDrivingTime(500);
+        DriveForwardTime(-DRIVE_POWER, 900);
+        gyroTurn(-85);
+        armMove(.5, -600);
+        armHold();
+        DriveForwardTime(DRIVE_POWER, 350);
+        gyroTurn(85);
+        DriveForwardTime(DRIVE_POWER, 160);
+        gyroTurn(-85);
+        DriveForwardTime(0.3, 50);
+        armMove(DRIVE_POWER, 300);
+        OpenClaw();
+        armMove(.5, -300);
+
+
+
+
 
         // DriveForwardTime(DRIVE_POWER, 650);
         //StopDrivingTime(2000);
@@ -76,7 +92,7 @@ public class SimpleTurn extends LinearOpMode
 
     /** Below: Basic Drive Methods used in Autonomous code...**/
     //set Drive Power variable
-    double DRIVE_POWER = 0.3;
+    double DRIVE_POWER = 0.4;
 
     public void DriveForward(double power)
     {
@@ -151,7 +167,7 @@ public class SimpleTurn extends LinearOpMode
     {
         robot.servoHandR.setPosition(robot.OPEN);
         robot.servoHandL.setPosition(robot.CLOSED);
-        sleep(100);
+        sleep(200);
 
     }
     private void armHold()
@@ -164,15 +180,9 @@ public class SimpleTurn extends LinearOpMode
     {
         robot.motorBottomArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.motorBottomArm.setTargetPosition(pos);
-        robot.motorBottomArm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.motorBottomArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.motorBottomArm.setPower(power);
-        while (robot.motorBottomArm.isBusy())
-        {
-            telemetry.addData("armPos", robot.motorBottomArm.getCurrentPosition());
-            telemetry.update();
-            idle();
-        }
+        sleep(500);
         robot.motorBottomArm.setPower(0);
         // Set the arm hold position to the final position of the arm
         robot.armHold = robot.motorBottomArm.getCurrentPosition();
@@ -189,50 +199,88 @@ public class SimpleTurn extends LinearOpMode
             //reset the two motor encoders being monitored
             robot.motorBackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             robot.motorBackLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            robot.motorFrontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            robot.motorFrontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         }
-        //Determine new target
+        //Determine new targets
         int moveCounts = (int)(distance*robot.COUNTS_PER_INCH);
         robot.leftTarget = robot.motorBackLeft.getCurrentPosition()+moveCounts;
         robot.rightTarget = robot.motorBackRight.getCurrentPosition()+moveCounts;
+        //robot.frightTarget = robot.motorFrontRight.getCurrentPosition()+moveCounts;
+        //robot.fleftTarget = robot.motorFrontLeft.getCurrentPosition()+moveCounts;
 
         //Set Target, then turn on "RUN_TO_POSITION"
+        robot.motorBackRight.setTargetPosition(robot.rightTarget);
+        robot.motorBackLeft.setTargetPosition(robot.leftTarget);
+        //robot.motorFrontRight.setTargetPosition(robot.frightTarget);
+        //robot.motorFrontLeft.setTargetPosition(robot.fleftTarget);
 
-    }
+        robot.motorBackRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.motorBackLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        //robot.motorFrontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        //robot.motorFrontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-    private void simpleTurn(double position)
+        //Set motor speed
+        robot.motorFrontLeft.setPower(speed);
+        robot.motorBackLeft.setPower(speed);
+        robot.motorFrontRight.setPower(speed);
+        robot.motorBackRight.setPower(speed);
+
+        //Keep looping until target reached and display target & encoder
+        while (opModeIsActive() && robot.motorBackRight.isBusy()
+                && robot.motorBackLeft.isBusy())
+        {
+
+            telemetry.addLine("Straight");
+            telemetry.addData("Target: ", "%5.0f", robot.rightTarget/robot.COUNTS_PER_INCH);
+            telemetry.addData("Current: ", "%5.0f", robot.motorBackRight.getCurrentPosition()/robot.COUNTS_PER_INCH);
+            telemetry.update();
+        }
+        robot.motorBackRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.motorBackLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+    }//EndDriveEncoder
+
+    private void gyroTurn(double position)
     {
-        position = Math.abs(position);
+
         robot.imu.resetYaw();
         if(position > 0)
-        {   robot.motorBackRight.setPower(-0.3);
-            robot.motorFrontRight.setPower(-0.3);
-            robot.motorBackLeft.setPower(0.3);
-            robot.motorFrontLeft.setPower(0.3);
-            //Turns right
-        }
-
-        else if(position < 0)
-        {
-            robot.motorBackRight.setPower(0.3);
+        {   robot.motorBackRight.setPower(0.3);
             robot.motorFrontRight.setPower(0.3);
             robot.motorBackLeft.setPower(-0.3);
             robot.motorFrontLeft.setPower(-0.3);
-            //Turns Left
+            //Turns right
+
         }
 
-        while (opModeIsActive() && !isStopRequested() && getHeading() < position)
+        //Reminder: the program only works if its less than zero
+
+        if(position < 0)
+        {
+            robot.motorBackRight.setPower(-0.3);
+            robot.motorFrontRight.setPower(-0.3);
+            robot.motorBackLeft.setPower(0.3);
+            robot.motorFrontLeft.setPower(0.3);
+            //Turns Left
+
+        }
+
+        while (opModeIsActive() && !isStopRequested() && Math.abs(getHeading()) < Math.abs(position))
         {
             telemetry.addData("target: ", position);
             telemetry.addData("position", getHeading());
             telemetry.update();
         }
 
+
+
         //deactivates the motors
         robot.motorFrontLeft.setPower(0);
         robot.motorFrontRight.setPower(0);
         robot.motorBackLeft.setPower(0);
         robot.motorBackRight.setPower(0);
-
+        sleep(500);
 
     }
     public double getHeading()

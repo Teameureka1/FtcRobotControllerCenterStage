@@ -48,6 +48,8 @@ public class HardwareSetupHolonomic
     static double  rightSpeed    = 0;
     public int     leftTarget    = 0;
     public int     rightTarget   = 0;
+    public int     fleftTarget   = 0;
+    public int     frightTarget   = 0;
 
     //Drive motors
     public DcMotor motorFrontRight = null;
@@ -61,7 +63,7 @@ public class HardwareSetupHolonomic
 
     //public  armMotorTop = null;
     public int armHold;
-    public double  slopeVal  = 2000.0;
+    public double  slopeVal  = 2200.0;
 
     //servos
         //Add servos here

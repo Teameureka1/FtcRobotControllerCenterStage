@@ -12,7 +12,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 @Autonomous(name = "IMUTest", group = "Example")
-//@Disabled
+@Disabled
 public class IMUTest extends LinearOpMode {
     private BNO055IMU imu;
     /**
