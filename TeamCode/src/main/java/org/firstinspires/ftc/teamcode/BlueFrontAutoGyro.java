@@ -54,25 +54,32 @@ public class BlueFrontAutoGyro extends LinearOpMode
         /*************************
          * Autonomous Code Below://
          *************************/
+
+
         CloseClaw();
         armMove(-.3,-300);
         armHold();
-        DriveForwardTime(DRIVE_POWER, 1000);
+        DriveForwardTime(DRIVE_POWER, 1300);
         StopDrivingTime(500);
-        DriveForwardTime(-DRIVE_POWER, 800);
-        gyroTurn(-85);
-        DriveForwardTime(DRIVE_POWER, 400);
-        gyroTurn(90);
+        DriveForwardTime(-DRIVE_POWER, 1000);
+        gyroTurn(-80);
+        DriveForwardTime(DRIVE_POWER, 350);
+        gyroTurn(80);
         DriveForwardTime(DRIVE_POWER,   1700);
-        gyroTurn(90);
-        DriveForwardTime(DRIVE_POWER, 3200);
-        armMove(-.3, -700);
-        armHold();
+        gyroTurn(70);
+        DriveForwardTime(DRIVE_POWER, 2600);
         StrafeLeft(DRIVE_POWER, 500);
-        DriveForwardTime(.2, 50);
-        armMove(.3, 100);
+        armMove(-.3, -600);
+        armHold();
+        sleep(500);
+        DriveForwardTime(.3, 500);
+        sleep(500);
         OpenClaw();
-        armMove(-.3, -100);
+
+        StopDrivingTime(500);
+        armMove(-.3, -200);
+        armHold();
+        sleep(2000);
 
 
         // DriveForwardTime(DRIVE_POWER, 650);
@@ -122,12 +129,12 @@ public class BlueFrontAutoGyro extends LinearOpMode
     public void StrafeLeft(double power, long time) throws InterruptedException
     {
         // write the values to the motors
-        robot.motorFrontRight.setPower(power);
-        robot.motorFrontLeft.setPower(-power);
-        robot.motorBackRight.setPower(-power);
-        robot.motorBackLeft.setPower(power);
+        robot.motorFrontRight.setPower(power);//2
+        robot.motorFrontLeft.setPower(-power);//1
+        robot.motorBackRight.setPower(-power);//#3
+        robot.motorBackLeft.setPower(power); //#0
         Thread.sleep(time);
-        sleep(500);
+
     }
 
     public void StrafeRight(double power, long time) throws InterruptedException
@@ -240,8 +247,7 @@ public class BlueFrontAutoGyro extends LinearOpMode
 
     }//EndDriveEncoder
 
-    private void gyroTurn(double position)
-    {
+    private void gyroTurn(double position) throws InterruptedException {
         //left is negative
 
         robot.imu.resetYaw();
@@ -273,16 +279,13 @@ public class BlueFrontAutoGyro extends LinearOpMode
             telemetry.update();
         }
 
-
-
         //deactivates the motors
-        robot.motorFrontLeft.setPower(0);
+        robot.motorBackRight.setPower(0);
         robot.motorFrontRight.setPower(0);
         robot.motorBackLeft.setPower(0);
-        robot.motorBackRight.setPower(0);
-        sleep(500);
-
+        robot.motorFrontLeft.setPower(0);
     }
+
     public double getHeading()
     {
         YawPitchRollAngles orientation = robot.imu.getRobotYawPitchRollAngles();

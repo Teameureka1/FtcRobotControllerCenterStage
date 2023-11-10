@@ -57,9 +57,9 @@ public class BlueBackAutoGyro extends LinearOpMode
         CloseClaw();
         armMove(.3,-300);
         armHold();
-        DriveForwardTime(DRIVE_POWER, 1000);
+        DriveForwardTime(DRIVE_POWER, 1150);
         StopDrivingTime(500);
-        DriveForwardTime(-DRIVE_POWER, 900);
+        DriveForwardTime(-DRIVE_POWER, 1000);
         gyroTurn(85);
         armMove(.5, -600);
         armHold();
@@ -67,7 +67,8 @@ public class BlueBackAutoGyro extends LinearOpMode
         gyroTurn(-85);
         DriveForwardTime(DRIVE_POWER, 160);
         gyroTurn(85);
-        DriveForwardTime(0.3, 50);
+        DriveForwardTime(0.2, 1500);
+        StopDrivingTime(500);
         armMove(DRIVE_POWER, 300);
         OpenClaw();
         armMove(.5, -300);
@@ -105,9 +106,12 @@ public class BlueBackAutoGyro extends LinearOpMode
 
     public void DriveForwardTime(double power, long time) throws InterruptedException
     {
+        armHold();
         DriveForward(power);
         Thread.sleep(time);
+
         sleep(500);
+
     }
 
     public void StopDriving()
@@ -117,6 +121,7 @@ public class BlueBackAutoGyro extends LinearOpMode
 
     public void StopDrivingTime(long time) throws InterruptedException
     {
+        armHold();
         DriveForwardTime(0, time);
     }
 
@@ -157,9 +162,11 @@ public class BlueBackAutoGyro extends LinearOpMode
 
     public void OpenClaw()
     {
+        sleep(1000);
+        armHold();
         robot.servoHandR.setPosition(robot.CLOSED); //note: uses servo instead of motor.
         robot.servoHandL.setPosition(robot.OPEN);
-        sleep(100);
+        sleep(500);
 
     }
 
