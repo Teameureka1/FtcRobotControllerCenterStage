@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
@@ -109,7 +110,7 @@ public class teleOp8Bit extends LinearOpMode
 
 
 
-            robot.motorBottomArm.setPower(gamepad2.left_stick_y / 2);
+
 
             if (gamepad2.left_stick_y != 0) // && robot.armMotor.getCurrentPositionJ() > 0 && robot.armMotor.getCurrentPosition() < 100 //add this to check encoder within limits
             {
