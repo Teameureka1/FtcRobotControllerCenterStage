@@ -112,14 +112,23 @@ public class teleOp8Bit extends LinearOpMode
 
 
 
-            if (gamepad2.left_stick_y != 0) // && robot.armMotor.getCurrentPositionJ() > 0 && robot.armMotor.getCurrentPosition() < 100 //add this to check encoder within limits
+            if (gamepad2.left_stick_y != 0 && robot.motorBottomArm.getCurrentPosition() < 900) // && robot.armMotor.getCurrentPositionJ() > 0 && robot.armMotor.getCurrentPosition() < 100 //add this to check encoder within limits
             {
                 robot.motorBottomArm.setPower(gamepad2.left_stick_y / 2); // let stick drive UP (note this is positive value on joystick)
                 robot.armHold = robot.motorBottomArm.getCurrentPosition(); // while the lift is moving, continuously reset the arm holding position
-            }
-            else //joystick is released - try to maintain the current position
+            } else if (gamepad2.left_stick_y == 0 && robot.motorBottomArm.getCurrentPosition() > 900)
             {
-                robot.motorBottomArm.setPower((robot.armHold - robot.motorBottomArm.getCurrentPosition() / 2) / robot.slopeVal);   // Note depending on encoder/motor values it may be necessary to reverse sign for motor power by making neg -slopeVal
+                robot.motorBottomArm.setPower(-(robot.armHold - robot.motorBottomArm.getCurrentPosition() / 2) / robot.slopeVal);// Note depending on encoder/motor values it may be necessary to reverse sign for motor power by making neg -slopeVal
+
+
+            }
+
+            else if(gamepad2.left_stick_y == 0 && robot.motorBottomArm.getCurrentPosition() < 900) //joystick is released - try to maintain the current position
+            {
+                robot.motorBottomArm.setPower((robot.armHold - robot.motorBottomArm.getCurrentPosition() / 2) / robot.slopeVal);// Note depending on encoder/motor values it may be necessary to reverse sign for motor power by making neg -slopeVal
+                telemetry.addData("holdPower:", robot.armHold);
+                telemetry.addData("current position", robot.motorBottomArm.getCurrentPosition());
+                telemetry.update();
                 // the difference between hold and current positions will
                 // attempt to drive the motor back to be equal with holdPosition.
                 // By adjusting slopeVal you can achieved perfect hold power

@@ -63,7 +63,7 @@ public class RedFrontAutoGyro extends LinearOpMode
         gyroTurn(85);
         DriveForwardTime(DRIVE_POWER, 350);
         gyroTurn(-90);
-        DriveForwardTime(DRIVE_POWER,   1700);
+        DriveForwardTime(DRIVE_POWER,   1500);
         gyroTurn(-90);
         DriveForwardTime(DRIVE_POWER, 3200);
         armMove(-.3, -700);

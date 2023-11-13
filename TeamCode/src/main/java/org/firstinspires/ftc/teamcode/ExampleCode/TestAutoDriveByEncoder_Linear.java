@@ -155,9 +155,9 @@ public class TestAutoDriveByEncoder_Linear extends LinearOpMode {
 
     /*  Below is
      *  Method which performs relative moves, based on encoder counts.
-     *  Encoders are NOT reset as the move is based on the current position.
+      *  Encoders are NOT reset as the move is based on the current position.
      *  Move will stop if any of three conditions occur:
-     *  1) Move gets to the desired position
+    *  1) Move gets to the desired position
      *  2) Move runs out of time  NOTE: Ample time must be given to allow for position to be obtained
      *  3) Driver stops the opmode running.
     */

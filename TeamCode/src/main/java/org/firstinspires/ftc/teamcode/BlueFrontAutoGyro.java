@@ -65,7 +65,7 @@ public class BlueFrontAutoGyro extends LinearOpMode
         gyroTurn(-80);
         DriveForwardTime(DRIVE_POWER, 350);
         gyroTurn(80);
-        DriveForwardTime(DRIVE_POWER,   1700);
+        DriveForwardTime(DRIVE_POWER,   1500);
         gyroTurn(70);
         DriveForwardTime(DRIVE_POWER, 2600);
         StrafeLeft(DRIVE_POWER, 500);
@@ -291,5 +291,47 @@ public class BlueFrontAutoGyro extends LinearOpMode
         YawPitchRollAngles orientation = robot.imu.getRobotYawPitchRollAngles();
         return orientation.getYaw(AngleUnit.DEGREES);
     }
+
+    public void driveByEncoder(double distance, double speed)
+    {
+
+        if(opModeIsActive())
+        {
+
+            int moveCounts = (int)(distance * robot.COUNTS_PER_INCH);
+            robot.MFL = robot.motorFrontLeft.getCurrentPosition() + moveCounts;
+            robot.MFR = robot.motorFrontRight.getCurrentPosition() + moveCounts;
+            robot.MBL = robot.motorBackLeft.getCurrentPosition() + moveCounts;
+            robot.MBR = robot.motorBackRight.getCurrentPosition() + moveCounts;
+
+            robot.motorFrontRight.setTargetPosition(robot.MFR);
+            robot.motorFrontLeft.setTargetPosition(robot.MFL);
+            robot.motorBackRight.setTargetPosition(robot.MBL);
+            robot.motorBackRight.setTargetPosition(robot.MBR);
+
+            robot.motorFrontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.motorFrontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.motorBackRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.motorBackRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            robot.motorFrontRight.setPower(speed);
+            robot.motorFrontLeft.setPower(speed);
+            robot.motorBackRight.setPower(speed);
+            robot.motorBackRight.setPower(speed);
+
+            while(opModeIsActive() && (robot.motorBackRight.isBusy() && robot.motorBackLeft.isBusy() && robot.motorFrontRight.isBusy() && robot.motorFrontLeft.isBusy()))
+            {
+                //Telemetry for driver
+
+                
+            }
+        }
+
+
+    }
+
+
+
+
 }
 //OpMode

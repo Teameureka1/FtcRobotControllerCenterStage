@@ -59,11 +59,11 @@ public class RedBackAutoGyro extends LinearOpMode
         armHold();
         DriveForwardTime(DRIVE_POWER, 1000);
         StopDrivingTime(500);
-        DriveForwardTime(-DRIVE_POWER, 900);
+        DriveForwardTime(-DRIVE_POWER, 700);
         gyroTurn(-85);
         armMove(.5, -600);
         armHold();
-        DriveForwardTime(DRIVE_POWER, 350);
+        DriveForwardTime(DRIVE_POWER, 500);
         gyroTurn(85);
         DriveForwardTime(DRIVE_POWER, 160);
         gyroTurn(-85);
