@@ -210,16 +210,16 @@ public class BlueFrontAutoGyro extends LinearOpMode
         }
         //Determine new targets
         int moveCounts = (int)(distance*robot.COUNTS_PER_INCH);
-        robot.leftTarget = robot.motorBackLeft.getCurrentPosition()+moveCounts;
-        robot.rightTarget = robot.motorBackRight.getCurrentPosition()+moveCounts;
-        //robot.frightTarget = robot.motorFrontRight.getCurrentPosition()+moveCounts;
-        //robot.fleftTarget = robot.motorFrontLeft.getCurrentPosition()+moveCounts;
+        robot.BleftTarget = robot.motorBackLeft.getCurrentPosition()+moveCounts;
+        robot.BrightTarget = robot.motorBackRight.getCurrentPosition()+moveCounts;
+        robot.FrightTarget = robot.motorFrontRight.getCurrentPosition()+moveCounts;
+        robot.FleftTarget = robot.motorFrontLeft.getCurrentPosition()+moveCounts;
 
         //Set Target, then turn on "RUN_TO_POSITION"
-        robot.motorBackRight.setTargetPosition(robot.rightTarget);
-        robot.motorBackLeft.setTargetPosition(robot.leftTarget);
-        //robot.motorFrontRight.setTargetPosition(robot.frightTarget);
-        //robot.motorFrontLeft.setTargetPosition(robot.fleftTarget);
+        robot.motorBackRight.setTargetPosition(robot.BrightTarget);
+        robot.motorBackLeft.setTargetPosition(robot.BleftTarget);
+        robot.motorFrontRight.setTargetPosition(robot.FrightTarget);
+        robot.motorFrontLeft.setTargetPosition(robot.FleftTarget);
 
         robot.motorBackRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.motorBackLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -238,7 +238,7 @@ public class BlueFrontAutoGyro extends LinearOpMode
         {
 
             telemetry.addLine("Straight");
-            telemetry.addData("Target: ", "%5.0f", robot.rightTarget/robot.COUNTS_PER_INCH);
+            telemetry.addData("Target: ", "%5.0f", robot.BrightTarget/robot.COUNTS_PER_INCH);
             telemetry.addData("Current: ", "%5.0f", robot.motorBackRight.getCurrentPosition()/robot.COUNTS_PER_INCH);
             telemetry.update();
         }
@@ -257,12 +257,10 @@ public class BlueFrontAutoGyro extends LinearOpMode
             robot.motorBackLeft.setPower(-0.3);
             robot.motorFrontLeft.setPower(-0.3);
             //Turns right
+            //Reminder: the program only works if its less than zero
 
         }
-
-        //Reminder: the program only works if its less than zero
-
-        if(position < 0)
+        else if(position < 0)
         {
             robot.motorBackRight.setPower(-0.3);
             robot.motorFrontRight.setPower(-0.3);
@@ -284,6 +282,7 @@ public class BlueFrontAutoGyro extends LinearOpMode
         robot.motorFrontRight.setPower(0);
         robot.motorBackLeft.setPower(0);
         robot.motorFrontLeft.setPower(0);
+        sleep(500);
     }
 
     public double getHeading()
@@ -322,13 +321,33 @@ public class BlueFrontAutoGyro extends LinearOpMode
             while(opModeIsActive() && (robot.motorBackRight.isBusy() && robot.motorBackLeft.isBusy() && robot.motorFrontRight.isBusy() && robot.motorFrontLeft.isBusy()))
             {
                 //Telemetry for driver
+                telemetry.addLine("straight");
+                telemetry.addData("EncCounts ", robot.motorFrontLeft.getCurrentPosition());
+                telemetry.update();
 
-                
+
             }
+            //Stop all motors
+
+            robot.motorFrontRight.setPower(0);
+            robot.motorFrontLeft.setPower(0);
+            robot.motorBackRight.setPower(0);
+            robot.motorBackRight.setPower(0);
+
+
+
+            robot.motorFrontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.motorFrontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.motorBackRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.motorBackLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+            sleep(500);
+
         }
 
-
     }
+
+
 
 
 

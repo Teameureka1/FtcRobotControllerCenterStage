@@ -46,10 +46,10 @@ public class HardwareSetupHolonomic
     static double  turnSpeed    = 0;
     static double  leftSpeed     = 0;
     static double  rightSpeed    = 0;
-    public int     leftTarget    = 0;
-    public int     rightTarget   = 0;
-    public int     fleftTarget   = 0;
-    public int     frightTarget   = 0;
+    public int     BleftTarget    = 0;
+    public int     BrightTarget   = 0;
+    public int     FleftTarget   = 0;
+    public int     FrightTarget   = 0;
 
     public int MFL = 0;
     public int MBL = 0;
