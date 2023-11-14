@@ -211,16 +211,16 @@ public class BlueBackAutoGyro extends LinearOpMode
         }
         //Determine new targets
         int moveCounts = (int)(distance*robot.COUNTS_PER_INCH);
-        robot.leftTarget = robot.motorBackLeft.getCurrentPosition()+moveCounts;
-        robot.rightTarget = robot.motorBackRight.getCurrentPosition()+moveCounts;
-        //robot.frightTarget = robot.motorFrontRight.getCurrentPosition()+moveCounts;
-        //robot.fleftTarget = robot.motorFrontLeft.getCurrentPosition()+moveCounts;
+        robot.BleftTarget = robot.motorBackLeft.getCurrentPosition()+moveCounts;
+        robot.BrightTarget = robot.motorBackRight.getCurrentPosition()+moveCounts;
+        robot.FrightTarget = robot.motorFrontRight.getCurrentPosition()+moveCounts;
+        robot.FleftTarget = robot.motorFrontLeft.getCurrentPosition()+moveCounts;
 
         //Set Target, then turn on "RUN_TO_POSITION"
-        robot.motorBackRight.setTargetPosition(robot.rightTarget);
-        robot.motorBackLeft.setTargetPosition(robot.leftTarget);
-        //robot.motorFrontRight.setTargetPosition(robot.frightTarget);
-        //robot.motorFrontLeft.setTargetPosition(robot.fleftTarget);
+        robot.motorBackRight.setTargetPosition(robot.BrightTarget);
+        robot.motorBackLeft.setTargetPosition(robot.BleftTarget);
+        //robot.motorFrontRight.setTargetPosition(robot.FrightTarget);
+        //robot.motorFrontLeft.setTargetPosition(robot.FleftTarget);
 
         robot.motorBackRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.motorBackLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -239,7 +239,7 @@ public class BlueBackAutoGyro extends LinearOpMode
         {
 
             telemetry.addLine("Straight");
-            telemetry.addData("Target: ", "%5.0f", robot.rightTarget/robot.COUNTS_PER_INCH);
+            telemetry.addData("Target: ", "%5.0f", robot.BrightTarget/robot.COUNTS_PER_INCH);
             telemetry.addData("Current: ", "%5.0f", robot.motorBackRight.getCurrentPosition()/robot.COUNTS_PER_INCH);
             telemetry.update();
         }

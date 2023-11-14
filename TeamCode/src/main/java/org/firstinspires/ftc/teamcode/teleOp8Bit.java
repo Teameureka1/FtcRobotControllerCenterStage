@@ -111,21 +111,57 @@ public class teleOp8Bit extends LinearOpMode
 
 
 
+            if (gamepad2.left_stick_y != 0)  //add this to check encoder within limits
+            {
+                telemetry.addData("joyStick: ", gamepad2.left_stick_y);
+                telemetry.update();
+                if (robot.motorBottomArm.getCurrentPosition() > -800)
+                {
+                    robot.motorBottomArm.setPower(gamepad2.left_stick_y / 2); // let stick drive UP (note this is positive value on joystick)
+                    robot.armHold = robot.motorBottomArm.getCurrentPosition(); // while the lift is moving, continuously reset the arm holding position
+                }
+                else if(gamepad2.left_stick_y > 0 && robot.motorBottomArm.getCurrentPosition() < -800) //JoyStick down == Positive value
+                {
+                    robot.motorBottomArm.setPower(gamepad2.left_stick_y / 2); // let stick drive UP (note this is positive value on joystick)
+                    robot.armHold = robot.motorBottomArm.getCurrentPosition();
+                }
 
-            if (gamepad2.left_stick_y != 0 && robot.motorBottomArm.getCurrentPosition() < 900) // && robot.armMotor.getCurrentPositionJ() > 0 && robot.armMotor.getCurrentPosition() < 100 //add this to check encoder within limits
-            {
-                robot.motorBottomArm.setPower(gamepad2.left_stick_y / 2); // let stick drive UP (note this is positive value on joystick)
-                robot.armHold = robot.motorBottomArm.getCurrentPosition(); // while the lift is moving, continuously reset the arm holding position
-            } else if (gamepad2.left_stick_y == 0 && robot.motorBottomArm.getCurrentPosition() > 900)
-            {
-                robot.motorBottomArm.setPower(-(robot.armHold - robot.motorBottomArm.getCurrentPosition() / 2) / robot.slopeVal);// Note depending on encoder/motor values it may be necessary to reverse sign for motor power by making neg -slopeVal
 
 
             }
 
-            else if(gamepad2.left_stick_y == 0 && robot.motorBottomArm.getCurrentPosition() < 900) //joystick is released - try to maintain the current position
+            if(gamepad2.dpad_up)
             {
-                robot.motorBottomArm.setPower((robot.armHold - robot.motorBottomArm.getCurrentPosition() / 2) / robot.slopeVal);// Note depending on encoder/motor values it may be necessary to reverse sign for motor power by making neg -slopeVal
+               //in proggress
+                while(robot.motorBottomArm.getCurrentPosition() > -1200)
+                {
+                    robot.motorBottomArm.setTargetPosition(-1200);
+                    robot.motorBottomArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    robot.motorBottomArm.setPower(-.3);
+                    sleep(500);
+                    robot.motorBottomArm.setPower(0);
+                }
+
+                while (!robot.MagOut.isPressed())
+                {
+                    robot.motorTopArm.setPower(.3);
+                    sleep(500);
+                    robot.motorTopArm.setPower(0);
+                }
+            }
+
+            else if(gamepad2.left_stick_y == 0) //joystick is released - try to maintain the current position
+            {
+                if(robot.motorBottomArm.getCurrentPosition() < -800)
+                {
+                robot.motorBottomArm.setPower(-(robot.armHold - robot.motorBottomArm.getCurrentPosition() / 2) / robot.slopeVal);// Note depending on encoder/motor values it may be necessary to reverse sign for motor power by making neg -slopeVal
+
+                }
+
+                else if(robot.motorBottomArm.getCurrentPosition() > -800)
+                {
+                    robot.motorBottomArm.setPower((robot.armHold - robot.motorBottomArm.getCurrentPosition() / 2) / robot.slopeVal);// Note depending on encoder/motor values it may be necessary to reverse sign for motor power by making neg -slopeVal
+                }
                 telemetry.addData("holdPower:", robot.armHold);
                 telemetry.addData("current position", robot.motorBottomArm.getCurrentPosition());
                 telemetry.update();
