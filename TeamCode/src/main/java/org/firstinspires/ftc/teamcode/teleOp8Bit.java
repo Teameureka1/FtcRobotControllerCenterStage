@@ -108,67 +108,35 @@ public class teleOp8Bit extends LinearOpMode
 
             // write the clipped values from the formula to the motors
 
-
-
-
             if (gamepad2.left_stick_y != 0)  //add this to check encoder within limits
             {
                 telemetry.addData("joyStick: ", gamepad2.left_stick_y);
-                telemetry.update();
                 if (robot.motorBottomArm.getCurrentPosition() > -800)
                 {
-                    robot.motorBottomArm.setPower(gamepad2.left_stick_y / 2); // let stick drive UP (note this is positive value on joystick)
+                    robot.motorBottomArm.setPower(gamepad2.left_stick_y / 2);// let stick drive UP (note this is positive value on joystick)
+
                     robot.armHold = robot.motorBottomArm.getCurrentPosition(); // while the lift is moving, continuously reset the arm holding position
                 }
                 else if(gamepad2.left_stick_y > 0 && robot.motorBottomArm.getCurrentPosition() < -800) //JoyStick down == Positive value
                 {
-                    robot.motorBottomArm.setPower(gamepad2.left_stick_y / 2); // let stick drive UP (note this is positive value on joystick)
-                    robot.armHold = robot.motorBottomArm.getCurrentPosition();
-                }
-
-
-
-            }
-
-            if(gamepad2.dpad_up)
-            {
-               //in proggress
-                while(robot.motorBottomArm.getCurrentPosition() > -1200)
-                {
-                    robot.motorBottomArm.setTargetPosition(-1200);
-                    robot.motorBottomArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    robot.motorBottomArm.setPower(-.3);
-                    sleep(500);
                     robot.motorBottomArm.setPower(0);
+                    robot.motorBottomArm.setPower(gamepad2.left_stick_y / 2); // let stick drive UP (note this is positive value on joystick)
                 }
 
-                while (!robot.MagOut.isPressed())
-                {
-                    robot.motorTopArm.setPower(.3);
-                    sleep(500);
-                    robot.motorTopArm.setPower(0);
-                }
             }
-
-            else if(gamepad2.left_stick_y == 0) //joystick is released - try to maintain the current position
+             else if(gamepad2.left_stick_y == 0 && opModeIsActive()) //joystick is released - try to maintain the current position
             {
-                if(robot.motorBottomArm.getCurrentPosition() < -800)
-                {
-                robot.motorBottomArm.setPower(-(robot.armHold - robot.motorBottomArm.getCurrentPosition() / 2) / robot.slopeVal);// Note depending on encoder/motor values it may be necessary to reverse sign for motor power by making neg -slopeVal
+                robot.motorBottomArm.setPower((robot.armHold - robot.motorBottomArm.getCurrentPosition() / 2) / robot.slopeVal);// Note depending on encoder/motor values it may be necessary to reverse sign for motor power by making neg -slopeVal
 
-                }
-
-                else if(robot.motorBottomArm.getCurrentPosition() > -800)
-                {
-                    robot.motorBottomArm.setPower((robot.armHold - robot.motorBottomArm.getCurrentPosition() / 2) / robot.slopeVal);// Note depending on encoder/motor values it may be necessary to reverse sign for motor power by making neg -slopeVal
-                }
                 telemetry.addData("holdPower:", robot.armHold);
                 telemetry.addData("current position", robot.motorBottomArm.getCurrentPosition());
-                telemetry.update();
+
                 // the difference between hold and current positions will
                 // attempt to drive the motor back to be equal with holdPosition.
                 // By adjusting slopeVal you can achieved perfect hold power
-            }
+            }//end of left y == 0
+
+
             //the claw servos open a and close b.
             if(gamepad2.a)
             {
@@ -239,6 +207,6 @@ public class teleOp8Bit extends LinearOpMode
             telemetry.addData("b right pwr", "back right pwr: " + String.format("%.2f", BackRight));
             telemetry.addData("b left pwr", "back left pwr: " + String.format("%.2f", BackLeft));
             telemetry.update();
-        }
+        }//opMode
     }
 }

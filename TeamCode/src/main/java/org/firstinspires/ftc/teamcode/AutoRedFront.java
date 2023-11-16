@@ -22,9 +22,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
-@Autonomous(name="RedBack", group="Red")
+@Autonomous(name="RedFront", group="Red")
 //@Disabled
-public class RedBackAutoGyro extends LinearOpMode
+public class AutoRedFront extends LinearOpMode
 {
 
     private ElapsedTime runtime = new ElapsedTime();
@@ -33,10 +33,15 @@ public class RedBackAutoGyro extends LinearOpMode
     // assumes left motors are reversed
     HardwareSetupHolonomic robot = new HardwareSetupHolonomic();
 
+    int FRtarget = 0;
+    int BRtarget = 0;
+    int FLtarget = 0;
+    int BLtarget = 0;
+
     /**
      * Constructor
      */
-    public RedBackAutoGyro() {
+    public AutoRedFront() {
     }
 
     @Override
@@ -47,41 +52,18 @@ public class RedBackAutoGyro extends LinearOpMode
         //adds feedback telemetry to DS
         telemetry.addData("Status", "Initialized");
         telemetry.update();
-        //robot.imu.initialize(robot.myIMUparameters);
+
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
         /*************************
          * Autonomous Code Below://
          *************************/
-        CloseClaw();
-        armMove(.3,-300);
-        armHold();
-        DriveForwardTime(DRIVE_POWER, 1000);
-        StopDrivingTime(500);
-        DriveForwardTime(-DRIVE_POWER, 700);
-        gyroTurn(-85);
-        armMove(.5, -600);
-        armHold();
-        DriveForwardTime(DRIVE_POWER, 500);
-        gyroTurn(85);
-        DriveForwardTime(DRIVE_POWER, 160);
-        gyroTurn(-85);
-        DriveForwardTime(0.3, 50);
-        armMove(DRIVE_POWER, 300);
-        OpenClaw();
-        armMove(.5, -300);
+
+        DriveEncoder(0.5,24);
 
 
 
-
-
-        // DriveForwardTime(DRIVE_POWER, 650);
-        //StopDrivingTime(2000);
-
-        //add spike mark pixel here
-
-        //DriveForwardTime(-DRIVE_POWER, 500);
 
 
         /*************************
@@ -105,9 +87,12 @@ public class RedBackAutoGyro extends LinearOpMode
 
     public void DriveForwardTime(double power, long time) throws InterruptedException
     {
+        armHold();
         DriveForward(power);
         Thread.sleep(time);
+
         sleep(500);
+
     }
 
     public void StopDriving()
@@ -117,6 +102,7 @@ public class RedBackAutoGyro extends LinearOpMode
 
     public void StopDrivingTime(long time) throws InterruptedException
     {
+        armHold();
         DriveForwardTime(0, time);
     }
 
@@ -154,12 +140,13 @@ public class RedBackAutoGyro extends LinearOpMode
         sleep(500);
     }
 
-
     public void OpenClaw()
     {
+        sleep(1000);
+        armHold();
         robot.servoHandR.setPosition(robot.CLOSED); //note: uses servo instead of motor.
         robot.servoHandL.setPosition(robot.OPEN);
-        sleep(100);
+        sleep(500);
 
     }
 
@@ -194,56 +181,78 @@ public class RedBackAutoGyro extends LinearOpMode
     //Below are the Gyro and Encoder methods
     //////////////////////////////////////////////////////////////////////////////
 
-    private  void driveEncoder(double speed, double distance){
-        if (opModeIsActive()) {
-            //reset the two motor encoders being monitored
-            robot.motorBackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            robot.motorBackLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            robot.motorFrontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            robot.motorFrontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        }
+    private  void DriveEncoder(double speed, double distance){
+
+        //reset Mode
+        robot.motorBackRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.motorBackLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.motorFrontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.motorFrontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        //reset the motor encoders
+        robot.motorBackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.motorBackLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.motorFrontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.motorFrontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
         //Determine new targets
         int moveCounts = (int)(distance*robot.COUNTS_PER_INCH);
-        robot.BleftTarget = robot.motorBackLeft.getCurrentPosition()+moveCounts;
-        robot.BrightTarget = robot.motorBackRight.getCurrentPosition()+moveCounts;
-        //robot.frightTarget = robot.motorFrontRight.getCurrentPosition()+moveCounts;
-        //robot.fleftTarget = robot.motorFrontLeft.getCurrentPosition()+moveCounts;
+        BLtarget = robot.motorBackLeft.getCurrentPosition()+moveCounts;
+        BRtarget = robot.motorBackRight.getCurrentPosition()+moveCounts;
+        FRtarget = robot.motorFrontRight.getCurrentPosition()+moveCounts;
+        FLtarget = robot.motorFrontLeft.getCurrentPosition()+moveCounts;
 
         //Set Target, then turn on "RUN_TO_POSITION"
-        robot.motorBackRight.setTargetPosition(robot.BrightTarget);
-        robot.motorBackLeft.setTargetPosition(robot.BleftTarget);
-        //robot.motorFrontRight.setTargetPosition(robot.frightTarget);
-        //robot.motorFrontLeft.setTargetPosition(robot.fleftTarget);
+        robot.motorBackRight.setTargetPosition(BRtarget);
+        robot.motorBackLeft.setTargetPosition(BLtarget);
+        robot.motorFrontRight.setTargetPosition(FRtarget);
+        robot.motorFrontLeft.setTargetPosition(FLtarget);
 
+        //Set Mode
         robot.motorBackRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.motorBackLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        //robot.motorFrontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        //robot.motorFrontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.motorFrontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.motorFrontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        //Set motor speed
-        robot.motorFrontLeft.setPower(speed);
-        robot.motorBackLeft.setPower(speed);
-        robot.motorFrontRight.setPower(speed);
-        robot.motorBackRight.setPower(speed);
+        //Set motor speed "turn on motors"
+        robot.motorFrontLeft.setPower(.3);
+        robot.motorBackLeft.setPower(.3);
+        robot.motorFrontRight.setPower(.3);
+        robot.motorBackRight.setPower(.3);
 
         //Keep looping until target reached and display target & encoder
         while (opModeIsActive() && robot.motorBackRight.isBusy()
-                && robot.motorBackLeft.isBusy())
+
+                && robot.motorFrontRight.isBusy())
         {
 
             telemetry.addLine("Straight");
-            telemetry.addData("Target: ", "%5.0f", robot.BrightTarget/robot.COUNTS_PER_INCH);
-            telemetry.addData("Current: ", "%5.0f", robot.motorBackRight.getCurrentPosition()/robot.COUNTS_PER_INCH);
+            telemetry.addData("Target: ", "%5.0f", BRtarget/robot.COUNTS_PER_INCH);
+            telemetry.addData("CurrentBR: ", "%5.0f", robot.motorBackRight.getCurrentPosition()/robot.COUNTS_PER_INCH);
+            telemetry.addData("CurrentBL: ", "%5.0f", robot.motorBackLeft.getCurrentPosition()/robot.COUNTS_PER_INCH);
+            telemetry.addData("CurrentFR: ", "%5.0f", robot.motorFrontRight.getCurrentPosition()/robot.COUNTS_PER_INCH);
+            telemetry.addData("CurrentFL: ", "%5.0f", robot.motorFrontLeft.getCurrentPosition()/robot.COUNTS_PER_INCH);
+
             telemetry.update();
         }
+        //Motors Off
+        robot.motorFrontLeft.setPower(0);
+        robot.motorBackLeft.setPower(0);
+        robot.motorFrontRight.setPower(0);
+        robot.motorBackRight.setPower(0);
+
+        //reset Mode
         robot.motorBackRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         robot.motorBackLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.motorFrontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.motorFrontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
     }//EndDriveEncoder
 
-    private void gyroTurn(double position)
+    private void GyroTurn(double position)
     {
-        //left is positive
+        //Left is positive
+
         robot.imu.resetYaw();
         if(position > 0)
         {   robot.motorBackRight.setPower(0.3);
@@ -258,6 +267,7 @@ public class RedBackAutoGyro extends LinearOpMode
 
         if(position < 0)
         {
+
             robot.motorBackRight.setPower(-0.3);
             robot.motorFrontRight.setPower(-0.3);
             robot.motorBackLeft.setPower(0.3);
@@ -266,10 +276,10 @@ public class RedBackAutoGyro extends LinearOpMode
 
         }
 
-        while (opModeIsActive() && !isStopRequested() && Math.abs(getHeading()) < Math.abs(position))
+        while (opModeIsActive() && !isStopRequested() && Math.abs(GetHeading()) < Math.abs(position))
         {
             telemetry.addData("target: ", position);
-            telemetry.addData("position", getHeading());
+            telemetry.addData("position", GetHeading());
             telemetry.update();
         }
 
@@ -283,7 +293,7 @@ public class RedBackAutoGyro extends LinearOpMode
         sleep(500);
 
     }
-    public double getHeading()
+    public double GetHeading()
     {
         YawPitchRollAngles orientation = robot.imu.getRobotYawPitchRollAngles();
         return orientation.getYaw(AngleUnit.DEGREES);
