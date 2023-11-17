@@ -77,7 +77,7 @@ public class HardwareSetupHolonomic
     public Servo servoHandR = null;
     public Servo servoHandL = null;
 
-    public Servo servoDR = null;
+    public Servo servoP = null;
 
     //sensors
         //Add sensors here
@@ -169,7 +169,7 @@ public class HardwareSetupHolonomic
         servoHandR = hwMap.servo.get("servoHandR");
         servoHandL = hwMap.servo.get("servoHandL");
 
-        servoDR = hwMap.servo.get("servoDR");
+        servoP = hwMap.servo.get("servoP");
 
 
 
@@ -177,7 +177,7 @@ public class HardwareSetupHolonomic
         servoHandR.setPosition(CLOSED);
         servoHandL.setPosition(OPEN);
 
-        servoDR.setPosition(OPEN);
+        servoP.setPosition(1);
 
         /************************************************************
          * SENSOR SECTION**************************************************

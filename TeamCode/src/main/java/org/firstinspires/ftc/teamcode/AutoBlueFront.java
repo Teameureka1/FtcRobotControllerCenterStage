@@ -63,6 +63,7 @@ public class AutoBlueFront extends LinearOpMode
         armMove(-.3, -150);
         armHold();
         DriveEncoder(0.5,35);
+        pushUp();
         DriveEncoder(.5, 18);
         GyroTurn(85);
         DriveEncoder(.5, 72);
@@ -178,6 +179,14 @@ public class AutoBlueFront extends LinearOpMode
         robot.motorBottomArm.setPower(0);
         // Set the arm hold position to the final position of the arm
         robot.armHold = robot.motorBottomArm.getCurrentPosition();
+    }
+    private void pushUp() throws InterruptedException {
+        robot.servoP.setPosition(.5);
+        wait(500);
+    }
+    private void pushDown() throws InterruptedException {
+        robot.servoP.setPosition(1);
+        wait(500);
     }
 
 

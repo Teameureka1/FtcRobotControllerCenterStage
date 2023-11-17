@@ -60,8 +60,10 @@ public class AutoBlueBack extends LinearOpMode
          * Autonomous Code Below://
          *************************/
 
-        DriveEncoder(0.5,24);
-
+        armMove(-.3, -150);
+        armHold();
+        DriveEncoder(0.5,35);
+        pushUp();
 
 
 
@@ -174,6 +176,14 @@ public class AutoBlueBack extends LinearOpMode
         // Set the arm hold position to the final position of the arm
         robot.armHold = robot.motorBottomArm.getCurrentPosition();
         sleep(100);
+    }
+    private void pushUp() throws InterruptedException {
+        robot.servoP.setPosition(.5);
+        wait(500);
+    }
+    private void pushDown() throws InterruptedException {
+        robot.servoP.setPosition(1);
+        wait(500);
     }
 
 
