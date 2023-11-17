@@ -60,13 +60,20 @@ public class AutoBlueFront extends LinearOpMode
          * Autonomous Code Below://
          *************************/
         //move up needs to be both negative
-        armMove(-.3, -150);
+        CloseClaw();
+        sleep(200);
+        armMove(-.3, -300);
         armHold();
-        DriveEncoder(0.5,35);
+        DriveEncoder(0.5,34);
         pushUp();
-        DriveEncoder(.5, 18);
-        GyroTurn(85);
-        DriveEncoder(.5, 72);
+        DriveEncoder(-.5, 19);
+        GyroTurn(80);
+        DriveEncoder(.5, 84);
+        StrafeLeft(.4, 700);
+        armMove(-.3, -400);
+        armHold();
+
+
 
 
 
@@ -182,11 +189,11 @@ public class AutoBlueFront extends LinearOpMode
     }
     private void pushUp() throws InterruptedException {
         robot.servoP.setPosition(.5);
-        wait(500);
+        sleep(500);
     }
     private void pushDown() throws InterruptedException {
         robot.servoP.setPosition(1);
-        wait(500);
+        sleep(500);
     }
 
 
