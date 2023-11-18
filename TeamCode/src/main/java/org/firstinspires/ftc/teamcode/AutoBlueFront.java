@@ -60,18 +60,25 @@ public class AutoBlueFront extends LinearOpMode
          * Autonomous Code Below://
          *************************/
         //move up needs to be both negative
-        CloseClaw();
-        sleep(200);
-        armMove(-.3, -300);
+        //CloseClaw();
+        //sleep(200);
+        //armMove(-.3, -400);
         armHold();
-        DriveEncoder(0.5,34);
+        DriveEncoder(0.5,33);
         pushUp();
-        DriveEncoder(-.5, 19);
+        DriveEncoder(-.5, 18);
+        CloseClaw();
         GyroTurn(80);
         DriveEncoder(.5, 84);
-        StrafeLeft(.4, 700);
-        armMove(-.3, -400);
+        //CloseClaw();
+        armMove(-.5, -600);
         armHold();
+        StrafeLeft(.4, 1700);
+        DriveEncoder(.3, 12);
+        armMove(.3, 200);
+        OpenClaw();
+        armMove(-0.3, -300);
+
 
 
 
@@ -128,7 +135,7 @@ public class AutoBlueFront extends LinearOpMode
         robot.motorBackRight.setPower(-power);
         robot.motorBackLeft.setPower(power);
         Thread.sleep(time);
-        sleep(500);
+        armHold();
     }
 
     public void StrafeRight(double power, long time) throws InterruptedException
@@ -179,13 +186,14 @@ public class AutoBlueFront extends LinearOpMode
 
     private void armMove(double power, int pos)
     {
+        robot.motorBottomArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.motorBottomArm.setTargetPosition(pos);
         robot.motorBottomArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.motorBottomArm.setPower(power);
         sleep(500);
         robot.motorBottomArm.setPower(0);
         // Set the arm hold position to the final position of the arm
-        robot.armHold = robot.motorBottomArm.getCurrentPosition();
+        robot.armHold = pos;
     }
     private void pushUp() throws InterruptedException {
         robot.servoP.setPosition(.5);

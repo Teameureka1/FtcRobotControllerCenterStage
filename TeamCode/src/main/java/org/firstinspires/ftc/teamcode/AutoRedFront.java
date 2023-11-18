@@ -60,13 +60,24 @@ public class AutoRedFront extends LinearOpMode
          * Autonomous Code Below://
          *************************/
 
-        armMove(-.3, -150);
+        CloseClaw();
+        sleep(200);
+        armMove(-.3, -300);
         armHold();
-        DriveEncoder(0.5,35);
+        DriveEncoder(0.5,34);
         pushUp();
-        DriveEncoder(.5, 18);
-        GyroTurn(-85);
-        DriveEncoder(.5, 72);
+        DriveEncoder(.5, 19);
+        GyroTurn(-75);
+        DriveEncoder(.5, 84);
+        //CloseClaw();
+        armMove(-.5, -600);
+        armHold();
+        StrafeRight(.3, 1000);
+        DriveEncoder(.3, 12);
+        armMove(.3, 200);
+        OpenClaw();
+        armMove(-0.3, -300);
+
 
 
 
@@ -178,16 +189,15 @@ public class AutoRedFront extends LinearOpMode
         sleep(500);
         robot.motorBottomArm.setPower(0);
         // Set the arm hold position to the final position of the arm
-        robot.armHold = robot.motorBottomArm.getCurrentPosition();
-        sleep(100);
+        robot.armHold = pos;
     }
     private void pushUp() throws InterruptedException {
         robot.servoP.setPosition(.5);
-        wait(500);
+        sleep(500);
     }
     private void pushDown() throws InterruptedException {
         robot.servoP.setPosition(1);
-        wait(500);
+        sleep(500);
     }
 
 
