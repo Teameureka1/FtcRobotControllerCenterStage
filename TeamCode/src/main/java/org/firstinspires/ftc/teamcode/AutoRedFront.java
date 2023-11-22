@@ -274,9 +274,7 @@ public class AutoRedFront extends LinearOpMode
     }//EndDriveEncoder
 
     private void GyroTurn(double position)
-    {
-        //Left is positive
-
+    { //Left is positive
         robot.imu.resetYaw();
         if(position > 0)
         {   robot.motorBackRight.setPower(0.3);
@@ -284,38 +282,27 @@ public class AutoRedFront extends LinearOpMode
             robot.motorBackLeft.setPower(-0.3);
             robot.motorFrontLeft.setPower(-0.3);
             //Turns right
-
         }
-
-        //Reminder: the program only works if its less than zero
-
-        if(position < 0)
+        if(position < 0)  //Reminder: the program only works if its less than zero
         {
-
             robot.motorBackRight.setPower(-0.3);
             robot.motorFrontRight.setPower(-0.3);
             robot.motorBackLeft.setPower(0.3);
             robot.motorFrontLeft.setPower(0.3);
             //Turns Left
-
         }
-
         while (opModeIsActive() && !isStopRequested() && Math.abs(GetHeading()) < Math.abs(position))
         {
             telemetry.addData("target: ", position);
             telemetry.addData("position", GetHeading());
             telemetry.update();
         }
-
-
-
         //deactivates the motors
         robot.motorFrontLeft.setPower(0);
         robot.motorFrontRight.setPower(0);
         robot.motorBackLeft.setPower(0);
         robot.motorBackRight.setPower(0);
         sleep(500);
-
     }
     public double GetHeading()
     {
