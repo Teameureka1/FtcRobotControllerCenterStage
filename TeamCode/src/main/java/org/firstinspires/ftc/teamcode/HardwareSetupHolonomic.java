@@ -171,7 +171,7 @@ public class HardwareSetupHolonomic
         servoHandL = hwMap.servo.get("servoHandL");
 
         servoP = hwMap.servo.get("servoP");
-        servoD = hwMap.servo.get("servoP");
+        servoD = hwMap.servo.get("servoD");
 
 
 

@@ -55,7 +55,7 @@ public class teleOp8Bit extends LinearOpMode
         telemetry.addData("Status", "Initialized - Waiting for Start");
         telemetry.addData("armPosition: ", +robot.motorBottomArm.getCurrentPosition());
         telemetry.addData("HoldPosition: ", +robot.armHold);
-        telemetry.update();
+       //b  telemetry.update();
 
         waitForStart();
         runtime.reset(); // starts timer once start button is pressed
@@ -66,7 +66,7 @@ public class teleOp8Bit extends LinearOpMode
             telemetry.addData("Status", "Initialized - Waiting for Start");
             telemetry.addData("armPosition: ", +robot.motorBottomArm.getCurrentPosition());
             telemetry.addData("HoldPosition: ", +robot.armHold);
-            telemetry.update();
+
 
             waitForStart();
 
@@ -80,6 +80,12 @@ public class teleOp8Bit extends LinearOpMode
             double gamepad1LeftY = -gamepad1.left_stick_y;   // drives spin left/right
             double gamepad1LeftX = gamepad1.left_stick_x;    // strafe direction (side to side)
             double gamepad1RightX = gamepad1.right_stick_x;  //drives forwards and backwards
+
+            telemetry.addData("joyStick: ", gamepad2.left_stick_y);
+
+            telemetry.addData("holdPos:", robot.armHold);
+            telemetry.addData("current position", robot.motorBottomArm.getCurrentPosition());
+            telemetry.addData("arm Power ",(robot.armHold - robot.motorBottomArm.getCurrentPosition()) / robot.slopeVal);
 
 
             // holonomic formulas
@@ -97,6 +103,8 @@ public class teleOp8Bit extends LinearOpMode
                 robot.motorFrontLeft.setPower(FrontLeft);
                 robot.motorBackLeft.setPower(BackLeft);
                 robot.motorBackRight.setPower(BackRight);
+                //robot.armHold = robot.motorBottomArm.getCurrentPosition();
+
             }
             else
             {
@@ -104,13 +112,14 @@ public class teleOp8Bit extends LinearOpMode
                 robot.motorFrontLeft.setPower(FrontLeft / 2);
                 robot.motorBackLeft.setPower(BackLeft / 2);
                 robot.motorBackRight.setPower(BackRight / 2);
+               // robot.armHold = robot.motorBottomArm.getCurrentPosition();
+
             }
 
             // write the clipped values from the formula to the motors
 
             if (gamepad2.left_stick_y != 0)  //add this to check encoder within limits
             {
-                telemetry.addData("joyStick: ", gamepad2.left_stick_y);
                 robot.motorBottomArm.setPower(gamepad2.left_stick_y / 2);// let stick drive UP (note this is positive value on joystick)
 
                 robot.armHold = robot.motorBottomArm.getCurrentPosition();
@@ -119,10 +128,6 @@ public class teleOp8Bit extends LinearOpMode
              else if(gamepad2.left_stick_y > -.1 && gamepad2.left_stick_y < .1 && opModeIsActive()) //joystick is released - try to maintain the current position
             {
                 robot.motorBottomArm.setPower((robot.armHold - robot.motorBottomArm.getCurrentPosition()) / robot.slopeVal);// Note depending on encoder/motor values it may be necessary to reverse sign for motor power by making neg -slopeVal
-
-                telemetry.addData("holdPos:", robot.armHold);
-                telemetry.addData("current position", robot.motorBottomArm.getCurrentPosition());
-                telemetry.addData("arm Power ",(robot.armHold - robot.motorBottomArm.getCurrentPosition()) / robot.slopeVal);
 
                 // the difference between hold and current positions will
                 // attempt to drive the motor back to be equal with holdPosition.
@@ -162,34 +167,43 @@ public class teleOp8Bit extends LinearOpMode
             if(!robot.MagIn.isPressed() && !robot.MagOut.isPressed())
             {
                 robot.motorTopArm.setPower(-gamepad2.right_stick_y);
+               // robot.armHold = robot.motorBottomArm.getCurrentPosition();
+
             }
             else
             {
                 if (robot.MagIn.isPressed() == true)
                 {
-                    telemetry.addData("DETECTED", "MagIN - reverse direction");
+                    //telemetry.addData("DETECTED", "MagIN - reverse direction");
                     if(gamepad2.right_stick_y > 0)
                     {
-                        telemetry.addData("Joystick Y", gamepad2.right_stick_y);
+                        //telemetry.addData("Joystick Y", gamepad2.right_stick_y);
                         robot.motorTopArm.setPower(-gamepad2.right_stick_y);
+                        // robot.armHold = robot.motorBottomArm.getCurrentPosition();
 
                     }
                     else
                     {
                         robot.motorTopArm.setPower(0);
+                       // robot.armHold = robot.motorBottomArm.getCurrentPosition();
+
                     }
                 }
                 else if (robot.MagOut.isPressed() == true)
                 {
-                    telemetry.addData("DETECTED", "magOut - reverse direction");
+                    //telemetry.addData("DETECTED", "magOut - reverse direction");
                     if (gamepad2.right_stick_y < 0)
                     {
-                        telemetry.addData("Motor", gamepad2.right_stick_y);
+                       // telemetry.addData("Motor", gamepad2.right_stick_y);
                         robot.motorTopArm.setPower(-gamepad2.right_stick_y);
+                       // robot.armHold = robot.motorBottomArm.getCurrentPosition();
+
                     }
                     else
                     {
                         robot.motorTopArm.setPower(0);
+                        //robot.armHold = robot.motorBottomArm.getCurrentPosition();
+
 
                     }
 
@@ -201,7 +215,7 @@ public class teleOp8Bit extends LinearOpMode
              */
             //telemetry.addData("armPos", robot.motorBottomArm.getCurrentPosition());
 
-            telemetry.addData("gamePad2 LeftY", gamepad2.left_stick_y);
+            //telemetry.addData("gamePad2 LeftY", gamepad2.left_stick_y);
             //telemetry.addData("Text", "*** Robot Data***");
             //telemetry.addData("Joy XL YL XR", String.format("%.2f", gamepad1LeftX) + " " + String.format("%.2f", gamepad1LeftY) + " " + String.format("%.2f", gamepad1RightX));
             //telemetry.addData("f left pwr", "front left  pwr: " + String.format("%.2f", FrontLeft));
