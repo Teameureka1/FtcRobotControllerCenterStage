@@ -191,11 +191,11 @@ public class AutoRedFront extends LinearOpMode
         // Set the arm hold position to the final position of the arm
         robot.armHold = pos;
     }
-    private void pushUp() throws InterruptedException {
+    private void pushDown() throws InterruptedException {
         robot.servoP.setPosition(.5);
         sleep(500);
     }
-    private void pushDown() throws InterruptedException {
+    private void pushUp() throws InterruptedException {
         robot.servoP.setPosition(1);
         sleep(500);
     }
@@ -276,20 +276,18 @@ public class AutoRedFront extends LinearOpMode
     private void GyroTurn(double position)
     { //Left is positive
         robot.imu.resetYaw();
-        if(position > 0)
+        if(position > 0)  //Turns right
         {   robot.motorBackRight.setPower(0.3);
             robot.motorFrontRight.setPower(0.3);
             robot.motorBackLeft.setPower(-0.3);
             robot.motorFrontLeft.setPower(-0.3);
-            //Turns right
         }
-        if(position < 0)  //Reminder: the program only works if its less than zero
+        if(position < 0) //Turns Left   Reminder: the program only works if its less than zero
         {
             robot.motorBackRight.setPower(-0.3);
             robot.motorFrontRight.setPower(-0.3);
             robot.motorBackLeft.setPower(0.3);
             robot.motorFrontLeft.setPower(0.3);
-            //Turns Left
         }
         while (opModeIsActive() && !isStopRequested() && Math.abs(GetHeading()) < Math.abs(position))
         {

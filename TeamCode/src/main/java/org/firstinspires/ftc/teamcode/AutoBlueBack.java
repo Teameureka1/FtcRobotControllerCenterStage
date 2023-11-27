@@ -187,11 +187,11 @@ public class AutoBlueBack extends LinearOpMode
         // Set the arm hold position to the final position of the arm
         robot.armHold = pos;
     }
-    private void pushUp() throws InterruptedException {
+    private void pushDown() throws InterruptedException {
         robot.servoP.setPosition(.5);
         sleep(500);
     }
-    private void pushDown() throws InterruptedException {
+    private void pushUp() throws InterruptedException {
         robot.servoP.setPosition(1);
         sleep(500);
     }
