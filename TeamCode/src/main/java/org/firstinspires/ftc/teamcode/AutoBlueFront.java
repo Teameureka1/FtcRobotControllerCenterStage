@@ -64,9 +64,9 @@ public class AutoBlueFront extends LinearOpMode
         //sleep(200);
         //armMove(-.3, -400);
         armHold();
-        DriveEncoder(0.5,33);
+        DriveEncoder(0.5,34);
         pushUp();
-        DriveEncoder(-.5, 18);
+        DriveEncoder(-.5, 17);
         CloseClaw();
         GyroTurn(80);
         DriveEncoder(.5, 84);

@@ -126,8 +126,6 @@ public class HardwareSetupHolonomic
         RevHubOrientationOnRobot.UsbFacingDirection  usbDirection  = RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
         RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
 
-
-
         /************************************************************
          * MOTOR SECTION
          ************************************************************/
@@ -140,7 +138,6 @@ public class HardwareSetupHolonomic
         motorBottomArm = hwMap.get(DcMotor.class, "armMotor");
         motorTopArm = hwMap.get(DcMotor.class, "topArm");
 
-
         // Set the drive motor directions:
         motorFrontLeft.setDirection(DcMotor.Direction.FORWARD);
         motorFrontRight.setDirection(DcMotor.Direction.FORWARD);
@@ -150,13 +147,11 @@ public class HardwareSetupHolonomic
         motorBottomArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorBottomArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-
         //Keep the motors from moving during initialize.
         motorFrontLeft.setPower(MOTOR_STOP);
         motorFrontRight.setPower(MOTOR_STOP);
         motorBackLeft.setPower(MOTOR_STOP);
         motorBackRight.setPower(MOTOR_STOP);
-
 
         motorBottomArm.setPower(MOTOR_STOP);
 
@@ -169,17 +164,14 @@ public class HardwareSetupHolonomic
             //Add servo configuration
         servoHandR = hwMap.servo.get("servoHandR");
         servoHandL = hwMap.servo.get("servoHandL");
-
         servoP = hwMap.servo.get("servoP");
         servoD = hwMap.servo.get("servoD");
-
-
 
         //open claw
         servoHandR.setPosition(CLOSED);
         servoHandL.setPosition(OPEN);
 
-        servoP.setPosition(1);
+        servoP.setPosition(.5);
         servoD.setPosition(.1);
 
         /************************************************************
@@ -193,10 +185,6 @@ public class HardwareSetupHolonomic
         // This sample expects the IMU to be in a REV Hub and named "imu".
         imu = hwMap.get(IMU.class, "imu");
         imu.initialize(new IMU.Parameters(orientationOnRobot));
-
-
-
-
    }
 
 }

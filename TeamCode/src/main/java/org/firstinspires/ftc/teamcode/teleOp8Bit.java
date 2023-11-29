@@ -159,6 +159,15 @@ public class teleOp8Bit extends LinearOpMode
                 robot.servoP.setPosition(.5);
             }
 
+            if(gamepad1.y)
+            {
+                robot.servoD.setPosition(.9);
+            }
+            if(gamepad1.x)
+            {
+                robot.servoD.setPosition(.1);
+            }
+
 
 
             if(!robot.MagIn.isPressed() && !robot.MagOut.isPressed())

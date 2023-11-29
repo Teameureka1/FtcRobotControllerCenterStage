@@ -61,13 +61,14 @@ public class AutoRedBack extends LinearOpMode
          *************************/
 
         CloseClaw();
-        DriveEncoder(0.5,35);
+        DriveEncoder(0.5,38);
         pushUp();
         GyroTurn(-80);
         DriveEncoder(.5, 36);
-        armMove(-.5, -600);
+        armMove(-.5, -800);
         armHold();
-        DriveEncoder(0.3, 5);
+        StrafeRight(.3, 400);
+        DriveEncoder(.3, 5);
         armMove(.3, 200);
         OpenClaw();
         armMove(-.3, -200);
