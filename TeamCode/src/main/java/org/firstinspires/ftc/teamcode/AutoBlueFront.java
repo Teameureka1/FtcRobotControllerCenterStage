@@ -59,21 +59,17 @@ public class AutoBlueFront extends LinearOpMode
         /*************************
          * Autonomous Code Below://
          *************************/
-        //move up needs to be both negative
-        //CloseClaw();
-        //sleep(200);
-        //armMove(-.3, -400);
-        armHold();
-        DriveEncoder(0.5,34);
+
+        DriveEncoder(0.5,36);
         pushUp();
         DriveEncoder(-.5, 17);
         CloseClaw();
         GyroTurn(80);
         DriveEncoder(.5, 84);
         //CloseClaw();
-        armMove(-.5, -600);
-        armHold();
         StrafeLeft(.4, 1700);
+        armMove(-.3, -900);
+        armHold();
         DriveEncoder(.3, 12);
         armMove(.3, 200);
         OpenClaw();

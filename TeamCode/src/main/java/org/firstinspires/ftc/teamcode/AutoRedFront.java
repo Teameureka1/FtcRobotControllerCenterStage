@@ -60,21 +60,20 @@ public class AutoRedFront extends LinearOpMode
          * Autonomous Code Below://
          *************************/
 
-        CloseClaw();
+
         sleep(200);
-        armMove(-.3, -300);
-        armHold();
-        DriveEncoder(0.5,34);
+        DriveEncoder(0.5,36);
         pushUp();
-        DriveEncoder(.5, 19);
+        DriveEncoder(.5, 17);
+        CloseClaw();
         GyroTurn(-75);
         DriveEncoder(.5, 84);
         //CloseClaw();
-        armMove(-.5, -600);
+        StrafeRight(.3, 1200);
+        armMove(-.3, -800);
         armHold();
-        StrafeRight(.3, 1000);
         DriveEncoder(.3, 12);
-        armMove(.3, 200);
+        armMove(.3, 250);
         OpenClaw();
         armMove(-0.3, -300);
 

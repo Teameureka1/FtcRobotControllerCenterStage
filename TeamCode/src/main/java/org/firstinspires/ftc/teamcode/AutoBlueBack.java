@@ -66,9 +66,10 @@ public class AutoBlueBack extends LinearOpMode
         pushUp();
         GyroTurn(80);
         DriveEncoder(.5, 36);
-        StrafeLeft(.3, 600);
+        StrafeLeft(.3, 400);
         armMove(-.5, -800);
         armHold();
+        DriveEncoder(.3, 5);
         armMove(.3, 200);
         OpenClaw();
         armMove(-.3, -200);

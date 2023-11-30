@@ -65,18 +65,15 @@ public class AutoRedBack extends LinearOpMode
         pushUp();
         GyroTurn(-80);
         DriveEncoder(.5, 36);
-        armMove(-.5, -800);
+        armMove(-.5, -900);
         armHold();
         StrafeRight(.3, 400);
-        DriveEncoder(.3, 5);
+        DriveEncoder(.3, 7);
         armMove(.3, 200);
         OpenClaw();
         armMove(-.3, -200);
         armHold();
         sleep(500);
-
-
-
 
         /*************************
          * Autonomous Code Above://
