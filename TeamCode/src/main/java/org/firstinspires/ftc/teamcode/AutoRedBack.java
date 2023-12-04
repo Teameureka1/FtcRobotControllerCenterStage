@@ -67,8 +67,8 @@ public class AutoRedBack extends LinearOpMode
         DriveEncoder(.5, 36);
         armMove(-.5, -900);
         armHold();
-        StrafeRight(.3, 400);
-        DriveEncoder(.3, 7);
+        StrafeRight(.3, 350);
+        DriveEncoder(.3, 8);
         armMove(.3, 200);
         OpenClaw();
         armMove(-.3, -200);
