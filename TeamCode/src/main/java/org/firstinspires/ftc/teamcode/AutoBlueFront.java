@@ -21,6 +21,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
+import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+
+import java.util.List;
 
 @Autonomous(name="BlueFront", group="Blue")
 //@Disabled
@@ -52,6 +55,7 @@ public class AutoBlueFront extends LinearOpMode
         //adds feedback telemetry to DS
         telemetry.addData("Status", "Initialized");
         telemetry.update();
+        robot.initTfod();
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
@@ -59,14 +63,14 @@ public class AutoBlueFront extends LinearOpMode
         /*************************
          * Autonomous Code Below://
          *************************/
-
+    /**
         DriveEncoder(0.5,36);
         pushUp();
         DriveEncoder(-.5, 17);
         CloseClaw();
         GyroTurn(80);
         DriveEncoder(.5, 84);
-        //CloseClaw();
+        CloseClaw();
         StrafeLeft(.4, 1700);
         armMove(-.3, -900);
         armHold();
@@ -74,13 +78,13 @@ public class AutoBlueFront extends LinearOpMode
         armMove(.3, 500);
         OpenClaw();
         armMove(-0.3, -300);
+    **/
 
 
 
 
 
-
-
+        robot.visionPortal.close();
 
 
         /*************************
@@ -92,6 +96,66 @@ public class AutoBlueFront extends LinearOpMode
     /** Below: Basic Drive Methods used in Autonomous code...**/
     //set Drive Power variable
     double DRIVE_POWER = 0.4;
+
+
+    public void telemetryTfod() throws InterruptedException {
+
+        List<Recognition> currentRecognitions = robot.tfod.getRecognitions();
+        telemetry.addData("# Objects Detected", currentRecognitions.size());
+
+        boolean detectedProp = false;
+
+        // Step through the list of recognitions and display info for each one.
+        for (Recognition recognition : currentRecognitions) {
+            double x = (recognition.getLeft() + recognition.getRight()) / 2 ;
+            double y = (recognition.getTop()  + recognition.getBottom()) / 2 ;
+
+            if(x <= 320)// assuming the robot is on the blue front position
+            {
+                detectedProp = true;
+                telemetry.addLine("left");
+            }
+            else if(x > 320)
+            {
+                detectedProp = true;
+                telemetry.addLine("center");
+                DriveEncoder(0.5,36);
+                pushUp();
+                DriveEncoder(-.5, 17);
+                CloseClaw();
+                GyroTurn(80);
+                DriveEncoder(.5, 84);
+                CloseClaw();
+                StrafeLeft(.4, 1700);
+                armMove(-.3, -900);
+                armHold();
+                DriveEncoder(.3, 12);
+                armMove(.3, 500);
+                OpenClaw();
+                armMove(-0.3, -300);
+            }
+            else
+            {
+
+                telemetry.addLine("right");
+
+            }
+
+            telemetry.addLine(String.valueOf(recognition.getConfidence()));
+
+            telemetry.addData(""," ");
+            telemetry.addData("Image", "%s (%.0f %% Conf.)", recognition.getLabel(), recognition.getConfidence() * 100);
+            telemetry.addData("- Position", "%.0f / %.0f", x, y);
+            telemetry.addData("- Size", "%.0f x %.0f", recognition.getWidth(), recognition.getHeight());
+        }   // end for() loop
+
+        if(!detectedProp) {
+            telemetry.addLine("right");
+        }
+
+        telemetry.update();
+
+    }   // end method telemetryTfod()
 
     public void DriveForward(double power)
     {
