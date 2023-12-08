@@ -114,11 +114,14 @@ public class AutoBlueFront extends LinearOpMode
             {
                 detectedProp = true;
                 telemetry.addLine("left");
+
+
             }
             else if(x > 320)
             {
                 detectedProp = true;
                 telemetry.addLine("center");
+
                 DriveEncoder(0.5,36);
                 pushUp();
                 DriveEncoder(-.5, 17);
@@ -141,6 +144,10 @@ public class AutoBlueFront extends LinearOpMode
 
             }
 
+            if(detectedProp)
+            {
+
+            }
             telemetry.addLine(String.valueOf(recognition.getConfidence()));
 
             telemetry.addData(""," ");
@@ -369,7 +376,6 @@ public class AutoBlueFront extends LinearOpMode
         {
             telemetry.addData("target: ", position);
             telemetry.addData("position", GetHeading());
-            telemetry.update();
         }
 
 
