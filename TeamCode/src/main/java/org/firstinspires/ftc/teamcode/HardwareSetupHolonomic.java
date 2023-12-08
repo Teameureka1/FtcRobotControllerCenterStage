@@ -114,6 +114,13 @@ public class HardwareSetupHolonomic
     //I wanna make closed be 0-0.3 and open a higher value
     final static double MOTOR_STOP = 0.0; // sets motor power to zero
 
+    private static final String TFOD_MODEL_ASSET = "Hats.tflite";
+
+    private static final String[] LABELS = {
+            "blue hat", "red hat", "white pixel", "yellow pixel"
+    };
+
+
     //CR servo variables
         //Add servo variable here
     double SpinLeft = 0.1;
@@ -203,8 +210,7 @@ public class HardwareSetupHolonomic
         imu = hwMap.get(IMU.class, "imu");
         imu.initialize(new IMU.Parameters(orientationOnRobot));
    }
-    public void initTfod()
-    {
+    void initTfod() {
 
         // Create the TensorFlow processor by using a builder.
         tfod = new TfodProcessor.Builder()
@@ -214,7 +220,9 @@ public class HardwareSetupHolonomic
                 // choose one of the following:
                 //   Use setModelAssetName() if the custom TF Model is built in as an asset (AS only).
                 //   Use setModelFileName() if you have downloaded a custom team model to the Robot Controller.
-                .setModelAssetName("Hats.tflite")
+                //.setModelAssetName("Hats.tflite")
+                .setModelAssetName(TFOD_MODEL_ASSET)
+                .setModelLabels(LABELS)
                 //.setModelFileName("Object.tflite")
 
                 // The following default settings are available to un-comment and edit as needed to
@@ -257,12 +265,14 @@ public class HardwareSetupHolonomic
         // Build the Vision Portal, using the above settings.
         visionPortal = builder.build();
 
+
         // Set confidence threshold for TFOD recognitions, at any time.
-        tfod.setMinResultConfidence(0.30f);
+        //tfod.setMinResultConfidence(0.75f);
 
         // Disable or re-enable the TFOD processor at any time.
         //visionPortal.setProcessorEnabled(tfod, true);
 
     }   // end method initTfod()
+
 }
 

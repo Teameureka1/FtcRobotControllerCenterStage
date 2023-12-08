@@ -21,6 +21,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
+import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+
+import java.util.List;
 
 @Autonomous(name="RedFront", group="Red")
 //@Disabled
@@ -49,9 +52,11 @@ public class AutoRedFront extends LinearOpMode
     {
         robot.init(hardwareMap);  //Initialize hardware from the Hardware Setup Class
         robot.imu.resetYaw();
+
         //adds feedback telemetry to DS
         telemetry.addData("Status", "Initialized");
         telemetry.update();
+        robot.initTfod();
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
@@ -59,28 +64,17 @@ public class AutoRedFront extends LinearOpMode
         /*************************
          * Autonomous Code Below://
          *************************/
-
-
-        sleep(200);
-        DriveEncoder(0.5,36);
-        pushUp();
-        DriveEncoder(.5, 17);
-        CloseClaw();
-        GyroTurn(-75);
-        DriveEncoder(.5, 84);
-        //CloseClaw();
-        StrafeRight(.3, 1200);
-        armMove(-.3, -800);
-        armHold();
-        DriveEncoder(.3, 12);
-        armMove(.3, 250);
-        OpenClaw();
-        armMove(-0.3, -300);
+        autoPaths();
 
 
 
 
 
+
+
+
+
+        robot.visionPortal.close();
 
         /*************************
          * Autonomous Code Above://
@@ -91,6 +85,90 @@ public class AutoRedFront extends LinearOpMode
     /** Below: Basic Drive Methods used in Autonomous code...**/
     //set Drive Power variable
     double DRIVE_POWER = 0.4;
+
+
+    public void autoPaths() throws InterruptedException
+    {
+
+        List<Recognition> currentRecognitions = robot.tfod.getRecognitions();
+        telemetry.addData("# Objects Detected", currentRecognitions.size());
+
+        boolean detectedProp = false;
+
+        // Step through the list of recognitions and display info for each one.
+        for (Recognition recognition : currentRecognitions)
+        {
+
+            double x = (recognition.getLeft() + recognition.getRight()) / 2 ;
+            double y = (recognition.getTop()  + recognition.getBottom()) / 2 ;
+
+            if(x <= 320)// assuming the robot is on the blue front position
+            {
+                detectedProp = true;
+                telemetry.addLine("left");
+                telemetry.update();
+
+
+                CloseClaw();
+                DriveEncoder(.4, 15);
+                GyroTurn(45);
+                DriveEncoder(.4, 5);
+                pushUp();
+                armMove(-.4, -300);
+                armHold();
+                DriveEncoder(.4, -5);
+                GyroTurn(-130);
+                DriveEncoder(.4,35);
+                armMove(-.4, -400);
+                armHold();
+
+
+            }
+            else if(x > 320)
+            {
+                detectedProp = true;
+                telemetry.addLine("center");
+                telemetry.update();
+
+
+                DriveEncoder(0.5,36);
+                pushUp();
+                DriveEncoder(-.5, 17);
+                CloseClaw();
+                GyroTurn(80);
+                DriveEncoder(.5, 84);
+                CloseClaw();
+                StrafeLeft(.4, 1700);
+                armMove(-.3, -900);
+                armHold();
+                DriveEncoder(.3, 12);
+                armMove(.3, 500);
+                OpenClaw();
+                armMove(-0.3, -300);
+            }
+            else
+            {
+
+                telemetry.addLine("right");
+                telemetry.update();
+
+
+            }
+
+
+            telemetry.addLine(String.valueOf(recognition.getConfidence()));
+
+            telemetry.addData(""," ");
+            telemetry.addData("Image", "%s (%.0f %% Conf.)", recognition.getLabel(), recognition.getConfidence() * 100);
+            telemetry.addData("- Position", "%.0f / %.0f", x, y);
+            telemetry.addData("- Size", "%.0f x %.0f", recognition.getWidth(), recognition.getHeight());
+        }   // end for() loop
+
+
+
+
+    }
+
 
     public void DriveForward(double power)
     {
@@ -130,7 +208,7 @@ public class AutoRedFront extends LinearOpMode
         robot.motorBackRight.setPower(-power);
         robot.motorBackLeft.setPower(power);
         Thread.sleep(time);
-        sleep(500);
+        armHold();
     }
 
     public void StrafeRight(double power, long time) throws InterruptedException
@@ -256,7 +334,7 @@ public class AutoRedFront extends LinearOpMode
             telemetry.addData("CurrentFR: ", "%5.0f", robot.motorFrontRight.getCurrentPosition()/robot.COUNTS_PER_INCH);
             telemetry.addData("CurrentFL: ", "%5.0f", robot.motorFrontLeft.getCurrentPosition()/robot.COUNTS_PER_INCH);
 
-            telemetry.update();
+
         }
         //Motors Off
         robot.motorFrontLeft.setPower(0);
@@ -270,36 +348,51 @@ public class AutoRedFront extends LinearOpMode
         robot.motorFrontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         robot.motorFrontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
+        sleep(500);
     }//EndDriveEncoder
 
     private void GyroTurn(double position)
-    { //Left is positive
+    {
+        //Left is positive
+
         robot.imu.resetYaw();
-        if(position > 0)  //Turns right
+        if(position > 0)
         {   robot.motorBackRight.setPower(0.3);
             robot.motorFrontRight.setPower(0.3);
             robot.motorBackLeft.setPower(-0.3);
             robot.motorFrontLeft.setPower(-0.3);
+            //Turns right
+
         }
-        if(position < 0) //Turns Left   Reminder: the program only works if its less than zero
+
+        //Reminder: the program only works if its less than zero
+
+        if(position < 0)
         {
+
             robot.motorBackRight.setPower(-0.3);
             robot.motorFrontRight.setPower(-0.3);
             robot.motorBackLeft.setPower(0.3);
             robot.motorFrontLeft.setPower(0.3);
+            //Turns Left
+
         }
+
         while (opModeIsActive() && !isStopRequested() && Math.abs(GetHeading()) < Math.abs(position))
         {
             telemetry.addData("target: ", position);
             telemetry.addData("position", GetHeading());
-            telemetry.update();
         }
+
+
+
         //deactivates the motors
         robot.motorFrontLeft.setPower(0);
         robot.motorFrontRight.setPower(0);
         robot.motorBackLeft.setPower(0);
         robot.motorBackRight.setPower(0);
         sleep(500);
+
     }
     public double GetHeading()
     {

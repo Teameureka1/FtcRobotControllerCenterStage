@@ -27,7 +27,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.AprilTag;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -42,23 +42,28 @@ import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 import java.util.List;
 
 /*
- * This OpMode illustrates the basics of TensorFlow Object Detection, using
- * the easiest way.
+ * This OpMode illustrates the basics of TensorFlow Object Detection,
+ * including Java Builder structures for specifying Vision parameters.
  *
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list.
  */
-@TeleOp(name = "TenserFlow", group = "Test")
+@TeleOp(name = "My: TensorFlow Object Detection", group = "Concept")
 //@Disabled
-public class CameraTenserFlowTest extends LinearOpMode {
+public class MyConceptTensorFlowObjectDetection extends LinearOpMode {
 
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
-    private static final String TFOD_MODEL_ASSET = "Hats.tflite";
 
+    // TFOD_MODEL_ASSET points to a model file stored in the project Asset location,
+    // this is only used for Android Studio when using models in Assets.
+    private static final String TFOD_MODEL_ASSET = "MyModelStoredAsAsset.tflite";
+    // TFOD_MODEL_FILE points to a model file stored onboard the Robot Controller's storage,
+    // this is used when uploading models directly to the RC using the model upload interface.
+    private static final String TFOD_MODEL_FILE = "/sdcard/FIRST/tflitemodels/myCustomModel.tflite";
+    // Define the labels recognized in the model for TFOD (must be in training order!)
     private static final String[] LABELS = {
-            "blue hat", "red hat", "white pixel", "yellow pixel"
+       "Pixel",
     };
-
 
     /**
      * The variable to store our instance of the TensorFlow Object Detection processor.
@@ -109,33 +114,28 @@ public class CameraTenserFlowTest extends LinearOpMode {
     /**
      * Initialize the TensorFlow Object Detection processor.
      */
-    /**
-     * Initialize the TensorFlow Object Detection processor.
-     */
     private void initTfod() {
 
         // Create the TensorFlow processor by using a builder.
         tfod = new TfodProcessor.Builder()
 
-                // With the following lines commented out, the default TfodProcessor Builder
-                // will load the default model for the season. To define a custom model to load,
-                // choose one of the following:
-                //   Use setModelAssetName() if the custom TF Model is built in as an asset (AS only).
-                //   Use setModelFileName() if you have downloaded a custom team model to the Robot Controller.
-                //.setModelAssetName("Hats.tflite")
-                .setModelAssetName(TFOD_MODEL_ASSET)
-                .setModelLabels(LABELS)
-                //.setModelFileName("Object.tflite")
+            // With the following lines commented out, the default TfodProcessor Builder
+            // will load the default model for the season. To define a custom model to load, 
+            // choose one of the following:
+            //   Use setModelAssetName() if the custom TF Model is built in as an asset (AS only).
+            //   Use setModelFileName() if you have downloaded a custom team model to the Robot Controller.
+            //.setModelAssetName(TFOD_MODEL_ASSET)
+            //.setModelFileName(TFOD_MODEL_FILE)
 
-                // The following default settings are available to un-comment and edit as needed to
-                // set parameters for custom models.
-                //.setModelLabels(LABELS)
-                //.setIsModelTensorFlow2(true)
-                //.setIsModelQuantized(true)
-                //.setModelInputSize(300)
-                //.setModelAspectRatio(16.0 / 9.0)
+            // The following default settings are available to un-comment and edit as needed to 
+            // set parameters for custom models.
+            //.setModelLabels(LABELS)
+            //.setIsModelTensorFlow2(true)
+            //.setIsModelQuantized(true)
+            //.setModelInputSize(300)
+            //.setModelAspectRatio(16.0 / 9.0)
 
-                .build();
+            .build();
 
         // Create the vision portal by using a builder.
         VisionPortal.Builder builder = new VisionPortal.Builder();
