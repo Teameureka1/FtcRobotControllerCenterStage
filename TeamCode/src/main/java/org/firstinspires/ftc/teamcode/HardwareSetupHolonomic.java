@@ -141,6 +141,7 @@ public class HardwareSetupHolonomic
         RevHubOrientationOnRobot.UsbFacingDirection  usbDirection  = RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
         RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
 
+        ///////////////////////////////////////////////////////////////////////
 
         /************************************************************
          * MOTOR SECTION
@@ -202,7 +203,8 @@ public class HardwareSetupHolonomic
         imu = hwMap.get(IMU.class, "imu");
         imu.initialize(new IMU.Parameters(orientationOnRobot));
    }
-    public void initTfod() {
+    public void initTfod()
+    {
 
         // Create the TensorFlow processor by using a builder.
         tfod = new TfodProcessor.Builder()
@@ -212,8 +214,8 @@ public class HardwareSetupHolonomic
                 // choose one of the following:
                 //   Use setModelAssetName() if the custom TF Model is built in as an asset (AS only).
                 //   Use setModelFileName() if you have downloaded a custom team model to the Robot Controller.
-                //.setModelAssetName(TFOD_MODEL_ASSET)
-                .setModelFileName("Object.tflite")
+                .setModelAssetName("Hats.tflite")
+                //.setModelFileName("Object.tflite")
 
                 // The following default settings are available to un-comment and edit as needed to
                 // set parameters for custom models.

@@ -53,6 +53,12 @@ import java.util.List;
 public class CameraTenserFlowTest extends LinearOpMode {
 
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
+    private static final String TFOD_MODEL_FILE = "/sdcard/FIRST/tflitemodels/Hats.tflite";
+
+    private static final String[] LABELS = {
+            "blue hat", "red hat", "white pixel", "yellow pixel"
+    };
+
 
     /**
      * The variable to store our instance of the TensorFlow Object Detection processor.
@@ -116,8 +122,8 @@ public class CameraTenserFlowTest extends LinearOpMode {
                 // choose one of the following:
                 //   Use setModelAssetName() if the custom TF Model is built in as an asset (AS only).
                 //   Use setModelFileName() if you have downloaded a custom team model to the Robot Controller.
-                //.setModelAssetName(TFOD_MODEL_ASSET)
-                .setModelFileName("hats.tflite")
+                .setModelAssetName("Object.tflite")
+                //.setModelFileName("Object.tflite")
 
                 // The following default settings are available to un-comment and edit as needed to
                 // set parameters for custom models.
