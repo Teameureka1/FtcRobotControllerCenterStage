@@ -62,8 +62,6 @@ public class AutoOptionExample extends LinearOpMode {
      */
 
 
-    String barcode = null;
-
     //VARIABLES USED FOR DIFFERENT GAME ELEMENTS. CAN BE CHANGED
     int bottomLevel = 350;
     int approachBottom = -390;
@@ -426,6 +424,7 @@ public class AutoOptionExample extends LinearOpMode {
             tfod.setZoom(1.0, 16.0/9.0);
         }
 */
+        robot.init(hardwareMap);  //Initialize hardware from the Hardware Setup Class
 
         selectOptions();
         robot.initTfod();
