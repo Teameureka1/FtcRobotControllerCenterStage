@@ -12,9 +12,10 @@
         X           X
           X       X
 */
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.OldCodeAuto;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -22,11 +23,12 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import org.firstinspires.ftc.teamcode.HardwareSetupHolonomic;
 
 import java.util.List;
 
 @Autonomous(name="RedFront", group="Red")
-//@Disabled
+@Disabled
 public class AutoBlueFront extends LinearOpMode
 {
 
@@ -34,7 +36,7 @@ public class AutoBlueFront extends LinearOpMode
 
     /* Define Hardware setup */
     // assumes left motors are reversed
-    HardwareSetupHolonomic robot = new HardwareSetupHolonomic();
+    HardwareSettup robot = new HardwareSettup();
 
     int FRtarget = 0;
     int BRtarget = 0;

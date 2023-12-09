@@ -1,16 +1,34 @@
-package org.firstinspires.ftc.teamcode.AutoOption;
+package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import java.util.List;
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 //import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
-import org.firstinspires.ftc.teamcode.MyIMU.ExampleHardwareSetupHolonomic_IMU_Encoder;
+import org.firstinspires.ftc.teamcode.AutonomousBooleanOption;
+import org.firstinspires.ftc.teamcode.AutonomousIntOption;
+import org.firstinspires.ftc.teamcode.AutonomousOption;
+import org.firstinspires.ftc.teamcode.AutonomousTextOption;
+import org.firstinspires.ftc.teamcode.HardwareSetupHolonomic;
+//import org.firstinspires.ftc.teamcode.imu.ExampleHardwareSetupHolonomic_IMU_Encoder;
+
+/**
+ * The red autonomous options should strt the same. The left,right, and center
+ * randomizations should move the same for the front and back positions, then they
+ * can vary by position. The programs should start with the same detection method them
+ * move into the randomization method that was created for that side of the field
+ * and that prop position.
+ *
+ *
+ * startPos sets left and right
+ *
+ * AlianceColor sets the alliance color
+ *
+ */
+
+
 
 
 /**
@@ -29,8 +47,7 @@ import org.firstinspires.ftc.teamcode.MyIMU.ExampleHardwareSetupHolonomic_IMU_En
 //@Disabled
 public class AutoOptionExample extends LinearOpMode {
 
-    ExampleHardwareSetupHolonomic_IMU_Encoder robot = new ExampleHardwareSetupHolonomic_IMU_Encoder();
-
+    HardwareSetupHolonomic robot = new HardwareSetupHolonomic();
     //region Initialize TFOD and VuForia
     /* Note: This sample uses the all-objects Tensor Flow model (FreightFrenzy_BCDM.tflite), which contains
      * the following 4 detectable objects
@@ -43,10 +60,7 @@ public class AutoOptionExample extends LinearOpMode {
      *  FreightFrenzy_BC.tflite  0: Ball,  1: Cube
      *  FreightFrenzy_DM.tflite  0: Duck,  1: Marker
      */
-    private static final String TFOD_MODEL_ASSET = "TSE_Complete.tflite";
-    private static final String[] LABELS = {
-            "TSE"
-    };
+
 
     String barcode = null;
 
@@ -59,6 +73,10 @@ public class AutoOptionExample extends LinearOpMode {
 
     int topLevel = 1100;
     int approachTop = -600;
+    int paths = 0;
+
+    final static double OPEN = 0.5;//original servo 0.8
+    final static double CLOSED = 0.3;//original servo 0.6
     
 /*
 /////////////////////////////// VISION CONTROL STUFF////////////////////////////////    
@@ -173,10 +191,10 @@ public class AutoOptionExample extends LinearOpMode {
     
     // For each auto option the parameters are essentially 1- the label to show on the driver station, 2 - starting value, 3 - the possible values
         //Below we create an instance of each of these abstract classes with defined parameters for the specific year's challenge elements
-    AutonomousTextOption    allianceColor       = new AutonomousTextOption("Alliance Color", "blue", new String[] {"blue", "red"});
+    AutonomousTextOption allianceColor       = new AutonomousTextOption("Alliance Color", "blue", new String[] {"blue", "red"});
     AutonomousTextOption    startPos       = new AutonomousTextOption("Start Position", "Left", new String[] {"Left", "Right"});
     AutonomousTextOption    endPos = new AutonomousTextOption("End Position", "RightStage", new String[] {"RightStage","LeftStage"});
-    AutonomousIntOption     waitStart           = new AutonomousIntOption("Wait at Start", 0, 0, 20);
+    AutonomousIntOption waitStart           = new AutonomousIntOption("Wait at Start", 0, 0, 20);
 
     //This is the order of our options and setting them all to their preset value.
     AutonomousOption[] autoOptions       = {allianceColor, startPos, endPos, waitStart};
@@ -255,95 +273,79 @@ public class AutoOptionExample extends LinearOpMode {
 
 /////  CREATE TWO VERSIONS FOR BOTH ALLIANCE COLORS////////////
 
-    private void Blue1() throws InterruptedException
+    private void BlueF() throws InterruptedException
 
     {
         //DO THIS
-        DriveBackwardEncoder(0.3, 800);
-        StopDrivingTime(500);
+        if(paths == 1)
+        {
 
-        liftArm(DRIVE_POWER, 1000);
-        maintainArmPos();
+        }
+        else if(paths == 2)
+        {
 
-        DriveForwardEncoder(0.2, -300);
-        StopDrivingTime(500);
+        }
+        else
+        {
 
-        SpinRightEncoder(0.3, 750);
-        maintainArmPos();
-        StopDrivingTime(500);
-
-        DriveForwardEncoder(0.4, -2500);
-        maintainArmPos();
-        StopDrivingTime(100);
-
-
-
-        DriveForwardEncoder(DRIVE_POWER, -500);
-        extendArm(-DRIVE_POWER, 500);
-        maintainArmPos();
+        }
 
         if(endPos.getValue().equals("LeftStage"))
         {
-            StrafeLeftEncoder(0.3, 500);
-            DriveBackwardEncoder(0.9, 6000);
+
         }
         else if(endPos.getValue().equals("RightStage"))
         {
-            DriveBackwardEncoder(DRIVE_POWER, 150);
-            maintainArmPos();
-            StopDrivingTime(100);
 
-            StrafeLeftEncoder(0.3, 800);
+        }
+        StopDriving();
 
-            extendArm(-DRIVE_POWER, 500);
-            maintainArmPos();
 
-            DriveForwardEncoder(0.3, -500);
-            maintainArmPos();
+    }
+
+    private void BlueB() throws InterruptedException
+    {
+        if(paths == 1)
+        {
+
+        }
+        else if(paths == 2)
+        {
+
+        }
+        else
+        {
+
         }
 
-    }
+        if(endPos.getValue().equals("LeftStage"))
+        {
 
-    private void Blue2() throws InterruptedException
-    {
-        DriveBackwardEncoder(0.4, 300);
-        StopDrivingTime(100);
+        }
+        else if(endPos.getValue().equals("RightStage"))
+        {
 
-        SpinLeftEncoder(0.3, -820);
-        maintainArmPos();
-        StopDrivingTime(500);
-
-        StrafeLeftEncoder(0.3, 1000);
-
-        DriveForwardEncoder(0.4, -2500);
-        maintainArmPos();
-
+        }
         StopDriving();
+
+
     }
 
-    private void Red1() throws InterruptedException
+    private void RedF() throws InterruptedException
     {
-        DriveBackwardEncoder(0.3, 800);
-        StopDrivingTime(500);
+       //Pathys are set during the autoPaths method. These run after the purple pixel is delivered.
+        if(paths == 1)
+        {
 
-        liftArm(DRIVE_POWER, 1000);
-        maintainArmPos();
+        }
+        else if(paths == 2)
+        {
 
-        DriveForwardEncoder(0.2, -300);
-        StopDrivingTime(500);
+        }
+        else
+        {
 
-        SpinLeftEncoder(0.3, -750);
-        maintainArmPos();
-        StopDrivingTime(500);
-
-        DriveForwardEncoder(0.4, -2500);
-        maintainArmPos();
-
-
-
-        DriveForwardEncoder(DRIVE_POWER, -500);
-        extendArm(-DRIVE_POWER, 500);
-        maintainArmPos();
+        }
 
         if(endPos.getValue().equals("LeftStage"))
         {
@@ -358,7 +360,7 @@ public class AutoOptionExample extends LinearOpMode {
 
             StrafeRightEncoder(0.3, -800);
 
-            extendArm(-DRIVE_POWER, 500);
+            extendArm(DRIVE_POWER, false);
             maintainArmPos();
 
             DriveForwardEncoder(0.3, -500);
@@ -367,20 +369,40 @@ public class AutoOptionExample extends LinearOpMode {
         StopDriving();
     }
 
-    private void Red2() throws InterruptedException
+    private void RedB() throws InterruptedException
     {
-        DriveBackwardEncoder(0.4, 300);
-        StopDrivingTime(100);
+        if(paths == 1)
+        {
 
-        SpinRightEncoder(0.3, 820);
-        maintainArmPos();
-        StopDrivingTime(500);
+        }
+        else if(paths == 2)
+        {
 
-        StrafeRightEncoder(0.3, -1000);
+        }
+        else
+        {
 
-        DriveForwardEncoder(0.4, -2500);
-        maintainArmPos();
+        }
 
+        if(endPos.getValue().equals("LeftStage"))
+        {
+            StrafeRightEncoder(0.3, -500);
+            DriveBackwardEncoder(0.9, 6000);
+        }
+        else if(endPos.getValue().equals("RightStage"))
+        {
+            DriveBackwardEncoder(DRIVE_POWER, 150);
+            maintainArmPos();
+            StopDrivingTime(100);
+
+            StrafeRightEncoder(0.3, -800);
+
+            extendArm(DRIVE_POWER, false);
+            maintainArmPos();
+
+            DriveForwardEncoder(0.3, -500);
+            maintainArmPos();
+        }
         StopDriving();
     }
 
@@ -406,7 +428,7 @@ public class AutoOptionExample extends LinearOpMode {
 */
 
         selectOptions();
-
+        robot.initTfod();
         /** Wait for the game to begin */
         telemetry.addData(">", "Press Play to start op mode");
         telemetry.update();
@@ -419,132 +441,15 @@ public class AutoOptionExample extends LinearOpMode {
         {
             if(allianceColor.getValue().equals("blue"))
             {
-                //If TSE is on middle barcode
-                if (barcode.equals("B")) {
-                    liftArm(DRIVE_POWER, middleLevel);
-                    extendArm(DRIVE_POWER, 500);
-                    StrafeLeftEncoder(0.4, 1100);
-
-                    DriveBackwardEncoder(0.4, 300);
-
-                    DriveForwardEncoder(0.4, approachMiddle);
-                    maintainArmPos();
-                    StopDrivingTime(500);
-
-                    openHands();
-                    DriveBackwardEncoder(0.3, 100);
-                    liftArm(DRIVE_POWER, 500);
-                    //now run the remaining auto code for Blue1
-                    Blue1();
-
-                    StopDriving();
-                }
-
-                //If TSE is on right barcode
-                else if (barcode.equals("C")) {
-                    liftArm(DRIVE_POWER, topLevel);
-                    extendArm(DRIVE_POWER, 500);
-                    StrafeLeftEncoder(0.4, 1100);
-
-                    DriveBackwardEncoder(0.4, 300);
-
-                    DriveForwardEncoder(0.4, approachTop);
-                    maintainArmPos();
-                    StopDrivingTime(500);
-
-                    openHands();
-                    maintainArmPos();
-
-                    Blue1();
-
-                    StopDriving();
-                }
-
-                //If TSE is on left barcode
-                else {
-                    liftArm(DRIVE_POWER, bottomLevel);
-                    extendArm(DRIVE_POWER, 500);
-                    StrafeLeftEncoder(0.4, 1100);
-
-                    DriveBackwardEncoder(0.4, 300);
-
-                    DriveForwardEncoder(0.4, approachBottom);
-                    maintainArmPos();
-                    StopDrivingTime(500);
-
-                    openHands();
-                    DriveBackwardEncoder(0.3, 100);
-                    liftArm(DRIVE_POWER, 900);
-
-                    Blue1();
-
-                    StopDriving();
-                }
+                AutoPaths();
+                BlueF();
+                StopDriving();
             }
             else if(allianceColor.getValue().equals("red"))
             {
-                //If TSE is on middle barcode
-                if (barcode.equals("B")) {
-                    liftArm(DRIVE_POWER, middleLevel);
-                    extendArm(DRIVE_POWER, 500);
-                    StrafeRightEncoder(0.4, -1100);
-
-                    DriveBackwardEncoder(0.4, 300);
-
-                    DriveForwardEncoder(0.4, approachMiddle);
-                    maintainArmPos();
-                    StopDrivingTime(500);
-
-                    openHands();
-                    DriveBackwardEncoder(0.3, 100);
-                    liftArm(DRIVE_POWER, 500);
-
-                    Red1();
-
-                    StopDriving();
-                }
-
-                //If TSE is on right barcode
-                else if (barcode.equals("C")) {
-                    liftArm(DRIVE_POWER, topLevel);
-                    extendArm(DRIVE_POWER, 500);
-                    StrafeRightEncoder(0.4, -1100);
-
-                    DriveBackwardEncoder(0.4, 300);
-
-                    DriveForwardEncoder(0.4, approachTop);
-                    maintainArmPos();
-                    StopDrivingTime(500);
-
-                    openHands();
-                    DriveBackwardEncoder(0.3, 100);
-                    maintainArmPos();
-
-                    Red1();
-
-                    StopDriving();
-                }
-
-                //If TSE is on left barcode
-                else {
-                    liftArm(DRIVE_POWER, bottomLevel);
-                    extendArm(DRIVE_POWER, 500);
-                    StrafeRightEncoder(0.4, -1100);
-
-                    DriveBackwardEncoder(0.4, 300);
-
-                    DriveForwardEncoder(0.4, approachBottom);
-                    maintainArmPos();
-                    StopDrivingTime(500);
-
-                    openHands();
-                    DriveBackwardEncoder(0.3, 100);
-                    liftArm(DRIVE_POWER, 900);
-
-                    Red1();
-
-                    StopDriving();
-                }
+                AutoPaths();
+                RedB();
+                StopDriving();
             }
         }
 
@@ -552,134 +457,18 @@ public class AutoOptionExample extends LinearOpMode {
         {
             if(allianceColor.getValue().equals("blue"))
             {
-                //If TSE is on middle barcode
-                if (barcode.equals("B")) {
-                    liftArm(DRIVE_POWER, middleLevel);
-                    extendArm(DRIVE_POWER, 500);
-                    StrafeRightEncoder(0.4, -1100);
+                AutoPaths();
+               BlueB();
+               StopDriving();
 
-                    DriveBackwardEncoder(0.4, 300);
-
-                    DriveForwardEncoder(0.4, approachMiddle);
-                    maintainArmPos();
-                    StopDrivingTime(500);
-
-                    openHands();
-                    DriveBackwardEncoder(0.3, 100);
-                    maintainArmPos();
-
-                    Blue2();
-
-                    StopDriving();
-                }
-
-                //If TSE is on right barcode
-                else if (barcode.equals("C")) {
-                    liftArm(DRIVE_POWER, topLevel);
-                    extendArm(DRIVE_POWER, 500);
-                    StrafeRightEncoder(0.4, -1100);
-
-                    DriveBackwardEncoder(0.4, 300);
-
-                    DriveForwardEncoder(0.4, approachTop);
-                    maintainArmPos();
-                    StopDrivingTime(500);
-
-                    openHands();
-                    DriveBackwardEncoder(0.3, 100);
-                    maintainArmPos();
-
-                    Blue2();
-
-                    StopDriving();
-                }
-
-                //If TSE is on left barcode
-                else {
-                    liftArm(DRIVE_POWER, bottomLevel);
-                    extendArm(DRIVE_POWER, 500);
-                    StrafeRightEncoder(0.4, -1100);
-
-                    DriveBackwardEncoder(0.4, 300);
-
-                    DriveForwardEncoder(0.4, approachBottom);
-                    maintainArmPos();
-                    StopDrivingTime(500);
-
-                    openHands();
-                    DriveBackwardEncoder(0.3, 100);
-                    maintainArmPos();
-
-                    Blue2();
-
-                    StopDriving();
-                }
             }
 
             else if(allianceColor.getValue().equals("red"))
             {
-                //If TSE is on middle barcode
-                if (barcode.equals("B")) {
-                    liftArm(DRIVE_POWER, middleLevel);
-                    extendArm(DRIVE_POWER, 500);
-                    StrafeLeftEncoder(0.4, 1100);
+                AutoPaths();
+                RedF();
+                StopDriving();
 
-                    DriveBackwardEncoder(0.4, 300);
-
-                    DriveForwardEncoder(0.4, approachMiddle);
-                    maintainArmPos();
-                    StopDrivingTime(500);
-
-                    openHands();
-                    DriveBackwardEncoder(0.3, 100);
-                    maintainArmPos();
-
-                    Red2();
-
-                    StopDriving();
-                }
-
-                //If TSE is on right barcode
-                else if (barcode.equals("C")) {
-                    liftArm(DRIVE_POWER, topLevel);
-                    extendArm(DRIVE_POWER, 500);
-                    StrafeLeftEncoder(0.4, 1100);
-
-                    DriveBackwardEncoder(0.4, 300);
-
-                    DriveForwardEncoder(0.4, approachTop);
-                    maintainArmPos();
-                    StopDrivingTime(500);
-
-                    openHands();
-                    DriveBackwardEncoder(0.3, 100);
-                    maintainArmPos();
-
-                    Red2();
-
-                    StopDriving();
-                }
-
-                //If TSE is on left barcode
-                else {
-                    liftArm(DRIVE_POWER, bottomLevel);
-
-                    StrafeLeftEncoder(0.4, 1100);
-
-                    DriveBackwardEncoder(0.4, 300);
-
-                    DriveForwardEncoder(0.4, approachBottom);
-                    maintainArmPos();
-                    StopDrivingTime(500);
-
-                    openHands();
-                    DriveBackwardEncoder(0.3, 100);
-                    maintainArmPos();
-
-                    Red2();
-
-                    StopDriving();
-                }
             }
         }
     }//End RunOpMode
@@ -688,6 +477,93 @@ public class AutoOptionExample extends LinearOpMode {
     /** Below: Basic Drive Methods used in Autonomous code...**/
     //region Drive Functions
     double DRIVE_POWER = 0.5;
+
+    //////////////////////////////////////////////////
+    public void AutoPaths() throws InterruptedException {
+
+        List<Recognition> currentRecognitions = robot.tfod.getRecognitions();
+        telemetry.addData("# Objects Detected", currentRecognitions.size());
+
+        boolean detectedProp = false;
+
+        // Step through the list of recognitions and display info for each one.
+        for (Recognition recognition : currentRecognitions)
+        {
+
+            double x = (recognition.getLeft() + recognition.getRight()) / 2 ;
+            double y = (recognition.getTop()  + recognition.getBottom()) / 2 ;
+
+            if(x <= 320)// assuming the robot is on the blue front position
+            {
+                paths = 1;
+                detectedProp = true;
+                telemetry.addLine("left");
+                telemetry.update();
+
+
+                CloseClaw();
+                DriveForwardEncoder(.4, 15);
+                SpinLeftEncoder(.5, 45);
+                DriveForwardEncoder(.4, 5);
+                pushUp();
+                liftArm(-.4, -300);
+                armHold();
+                DriveForwardEncoder(.4, -5);
+                SpinRightEncoder(.5,-130);
+                DriveForwardEncoder(.4,35);
+                liftArm(-.4, -400);
+                armHold();
+
+
+            }
+            else if(x > 320)
+            {
+                paths = 2;
+                detectedProp = true;
+                telemetry.addLine("center");
+                telemetry.update();
+
+
+                DriveForwardEncoder(0.5,36);
+                pushUp();
+                DriveBackwardEncoder(.5, 17);
+                CloseClaw();
+                SpinLeftEncoder(.3, 80);
+                DriveForwardEncoder(.5, 84);
+                CloseClaw();
+                StrafeLeftEncoder(.4, 15);
+                liftArm(-.3, -900);
+                armHold();
+                DriveForwardEncoder(.3, 12);
+                liftArm(.3, 500);
+                openHands();
+                liftArm(-0.3, -300);
+            }
+            else
+            {
+                paths = 3;
+
+                telemetry.addLine("right");
+                telemetry.update();
+
+
+            }
+
+
+            telemetry.addLine(String.valueOf(recognition.getConfidence()));
+
+            telemetry.addData(""," ");
+            telemetry.addData("Image", "%s (%.0f %% Conf.)", recognition.getLabel(), recognition.getConfidence() * 100);
+            telemetry.addData("- Position", "%.0f / %.0f", x, y);
+            telemetry.addData("- Size", "%.0f x %.0f", recognition.getWidth(), recognition.getHeight());
+        }   // end for() loop
+
+
+
+
+    }
+    //*****************************************************
+    /////////////////////////////////////////////////////
 
     //region Time Driving Functions
     public void DriveForward(double power)
@@ -699,11 +575,6 @@ public class AutoOptionExample extends LinearOpMode {
         robot.motorBackLeft.setPower(power);
     }
 
-    public void DriveForwardTime(double power, long time) throws InterruptedException
-    {
-        DriveForward(power);
-        Thread.sleep(time);
-    }
 
     public void StopDrivingTime(long time) throws InterruptedException
     {
@@ -713,38 +584,6 @@ public class AutoOptionExample extends LinearOpMode {
         robot.motorBackLeft.setPower(0);
         Thread.sleep(time);
     }
-
-    public void StrafeLeft(double power, long time) throws InterruptedException
-    {
-        // write the values to the motors
-        robot.motorFrontRight.setPower(-power);
-        robot.motorFrontLeft.setPower(-power);
-        robot.motorBackRight.setPower(power);
-        robot.motorBackLeft.setPower(power);
-        Thread.sleep(time);
-    }
-
-    public void StrafeRight(double power, long time) throws InterruptedException
-    {
-        StrafeLeft(-power, time);
-    }
-
-    public void SpinRight (double power, long time) throws InterruptedException
-    {
-        // write the values to the motors
-        robot.motorFrontRight.setPower(power);
-        robot.motorFrontLeft.setPower(power);
-        robot.motorBackRight.setPower(power);
-        robot.motorBackLeft.setPower(power);
-        Thread.sleep(time);
-    }
-
-    public void SpinLeft (double power, long time) throws InterruptedException
-    {
-        SpinRight(-power, time);
-    }
-
-    
 
     public void StopDriving()
     {
@@ -758,7 +597,7 @@ public class AutoOptionExample extends LinearOpMode {
     {
         robot.motorFrontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.motorBackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        //robot.motorFrontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+       // robot.motorFrontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.motorBackLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         robot.motorFrontRight.setTargetPosition(pos);
@@ -1038,26 +877,58 @@ public class AutoOptionExample extends LinearOpMode {
     //region Arm & Hand Functions
     public void openHands() throws InterruptedException
     {
-        robot.servo.setPosition(0.4);
+        sleep(1000);
+        armHold();
+        robot.servoHandR.setPosition(CLOSED); //note: uses servo instead of motor.
+        robot.servoHandL.setPosition(OPEN);
+        sleep(500);
+    }
+    public void CloseClaw()
+    {
+        robot.servoHandR.setPosition(OPEN);
+        robot.servoHandL.setPosition(CLOSED);
+        sleep(200);
+
+    }
+    private void pushUp() throws InterruptedException {
+        robot.servoP.setPosition(1);
+        sleep(500);
     }
 
     public void liftArm(double power, int pos) throws InterruptedException
     {
-        //sets arm's starting pos to 0
-        robot.motorArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.motorBottomArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.motorBottomArm.setTargetPosition(pos);
+        robot.motorBottomArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.motorBottomArm.setPower(power);
+        sleep(500);
+        robot.motorBottomArm.setPower(0);
+        // Set the arm hold position to the final position of the arm
+        robot.armHold = pos;
+    }
 
-        robot.motorArm.setTargetPosition(pos);
-        robot.motorArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.motorArm.setPower(power);
-        while(robot.motorArm.isBusy())
+    public void extendArm(double power, boolean out)
+    {
+       if(!robot.MagOut.isPressed() && out)
+       {
+           while(!robot.MagOut.isPressed())
+           {
+             robot.motorTopArm.setPower(power);
+           }
+       }
+       else if(!robot.MagOut.isPressed() && !out)
         {
-            telemetry.addData("armPos", robot.motorArm.getCurrentPosition());
-            telemetry.update();
+            while(!robot.MagIn.isPressed())
+            {
+                robot.motorTopArm.setPower(-power);
+            }
         }
     }
 
-    public void extendArm(double power, int pos){
-        //add code here for your arm extend operation
+    private void armHold()
+    {
+        robot.motorBottomArm.setPower((robot.armHold - robot.motorBottomArm.getCurrentPosition()) / robot.slopeVal);
+
     }
 
     public void maintainArmPos() throws InterruptedException

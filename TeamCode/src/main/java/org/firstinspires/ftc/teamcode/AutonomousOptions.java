@@ -1,6 +1,5 @@
-package org.firstinspires.ftc.teamcode.AutoOption;
+package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 public class AutonomousOptions {
     private AutonomousOption[] autoOptions;

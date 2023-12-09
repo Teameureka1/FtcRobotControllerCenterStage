@@ -12,29 +12,28 @@
         X           X
           X       X
 */
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.OldCodeAuto;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
-import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import org.firstinspires.ftc.teamcode.HardwareSetupHolonomic;
 
-import java.util.List;
-
-@Autonomous(name="RedFront", group="Red")
-//@Disabled
-public class AutoRedFront extends LinearOpMode
+@Autonomous(name="BlueBack", group="Blue")
+@Disabled
+public class AutoBlueBack extends LinearOpMode
 {
 
     private ElapsedTime runtime = new ElapsedTime();
 
     /* Define Hardware setup */
     // assumes left motors are reversed
-    HardwareSetupHolonomic robot = new HardwareSetupHolonomic();
+    HardwareSettup robot = new HardwareSettup();
 
     int FRtarget = 0;
     int BRtarget = 0;
@@ -44,7 +43,7 @@ public class AutoRedFront extends LinearOpMode
     /**
      * Constructor
      */
-    public AutoRedFront() {
+    public AutoBlueBack() {
     }
 
     @Override
@@ -52,11 +51,9 @@ public class AutoRedFront extends LinearOpMode
     {
         robot.init(hardwareMap);  //Initialize hardware from the Hardware Setup Class
         robot.imu.resetYaw();
-
         //adds feedback telemetry to DS
         telemetry.addData("Status", "Initialized");
         telemetry.update();
-        robot.initTfod();
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
@@ -64,17 +61,26 @@ public class AutoRedFront extends LinearOpMode
         /*************************
          * Autonomous Code Below://
          *************************/
-        autoPaths();
+
+
+        CloseClaw();
+        DriveEncoder(0.5,37);
+        pushUp();
+        GyroTurn(80);
+        DriveEncoder(.5, 36);
+        StrafeLeft(.3, 400);
+        armMove(-.5, -800);
+        armHold();
+        DriveEncoder(.3, 5);
+        armMove(.3, 200);
+        OpenClaw();
+        armMove(-.3, -200);
+        armHold();
+        sleep(500);
 
 
 
 
-
-
-
-
-
-        robot.visionPortal.close();
 
         /*************************
          * Autonomous Code Above://
@@ -85,90 +91,6 @@ public class AutoRedFront extends LinearOpMode
     /** Below: Basic Drive Methods used in Autonomous code...**/
     //set Drive Power variable
     double DRIVE_POWER = 0.4;
-
-
-    public void autoPaths() throws InterruptedException
-    {
-
-        List<Recognition> currentRecognitions = robot.tfod.getRecognitions();
-        telemetry.addData("# Objects Detected", currentRecognitions.size());
-
-        boolean detectedProp = false;
-
-        // Step through the list of recognitions and display info for each one.
-        for (Recognition recognition : currentRecognitions)
-        {
-
-            double x = (recognition.getLeft() + recognition.getRight()) / 2 ;
-            double y = (recognition.getTop()  + recognition.getBottom()) / 2 ;
-
-            if(x <= 320)// assuming the robot is on the blue front position
-            {
-                detectedProp = true;
-                telemetry.addLine("left");
-                telemetry.update();
-
-
-                CloseClaw();
-                DriveEncoder(.4, 15);
-                GyroTurn(45);
-                DriveEncoder(.4, 5);
-                pushUp();
-                armMove(-.4, -300);
-                armHold();
-                DriveEncoder(.4, -5);
-                GyroTurn(-130);
-                DriveEncoder(.4,35);
-                armMove(-.4, -400);
-                armHold();
-
-
-            }
-            else if(x > 320)
-            {
-                detectedProp = true;
-                telemetry.addLine("center");
-                telemetry.update();
-
-
-                DriveEncoder(0.5,36);
-                pushUp();
-                DriveEncoder(-.5, 17);
-                CloseClaw();
-                GyroTurn(80);
-                DriveEncoder(.5, 84);
-                CloseClaw();
-                StrafeLeft(.4, 1700);
-                armMove(-.3, -900);
-                armHold();
-                DriveEncoder(.3, 12);
-                armMove(.3, 500);
-                OpenClaw();
-                armMove(-0.3, -300);
-            }
-            else
-            {
-
-                telemetry.addLine("right");
-                telemetry.update();
-
-
-            }
-
-
-            telemetry.addLine(String.valueOf(recognition.getConfidence()));
-
-            telemetry.addData(""," ");
-            telemetry.addData("Image", "%s (%.0f %% Conf.)", recognition.getLabel(), recognition.getConfidence() * 100);
-            telemetry.addData("- Position", "%.0f / %.0f", x, y);
-            telemetry.addData("- Size", "%.0f x %.0f", recognition.getWidth(), recognition.getHeight());
-        }   // end for() loop
-
-
-
-
-    }
-
 
     public void DriveForward(double power)
     {
@@ -208,7 +130,7 @@ public class AutoRedFront extends LinearOpMode
         robot.motorBackRight.setPower(-power);
         robot.motorBackLeft.setPower(power);
         Thread.sleep(time);
-        armHold();
+        sleep(500);
     }
 
     public void StrafeRight(double power, long time) throws InterruptedException
@@ -334,7 +256,7 @@ public class AutoRedFront extends LinearOpMode
             telemetry.addData("CurrentFR: ", "%5.0f", robot.motorFrontRight.getCurrentPosition()/robot.COUNTS_PER_INCH);
             telemetry.addData("CurrentFL: ", "%5.0f", robot.motorFrontLeft.getCurrentPosition()/robot.COUNTS_PER_INCH);
 
-
+            telemetry.update();
         }
         //Motors Off
         robot.motorFrontLeft.setPower(0);
@@ -348,7 +270,6 @@ public class AutoRedFront extends LinearOpMode
         robot.motorFrontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         robot.motorFrontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        sleep(500);
     }//EndDriveEncoder
 
     private void GyroTurn(double position)
@@ -382,6 +303,7 @@ public class AutoRedFront extends LinearOpMode
         {
             telemetry.addData("target: ", position);
             telemetry.addData("position", GetHeading());
+            telemetry.update();
         }
 
 
