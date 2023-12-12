@@ -30,13 +30,20 @@ public class HardwareSetupHolonomic
    // For example, use a value of 2.0 for a 12-tooth spur gear driving a 24-tooth spur gear.
    // This is gearing DOWN for less speed and more torque.
    // For gearing UP, use a gear ratio less than 1.0. Note this will affect the direction of wheel rotation.
+    //region Doubles/Int Functions
     static final double     COUNTS_PER_MOTOR_REV    = 25 ;// eg: GoBILDA 312 RPM Yellow Jacket
     //1440
     static final double     DRIVE_GEAR_REDUCTION    = 20.0 ;     // No External Gearing.
     static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
     static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_INCHES * 3.1415);
-
+    public double  slopeVal  = 1500.0;
+    //Create and set default servo positions & MOTOR STOP variables.
+    //Possible servo values: 0.0 - 1.0  For CRServo 0.5=stop greater or less than will spin in that direction
+    final static double OPEN = 0.5;//original servo 0.8
+    final static double CLOSED = 0.3;//original servo 0.6
+    //I wanna make closed be 0-0.3 and open a higher value
+    final static double MOTOR_STOP = 0.0; // sets motor power to zero
     static final double     TURN_SPEED              = 0.2;     // Max Turn speed to limit turn rate
     static final double     HEADING_THRESHOLD       = 1.0 ;    // How close must the heading get to the target before moving to next step.
     // Requiring more accuracy (a smaller number) will often make the turn take longer to get into the final position.
@@ -60,8 +67,10 @@ public class HardwareSetupHolonomic
     public int MBL = 0;
     public int MFR = 0;
     public int MBR = 0;
+    //endregion
 
     private static final boolean USE_WEBCAM = true;
+
     /**
      * The variable to store our instance of the TensorFlow Object Detection processor.
      */
@@ -72,6 +81,7 @@ public class HardwareSetupHolonomic
      */
     public VisionPortal visionPortal;
 
+    //region IntMotors/servos/mag Functions
     //Drive motors
     public DcMotor motorFrontRight = null;
     public DcMotor motorFrontLeft = null;
@@ -84,7 +94,6 @@ public class HardwareSetupHolonomic
 
     //public  armMotorTop = null;
     public int armHold;
-    public double  slopeVal  = 1500.0;
 
     //servos
         //Add servos here
@@ -99,40 +108,21 @@ public class HardwareSetupHolonomic
         //Add sensors here
     public TouchSensor MagIn = null;
     public TouchSensor MagOut = null;
-
+    //endregion
     IMU             imu         = null;      // Control/Expansion Hub IMU
-    static double          headingError  = 0;
 
     /* local OpMode members. */
     HardwareMap hwMap        = null;
-
-
-    //Create and set default servo positions & MOTOR STOP variables.
-    //Possible servo values: 0.0 - 1.0  For CRServo 0.5=stop greater or less than will spin in that direction
-    final static double OPEN = 0.5;//original servo 0.8
-    final static double CLOSED = 0.3;//original servo 0.6
-    //I wanna make closed be 0-0.3 and open a higher value
-    final static double MOTOR_STOP = 0.0; // sets motor power to zero
-
+    
     private static final String TFOD_MODEL_ASSET = "Hats.tflite";
 
     private static final String[] LABELS = {
             "blue hat", "red hat", "white pixel", "yellow pixel"
     };
 
-
-    //CR servo variables
-        //Add servo variable here
-    double SpinLeft = 0.1;
-    double SpinRight = 0.6;
-    double STOP = 0.5;
-
    /* Constructor   // this is not required as JAVA does it for you, but useful if you want to add
     * function to this method when called in OpModes.
     */
-
-
-
 
     //Initialize standard Hardware interfaces
     public void init(HardwareMap ahwMap) {
@@ -153,6 +143,7 @@ public class HardwareSetupHolonomic
         /************************************************************
          * MOTOR SECTION
          ************************************************************/
+        //region MotorSettup Functions
         // Define Motors to match Robot Configuration File
         motorFrontLeft = hwMap.get(DcMotor.class,"motorFL");
         motorFrontRight = hwMap.get(DcMotor.class,"motorFR");
@@ -180,11 +171,12 @@ public class HardwareSetupHolonomic
         motorBottomArm.setPower(MOTOR_STOP);
 
         motorTopArm.setPower(MOTOR_STOP);
+        //endregion
 
         /************************************************************
          * SERVO SECTION
          ************************************************************/
-
+        //region Servo Functions
             //Add servo configuration
         servoHandR = hwMap.servo.get("servoHandR");
         servoHandL = hwMap.servo.get("servoHandL");
@@ -197,6 +189,7 @@ public class HardwareSetupHolonomic
 
         servoP.setPosition(.5);
         servoD.setPosition(.1);
+        //endregion
 
         /************************************************************
          * SENSOR SECTION**************************************************

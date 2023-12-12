@@ -41,8 +41,6 @@ public class teleOp8Bit extends LinearOpMode
     double BackLeft = 0;
     double BackRight = 0;
 
-
-
     @Override
     public void runOpMode() throws InterruptedException
     {
@@ -67,7 +65,6 @@ public class teleOp8Bit extends LinearOpMode
             telemetry.addData("armPosition: ", +robot.motorBottomArm.getCurrentPosition());
             telemetry.addData("HoldPosition: ", +robot.armHold);
 
-
             waitForStart();
 
         }
@@ -82,11 +79,9 @@ public class teleOp8Bit extends LinearOpMode
             double gamepad1RightX = gamepad1.right_stick_x;  //drives forwards and backwards
 
             telemetry.addData("joyStick: ", gamepad2.left_stick_y);
-
             telemetry.addData("holdPos:", robot.armHold);
             telemetry.addData("current position", robot.motorBottomArm.getCurrentPosition());
             telemetry.addData("arm Power ",(robot.armHold - robot.motorBottomArm.getCurrentPosition()) / robot.slopeVal);
-
 
             // holonomic formulas
             FrontLeft = gamepad1LeftY + gamepad1LeftX + gamepad1RightX;
@@ -94,7 +89,7 @@ public class teleOp8Bit extends LinearOpMode
             BackLeft = gamepad1LeftY - gamepad1LeftX + gamepad1RightX;
             BackRight = gamepad1LeftY + gamepad1LeftX - gamepad1RightX;
 
-
+            //region Control Functions
 
             //Adjusts the speed of the motors for more precise movements and speed when necessary
             if(gamepad1.right_bumper)
@@ -168,8 +163,6 @@ public class teleOp8Bit extends LinearOpMode
                 robot.servoD.setPosition(.1);
             }
 
-
-
             if(!robot.MagIn.isPressed() && !robot.MagOut.isPressed())
             {
                 robot.motorTopArm.setPower(-gamepad2.right_stick_y);
@@ -228,6 +221,7 @@ public class teleOp8Bit extends LinearOpMode
             //telemetry.addData("f right pwr", "front right pwr: " + String.format("%.2f", FrontRight));
             //telemetry.addData("b right pwr", "back right pwr: " + String.format("%.2f", BackRight));
             //telemetry.addData("b left pwr", "back left pwr: " + String.format("%.2f", BackLeft));
+            //endregions
             telemetry.update();
         }//opMode
     }

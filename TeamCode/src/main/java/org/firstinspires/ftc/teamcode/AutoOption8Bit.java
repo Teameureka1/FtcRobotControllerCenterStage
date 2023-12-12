@@ -7,11 +7,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import java.util.List;
 //import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
-import org.firstinspires.ftc.teamcode.AutonomousBooleanOption;
-import org.firstinspires.ftc.teamcode.AutonomousIntOption;
-import org.firstinspires.ftc.teamcode.AutonomousOption;
-import org.firstinspires.ftc.teamcode.AutonomousTextOption;
-import org.firstinspires.ftc.teamcode.HardwareSetupHolonomic;
 //import org.firstinspires.ftc.teamcode.imu.ExampleHardwareSetupHolonomic_IMU_Encoder;
 
 /**
@@ -28,9 +23,6 @@ import org.firstinspires.ftc.teamcode.HardwareSetupHolonomic;
  *
  */
 
-
-
-
 /**
  * This 2023-24 OpMode illustrates the basics of using the Gamepad to select autonomous options.
  * it also has the TensorFlow Object Detection API to
@@ -43,9 +35,9 @@ import org.firstinspires.ftc.teamcode.HardwareSetupHolonomic;
  * IMPORTANT: In order to use this OpMode, you need to obtain your own Vuforia license key as
  * is explained below.
  */
-@Autonomous(name = "AutoOptions", group = "Examples")
+@Autonomous(name = "AutoOptions", group = "Comp")
 //@Disabled
-public class AutoOptionExample extends LinearOpMode {
+public class AutoOption8Bit extends LinearOpMode {
 
     HardwareSetupHolonomic robot = new HardwareSetupHolonomic();
     //region Initialize TFOD and VuForia
@@ -61,16 +53,7 @@ public class AutoOptionExample extends LinearOpMode {
      *  FreightFrenzy_DM.tflite  0: Duck,  1: Marker
      */
 
-
     //VARIABLES USED FOR DIFFERENT GAME ELEMENTS. CAN BE CHANGED
-    int bottomLevel = 350;
-    int approachBottom = -390;
-
-    int middleLevel = 600;
-    int approachMiddle = -400;
-
-    int topLevel = 1100;
-    int approachTop = -600;
     int paths = 0;
 
     final static double OPEN = 0.5;//original servo 0.8
@@ -185,8 +168,7 @@ public class AutoOptionExample extends LinearOpMode {
 /////////////////////////////// VISION CONTROL STUFF////////////////////////////////    
 */
 
-    
-    
+
     // For each auto option the parameters are essentially 1- the label to show on the driver station, 2 - starting value, 3 - the possible values
         //Below we create an instance of each of these abstract classes with defined parameters for the specific year's challenge elements
     AutonomousTextOption allianceColor       = new AutonomousTextOption("Alliance Color", "blue", new String[] {"blue", "red"});
@@ -272,7 +254,6 @@ public class AutoOptionExample extends LinearOpMode {
 /////  CREATE TWO VERSIONS FOR BOTH ALLIANCE COLORS////////////
 
     private void BlueF() throws InterruptedException
-
     {
         //DO THIS
         if(paths == 1)
@@ -347,22 +328,11 @@ public class AutoOptionExample extends LinearOpMode {
 
         if(endPos.getValue().equals("LeftStage"))
         {
-            StrafeRightEncoder(0.3, -500);
-            DriveBackwardEncoder(0.9, 6000);
+
         }
         else if(endPos.getValue().equals("RightStage"))
         {
-            DriveBackwardEncoder(DRIVE_POWER, 150);
-            maintainArmPos();
-            StopDrivingTime(100);
 
-            StrafeRightEncoder(0.3, -800);
-
-            extendArm(DRIVE_POWER, false);
-            maintainArmPos();
-
-            DriveForwardEncoder(0.3, -500);
-            maintainArmPos();
         }
         StopDriving();
     }
@@ -384,22 +354,11 @@ public class AutoOptionExample extends LinearOpMode {
 
         if(endPos.getValue().equals("LeftStage"))
         {
-            StrafeRightEncoder(0.3, -500);
-            DriveBackwardEncoder(0.9, 6000);
+
         }
         else if(endPos.getValue().equals("RightStage"))
         {
-            DriveBackwardEncoder(DRIVE_POWER, 150);
-            maintainArmPos();
-            StopDrivingTime(100);
 
-            StrafeRightEncoder(0.3, -800);
-
-            extendArm(DRIVE_POWER, false);
-            maintainArmPos();
-
-            DriveForwardEncoder(0.3, -500);
-            maintainArmPos();
         }
         StopDriving();
     }
@@ -424,8 +383,8 @@ public class AutoOptionExample extends LinearOpMode {
             tfod.setZoom(1.0, 16.0/9.0);
         }
 */
+        //region Init Functions
         robot.init(hardwareMap);  //Initialize hardware from the Hardware Setup Class
-
         selectOptions();
         robot.initTfod();
         /** Wait for the game to begin */
@@ -433,8 +392,7 @@ public class AutoOptionExample extends LinearOpMode {
         telemetry.update();
         waitForStart();
         sleep(waitStart.getValue()*1000);
-
-       // barcode = analyzeBarcode();
+        //endregion
 
         if(startPos.getValue().equals("Right"))
         {
@@ -471,7 +429,6 @@ public class AutoOptionExample extends LinearOpMode {
             }
         }
     }//End RunOpMode
-
 
     /** Below: Basic Drive Methods used in Autonomous code...**/
     //region Drive Functions
@@ -545,12 +502,9 @@ public class AutoOptionExample extends LinearOpMode {
                 telemetry.addLine("right");
                 telemetry.update();
 
-
             }
 
-
             telemetry.addLine(String.valueOf(recognition.getConfidence()));
-
             telemetry.addData(""," ");
             telemetry.addData("Image", "%s (%.0f %% Conf.)", recognition.getLabel(), recognition.getConfidence() * 100);
             telemetry.addData("- Position", "%.0f / %.0f", x, y);
@@ -561,10 +515,8 @@ public class AutoOptionExample extends LinearOpMode {
 
 
     }
-    //*****************************************************
     /////////////////////////////////////////////////////
 
-    //region Time Driving Functions
     public void DriveForward(double power)
     {
         // write the values to the motors
