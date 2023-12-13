@@ -83,13 +83,14 @@ public class teleOp8Bit extends LinearOpMode
             telemetry.addData("current position", robot.motorBottomArm.getCurrentPosition());
             telemetry.addData("arm Power ",(robot.armHold - robot.motorBottomArm.getCurrentPosition()) / robot.slopeVal);
 
+            //region Control Functions
+
             // holonomic formulas
             FrontLeft = gamepad1LeftY + gamepad1LeftX + gamepad1RightX;
             FrontRight = gamepad1LeftY - gamepad1LeftX - gamepad1RightX;
             BackLeft = gamepad1LeftY - gamepad1LeftX + gamepad1RightX;
             BackRight = gamepad1LeftY + gamepad1LeftX - gamepad1RightX;
 
-            //region Control Functions
 
             //Adjusts the speed of the motors for more precise movements and speed when necessary
             if(gamepad1.right_bumper)
@@ -138,11 +139,19 @@ public class teleOp8Bit extends LinearOpMode
                 //The right servo is reversed
                 robot.servoHandR.setPosition(robot.CLOSED);
                 robot.servoHandL.setPosition(robot.OPEN);
+                robot.servoTallon.setPosition(.1);
             }
             else if (gamepad2.b)
             {
                 robot.servoHandR.setPosition(robot.OPEN);
                 robot.servoHandL.setPosition(robot.CLOSED);
+                robot.servoTallon.setPosition(.1);
+            }
+            else if(gamepad2.y)
+            {
+                robot.servoHandR.setPosition(robot.CLOSED);
+                robot.servoHandL.setPosition(robot.OPEN);
+                robot.servoTallon.setPosition(robot.OPEN);
             }
 
             if(gamepad2.dpad_up)

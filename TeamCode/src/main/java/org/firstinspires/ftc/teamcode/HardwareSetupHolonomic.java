@@ -110,6 +110,7 @@ public class HardwareSetupHolonomic
     public Servo servoP = null;
     public Servo servoD = null;
 
+    public Servo servoTallon = null;
     //sensors
         //Add sensors here
     public TouchSensor MagIn = null;
@@ -186,11 +187,12 @@ public class HardwareSetupHolonomic
         servoHandL = hwMap.servo.get("servoHandL");
         servoP = hwMap.servo.get("servoP");
         servoD = hwMap.servo.get("servoD");
+        servoTallon = hwMap.servo.get("servoTallon");
 
         //open claw
         servoHandR.setPosition(CLOSED);
         servoHandL.setPosition(OPEN);
-
+        servoTallon.setPosition(.1);
         servoP.setPosition(.5);
         servoD.setPosition(.1);
         //endregion
