@@ -193,7 +193,7 @@ public class teleOp8Bit extends LinearOpMode
                     //telemetry.addData("DETECTED", "magOut - reverse direction");
                     if (gamepad2.right_stick_y < 0)
                     {
-                       // telemetry.addData("Motor", gamepad2.right_stick_y);
+                        // telemetry.addData("Motor", gamepad2.right_stick_y);
                         robot.motorTopArm.setPower(-gamepad2.right_stick_y);
                        // robot.armHold = robot.motorBottomArm.getCurrentPosition();
 

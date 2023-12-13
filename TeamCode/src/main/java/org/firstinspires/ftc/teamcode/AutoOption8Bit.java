@@ -55,7 +55,6 @@ public class AutoOption8Bit extends LinearOpMode {
 
     //VARIABLES USED FOR DIFFERENT GAME ELEMENTS. CAN BE CHANGED
     int paths = 0;
-
     final static double OPEN = 0.5;//original servo 0.8
     final static double CLOSED = 0.3;//original servo 0.6
     
@@ -167,7 +166,6 @@ public class AutoOption8Bit extends LinearOpMode {
 ///////////////////////////////////// END OF //////////////////////////////////////    
 /////////////////////////////// VISION CONTROL STUFF////////////////////////////////    
 */
-
 
     // For each auto option the parameters are essentially 1- the label to show on the driver station, 2 - starting value, 3 - the possible values
         //Below we create an instance of each of these abstract classes with defined parameters for the specific year's challenge elements
@@ -435,7 +433,8 @@ public class AutoOption8Bit extends LinearOpMode {
     double DRIVE_POWER = 0.5;
 
     //////////////////////////////////////////////////
-    public void AutoPaths() throws InterruptedException {
+    public void AutoPaths() throws InterruptedException
+    {
 
         List<Recognition> currentRecognitions = robot.tfod.getRecognitions();
         telemetry.addData("# Objects Detected", currentRecognitions.size());
@@ -449,7 +448,7 @@ public class AutoOption8Bit extends LinearOpMode {
             double x = (recognition.getLeft() + recognition.getRight()) / 2 ;
             double y = (recognition.getTop()  + recognition.getBottom()) / 2 ;
 
-            if(x <= 320)// assuming the robot is on the blue front position
+            if(x <= 320)
             {
                 paths = 1;
                 detectedProp = true;
@@ -469,8 +468,6 @@ public class AutoOption8Bit extends LinearOpMode {
                 DriveForwardEncoder(.4,35);
                 liftArm(-.4, -400);
                 armHold();
-
-
             }
             else if(x > 320)
             {
@@ -479,26 +476,15 @@ public class AutoOption8Bit extends LinearOpMode {
                 telemetry.addLine("center");
                 telemetry.update();
 
-
                 DriveForwardEncoder(0.5,36);
                 pushUp();
-                DriveBackwardEncoder(.5, 17);
                 CloseClaw();
-                SpinLeftEncoder(.3, 80);
-                DriveForwardEncoder(.5, 84);
-                CloseClaw();
-                StrafeLeftEncoder(.4, 15);
-                liftArm(-.3, -900);
-                armHold();
-                DriveForwardEncoder(.3, 12);
-                liftArm(.3, 500);
-                openHands();
-                liftArm(-0.3, -300);
+
             }
             else
             {
                 paths = 3;
-
+                DriveForwardEncoder(.5, 50);
                 telemetry.addLine("right");
                 telemetry.update();
 
@@ -510,9 +496,6 @@ public class AutoOption8Bit extends LinearOpMode {
             telemetry.addData("- Position", "%.0f / %.0f", x, y);
             telemetry.addData("- Size", "%.0f x %.0f", recognition.getWidth(), recognition.getHeight());
         }   // end for() loop
-
-
-
 
     }
     /////////////////////////////////////////////////////

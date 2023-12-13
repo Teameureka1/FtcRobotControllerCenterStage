@@ -1,5 +1,9 @@
 package org.firstinspires.ftc.teamcode;
 
+//import com.google.ftcresearch.tfod.util.Size;
+
+import android.util.Size;
+
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -69,7 +73,9 @@ public class HardwareSetupHolonomic
     public int MBR = 0;
     //endregion
 
+
     private static final boolean USE_WEBCAM = true;
+
 
     /**
      * The variable to store our instance of the TensorFlow Object Detection processor.
@@ -113,12 +119,10 @@ public class HardwareSetupHolonomic
 
     /* local OpMode members. */
     HardwareMap hwMap        = null;
-    
+
     private static final String TFOD_MODEL_ASSET = "Hats.tflite";
 
-    private static final String[] LABELS = {
-            "blue hat", "red hat", "white pixel", "yellow pixel"
-    };
+    private static final String[] LABELS = {"blue hat", "red hat", "white pixel", "yellow pixel"};
 
    /* Constructor   // this is not required as JAVA does it for you, but useful if you want to add
     * function to this method when called in OpModes.
@@ -239,7 +243,7 @@ public class HardwareSetupHolonomic
         }
 
         // Choose a camera resolution. Not all cameras support all resolutions.
-        //builder.setCameraResolution(new Size(640, 480));
+        builder.setCameraResolution(new Size(640, 480));
 
         // Enable the RC preview (LiveView).  Set "false" to omit camera monitoring.
         //builder.enableLiveView(true);
@@ -260,7 +264,7 @@ public class HardwareSetupHolonomic
 
 
         // Set confidence threshold for TFOD recognitions, at any time.
-        //tfod.setMinResultConfidence(0.75f);
+        tfod.setMinResultConfidence(0.60f);
 
         // Disable or re-enable the TFOD processor at any time.
         //visionPortal.setProcessorEnabled(tfod, true);
