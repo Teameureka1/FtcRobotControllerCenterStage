@@ -63,24 +63,6 @@ public class AutoBlueBack extends LinearOpMode
          *************************/
 
 
-        CloseClaw();
-        DriveEncoder(0.5,37);
-        pushUp();
-        GyroTurn(80);
-        DriveEncoder(.5, 36);
-        StrafeLeft(.3, 400);
-        armMove(-.5, -800);
-        armHold();
-        DriveEncoder(.3, 5);
-        armMove(.3, 200);
-        OpenClaw();
-        armMove(-.3, -200);
-        armHold();
-        sleep(500);
-
-
-
-
 
         /*************************
          * Autonomous Code Above://
@@ -90,71 +72,6 @@ public class AutoBlueBack extends LinearOpMode
 
     /** Below: Basic Drive Methods used in Autonomous code...**/
     //set Drive Power variable
-    double DRIVE_POWER = 0.4;
-
-    public void DriveForward(double power)
-    {
-        // write the values to the motors
-        robot.motorFrontRight.setPower(power);//still need to test motor directions for desired movement
-        robot.motorFrontLeft.setPower(power);
-        robot.motorBackRight.setPower(power);
-        robot.motorBackLeft.setPower(power);
-    }
-
-    public void DriveForwardTime(double power, long time) throws InterruptedException
-    {
-        armHold();
-        DriveForward(power);
-        Thread.sleep(time);
-
-        sleep(500);
-
-    }
-
-    public void StopDriving()
-    {
-        DriveForward(0);
-    }
-
-    public void StopDrivingTime(long time) throws InterruptedException
-    {
-        armHold();
-        DriveForwardTime(0, time);
-    }
-
-    public void StrafeLeft(double power, long time) throws InterruptedException
-    {
-        // write the values to the motors
-        robot.motorFrontRight.setPower(power);
-        robot.motorFrontLeft.setPower(-power);
-        robot.motorBackRight.setPower(-power);
-        robot.motorBackLeft.setPower(power);
-        Thread.sleep(time);
-        sleep(500);
-    }
-
-    public void StrafeRight(double power, long time) throws InterruptedException
-    {
-        StrafeLeft(-power, time);
-        sleep(500);
-    }
-
-    public void SpinRight (double power, long time) throws InterruptedException
-    {
-        // write the values to the motors
-        robot.motorFrontRight.setPower(-power);
-        robot.motorFrontLeft.setPower(power);
-        robot.motorBackRight.setPower(-power);
-        robot.motorBackLeft.setPower(power);
-        Thread.sleep(time);
-        sleep(500);
-    }
-
-    public void SpinLeft (double power, long time) throws InterruptedException
-    {
-        SpinRight(-power, time);
-        sleep(500);
-    }
 
     public void OpenClaw()
     {
@@ -198,7 +115,6 @@ public class AutoBlueBack extends LinearOpMode
         robot.servoP.setPosition(1);
         sleep(500);
     }
-
 
    /////////////////////////////////////////////////////////////////////////////////
     //Below are the Gyro and Encoder methods

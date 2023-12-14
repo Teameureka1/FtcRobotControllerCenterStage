@@ -442,20 +442,7 @@ public class AutoOption8Bit extends LinearOpMode {
     public void AutoPaths() throws InterruptedException
     {
 
-        ElapsedTime run = new ElapsedTime();
-        run.reset();
         List<Recognition> currentRecognitions;
-        /**
-        while(run.seconds()<=5)
-        {
-            currentRecognitions = robot.tfod.getRecognitions();
-            if(currentRecognitions.size() > 0)
-            {
-                break;
-            }
-        }
-         **/
-
         currentRecognitions = robot.tfod.getRecognitions();
         telemetry.addData("# Objects Detected", currentRecognitions.size());
         telemetry.update();
