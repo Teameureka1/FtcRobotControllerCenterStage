@@ -42,7 +42,7 @@ public class AutoBlueRight extends LinearOpMode
     int FLtarget = 0;
     int BLtarget = 0;
     int paths = 0;
-
+    boolean detectedProp = false;
     /**
      * Constructor
      */
@@ -52,12 +52,12 @@ public class AutoBlueRight extends LinearOpMode
     @Override
     public void runOpMode() throws InterruptedException
     {
-        robot.init(hardwareMap);  //Initialize hardware from the Hardware Setup Class
+        robot.init(hardwareMap);//Initialize hardware from the Hardware Setup Class
+        robot.initTfod();
         robot.imu.resetYaw();
         //adds feedback telemetry to DS
         telemetry.addData("Status", "Initialized");
         telemetry.update();
-
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
@@ -77,8 +77,6 @@ public class AutoBlueRight extends LinearOpMode
     public void AutoPaths() throws InterruptedException {
 
         List<Recognition> currentRecognitions = robot.tfod.getRecognitions();
-
-        boolean detectedProp = false;
 
         // Step through the list of recognitions and display info for each one.
         for (Recognition recognition : currentRecognitions)
