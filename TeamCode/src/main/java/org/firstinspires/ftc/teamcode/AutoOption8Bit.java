@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import java.util.List;
 //import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
@@ -242,8 +243,8 @@ public class AutoOption8Bit extends LinearOpMode {
             telemetry.update();
             Thread.yield();
         }
-
         telemetry.addData("Robot","READY!!");
+
         telemetry.update();
     }
     //endregion
@@ -310,7 +311,7 @@ public class AutoOption8Bit extends LinearOpMode {
 
     private void RedF() throws InterruptedException
     {
-       //Pathys are set during the autoPaths method. These run after the purple pixel is delivered.
+       //Paths are set during the autoPaths method. These run after the purple pixel is delivered.
         if(paths == 1)
         {
 
@@ -362,7 +363,8 @@ public class AutoOption8Bit extends LinearOpMode {
     }
 
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() throws InterruptedException
+    {
 
 /*      // ADD THIS BACK IN FOR USING OBJECT DETECTION
 
@@ -385,6 +387,10 @@ public class AutoOption8Bit extends LinearOpMode {
         robot.init(hardwareMap);  //Initialize hardware from the Hardware Setup Class
         selectOptions();
         robot.initTfod();
+        telemetry.addData("color ",allianceColor.getValue());
+        telemetry.addData("pos ", startPos.getValue());
+        telemetry.addData("endPos", endPos.getValue());
+        telemetry.addData("wait ", waitStart.getValue());
         /** Wait for the game to begin */
         telemetry.addData(">", "Press Play to start op mode");
         telemetry.update();
@@ -429,32 +435,44 @@ public class AutoOption8Bit extends LinearOpMode {
     }//End RunOpMode
 
     /** Below: Basic Drive Methods used in Autonomous code...**/
-    //region Drive Functions
+    //region Drive
     double DRIVE_POWER = 0.5;
 
     //////////////////////////////////////////////////
     public void AutoPaths() throws InterruptedException
     {
 
-        List<Recognition> currentRecognitions = robot.tfod.getRecognitions();
+        ElapsedTime run = new ElapsedTime();
+        run.reset();
+        List<Recognition> currentRecognitions;
+        /**
+        while(run.seconds()<=5)
+        {
+            currentRecognitions = robot.tfod.getRecognitions();
+            if(currentRecognitions.size() > 0)
+            {
+                break;
+            }
+        }
+         **/
+
+        currentRecognitions = robot.tfod.getRecognitions();
         telemetry.addData("# Objects Detected", currentRecognitions.size());
+        telemetry.update();
 
         boolean detectedProp = false;
-
         // Step through the list of recognitions and display info for each one.
         for (Recognition recognition : currentRecognitions)
         {
-
-            double x = (recognition.getLeft() + recognition.getRight()) / 2 ;
+            double x  = (recognition.getLeft() + recognition.getRight()) / 2 ;
             double y = (recognition.getTop()  + recognition.getBottom()) / 2 ;
+            detectedProp = true;
 
             if(x <= 320)
             {
                 paths = 1;
-                detectedProp = true;
                 telemetry.addLine("left");
                 telemetry.update();
-
 
                 CloseClaw();
                 DriveForwardEncoder(.4, 15);
@@ -472,24 +490,13 @@ public class AutoOption8Bit extends LinearOpMode {
             else if(x > 320)
             {
                 paths = 2;
-                detectedProp = true;
                 telemetry.addLine("center");
                 telemetry.update();
 
                 DriveForwardEncoder(0.5,36);
                 pushUp();
                 CloseClaw();
-
             }
-            else
-            {
-                paths = 3;
-                DriveForwardEncoder(.5, 50);
-                telemetry.addLine("right");
-                telemetry.update();
-
-            }
-
             telemetry.addLine(String.valueOf(recognition.getConfidence()));
             telemetry.addData(""," ");
             telemetry.addData("Image", "%s (%.0f %% Conf.)", recognition.getLabel(), recognition.getConfidence() * 100);
@@ -497,8 +504,20 @@ public class AutoOption8Bit extends LinearOpMode {
             telemetry.addData("- Size", "%.0f x %.0f", recognition.getWidth(), recognition.getHeight());
         }   // end for() loop
 
+        if(!detectedProp)
+        {
+            paths = 3;
+            telemetry.addLine("right");
+            telemetry.update();
+            DriveForwardEncoder(.5, 50);
+            SpinLeftEncoder(.5, 600);
+
+        }
     }
     /////////////////////////////////////////////////////
+    //endregion
+
+    //region Encoder Drive
 
     public void DriveForward(double power)
     {
@@ -508,7 +527,6 @@ public class AutoOption8Bit extends LinearOpMode {
         robot.motorBackRight.setPower(-power);
         robot.motorBackLeft.setPower(power);
     }
-
 
     public void StopDrivingTime(long time) throws InterruptedException
     {
@@ -524,9 +542,6 @@ public class AutoOption8Bit extends LinearOpMode {
         DriveForward(0);
     }
 
-    //endregion
-
-    //region Encoder Drive Functions
     public void StrafeRightEncoder(double power, int pos)
     {
         robot.motorFrontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -623,12 +638,12 @@ public class AutoOption8Bit extends LinearOpMode {
     {
         robot.motorFrontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.motorBackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        //robot.motorFrontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+       // robot.motorFrontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.motorBackLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         robot.motorFrontRight.setTargetPosition(pos);
         robot.motorBackRight.setTargetPosition(pos);
-        //robot.motorFrontLeft.setTargetPosition(pos);
+       // robot.motorFrontLeft.setTargetPosition(pos);
         robot.motorBackLeft.setTargetPosition(pos);
 
         robot.motorFrontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -808,7 +823,7 @@ public class AutoOption8Bit extends LinearOpMode {
     }
     //endregion
 
-    //region Arm & Hand Functions
+    //region Arm & Hand
     public void openHands() throws InterruptedException
     {
         sleep(1000);

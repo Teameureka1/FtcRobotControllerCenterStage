@@ -151,7 +151,7 @@ public class teleOp8Bit extends LinearOpMode
             {
                 robot.servoHandR.setPosition(robot.CLOSED);
                 robot.servoHandL.setPosition(robot.OPEN);
-                robot.servoTallon.setPosition(robot.OPEN);
+                robot.servoTallon.setPosition(.3);
             }
 
             if(gamepad2.dpad_up)
