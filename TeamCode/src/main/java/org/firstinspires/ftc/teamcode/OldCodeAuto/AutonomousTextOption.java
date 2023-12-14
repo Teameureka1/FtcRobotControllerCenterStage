@@ -1,6 +1,4 @@
-package org.firstinspires.ftc.teamcode;
-
-import org.firstinspires.ftc.teamcode.AutonomousOption;
+package org.firstinspires.ftc.teamcode.OldCodeAuto;
 
 /**
  * Created by Fusion on 10/30/2017.

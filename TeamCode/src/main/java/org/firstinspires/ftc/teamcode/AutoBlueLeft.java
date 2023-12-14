@@ -15,20 +15,19 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
-import java.util.List;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
-import org.firstinspires.ftc.teamcode.OldCodeAuto.HardwareSettup;
+import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 
-@Autonomous(name="BlueBack", group="Blue")
+import java.util.List;
+
+@Autonomous(name="BlueFront", group="Blue")
 //@Disabled
-public class AutoBlueRight extends LinearOpMode
+public class AutoBlueLeft extends LinearOpMode
 {
 
     private ElapsedTime runtime = new ElapsedTime();
@@ -46,7 +45,7 @@ public class AutoBlueRight extends LinearOpMode
     /**
      * Constructor
      */
-    public AutoBlueRight() {
+    public AutoBlueLeft() {
     }
 
     @Override
@@ -65,6 +64,7 @@ public class AutoBlueRight extends LinearOpMode
          * Autonomous Code Below://
          *************************/
         AutoPaths();
+
 
         /*************************
          * Autonomous Code Above://
@@ -126,8 +126,6 @@ public class AutoBlueRight extends LinearOpMode
                 armHold();
                 DriveForwardEncoder(.3, 12);
                 liftArm(.3, 500);
-                armHold();
-                extendArm(.5, true);
                 OpenClaw();
                 liftArm(-0.3, -300);
             }
@@ -143,6 +141,7 @@ public class AutoBlueRight extends LinearOpMode
         if(detectedProp == false)
         {
             paths = 3;
+
             telemetry.addLine("right");
             telemetry.update();
 
@@ -460,10 +459,10 @@ public class AutoBlueRight extends LinearOpMode
     {
         sleep(1000);
         armHold();
-        robot.servoHandR.setPosition(robot.CLOSED);
+        robot.servoHandR.setPosition(robot.CLOSED); //note: uses servo instead of motor.
         robot.servoHandL.setPosition(robot.OPEN);
-        robot.servoTallon.setPosition(.3);
         sleep(500);
+
     }
 
     public void CloseClaw()

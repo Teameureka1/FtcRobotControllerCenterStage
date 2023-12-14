@@ -1,5 +1,10 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.OldCodeAuto;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+
+import org.firstinspires.ftc.teamcode.OldCodeAuto.AutonomousBooleanOption;
+import org.firstinspires.ftc.teamcode.OldCodeAuto.AutonomousIntOption;
+import org.firstinspires.ftc.teamcode.OldCodeAuto.AutonomousOption;
+import org.firstinspires.ftc.teamcode.OldCodeAuto.AutonomousTextOption;
 
 public class AutonomousOptions {
     private AutonomousOption[] autoOptions;

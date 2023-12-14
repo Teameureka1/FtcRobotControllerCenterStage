@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.OldCodeAuto;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
+import org.firstinspires.ftc.teamcode.OldCodeAuto.HardwareSettup;
 
 @TeleOp(name = "EncoderReading", group = "Encoder")
 @Disabled
@@ -16,7 +17,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 public class ReadEncoder extends LinearOpMode
 {
    private ElapsedTime runtime = new ElapsedTime();
-   HardwareSetupHolonomic robot = new HardwareSetupHolonomic();
+    HardwareSettup robot = new HardwareSettup();
 
 
 

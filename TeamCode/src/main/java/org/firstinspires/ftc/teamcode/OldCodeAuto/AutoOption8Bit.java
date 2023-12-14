@@ -1,9 +1,9 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.OldCodeAuto;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import java.util.List;
 //import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
@@ -37,10 +37,10 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
  * is explained below.
  */
 @Autonomous(name = "AutoOptions", group = "Comp")
-//@Disabled
+@Disabled
 public class AutoOption8Bit extends LinearOpMode {
 
-    HardwareSetupHolonomic robot = new HardwareSetupHolonomic();
+    HardwareSettup robot = new HardwareSettup();
     //region Initialize TFOD and VuForia
     /* Note: This sample uses the all-objects Tensor Flow model (FreightFrenzy_BCDM.tflite), which contains
      * the following 4 detectable objects
