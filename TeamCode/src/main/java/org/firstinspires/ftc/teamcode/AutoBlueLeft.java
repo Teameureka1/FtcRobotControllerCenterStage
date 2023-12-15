@@ -19,9 +19,13 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import org.firstinspires.ftc.vision.VisionPortal;
+import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 
 import java.util.List;
 
@@ -35,12 +39,20 @@ public class AutoBlueLeft extends LinearOpMode
     /* Define Hardware setup */
     // assumes left motors are reversed
     HardwareSetupHolonomic robot = new HardwareSetupHolonomic();
+    public VisionPortal visionPortal;
 
     int FRtarget = 0;
     int BRtarget = 0;
     int FLtarget = 0;
     int BLtarget = 0;
     int paths = 0;
+    double x = 0;
+    double y = 0;
+    public TfodProcessor tfod;
+    private static final String TFOD_MODEL_ASSET = "Hats.tflite";
+
+    private static final boolean USE_WEBCAM = true;
+    private static final String[] LABELS = {"blue hat", "red hat", "white pixel", "yellow pixel"};
 
     /**
      * Constructor
@@ -53,6 +65,7 @@ public class AutoBlueLeft extends LinearOpMode
     {
         robot.init(hardwareMap);  //Initialize hardware from the Hardware Setup Class
         robot.imu.resetYaw();
+        initTfod();
         //adds feedback telemetry to DS
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -76,7 +89,9 @@ public class AutoBlueLeft extends LinearOpMode
     //set Drive Power variable
     public void AutoPaths() throws InterruptedException {
 
+
         List<Recognition> currentRecognitions = robot.tfod.getRecognitions();
+        telemetry.addData("# Objects Detected", currentRecognitions.size());
 
         boolean detectedProp = false;
 
@@ -85,9 +100,17 @@ public class AutoBlueLeft extends LinearOpMode
         {
             detectedProp = true;
 
-            double x = (recognition.getLeft() + recognition.getRight()) / 2 ;
-            double y = (recognition.getTop()  + recognition.getBottom()) / 2 ;
+             x = (recognition.getLeft() + recognition.getRight()) / 2 ;
+             y = (recognition.getTop()  + recognition.getBottom()) / 2 ;
 
+            telemetry.addLine(String.valueOf(recognition.getConfidence()));
+            telemetry.addData(""," ");
+            telemetry.addData("Image", "%s (%.0f %% Conf.)", recognition.getLabel(), recognition.getConfidence() * 100);
+            telemetry.addData("- Position", "%.0f / %.0f", x, y);
+            telemetry.addData("- Size", "%.0f x %.0f", recognition.getWidth(), recognition.getHeight());
+            telemetry.update();
+
+            /**
             if(x <= 320)// assuming the robot is on the blue front position
             {
                 paths = 1;
@@ -129,15 +152,12 @@ public class AutoBlueLeft extends LinearOpMode
                 OpenClaw();
                 liftArm(-0.3, -300);
             }
+             **/
 
-            telemetry.addLine(String.valueOf(recognition.getConfidence()));
 
-            telemetry.addData(""," ");
-            telemetry.addData("Image", "%s (%.0f %% Conf.)", recognition.getLabel(), recognition.getConfidence() * 100);
-            telemetry.addData("- Position", "%.0f / %.0f", x, y);
-            telemetry.addData("- Size", "%.0f x %.0f", recognition.getWidth(), recognition.getHeight());
         }   // end for() loop
 
+        /**
         if(detectedProp == false)
         {
             paths = 3;
@@ -146,7 +166,71 @@ public class AutoBlueLeft extends LinearOpMode
             telemetry.update();
 
         }
+         **/
     }
+    void initTfod() {
+
+        // Create the TensorFlow processor by using a builder.
+        tfod = new TfodProcessor.Builder()
+
+                // With the following lines commented out, the default TfodProcessor Builder
+                // will load the default model for the season. To define a custom model to load,
+                // choose one of the following:
+                //   Use setModelAssetName() if the custom TF Model is built in as an asset (AS only).
+                //   Use setModelFileName() if you have downloaded a custom team model to the Robot Controller.
+                //.setModelAssetName("Hats.tflite")
+                .setModelAssetName(TFOD_MODEL_ASSET)
+                .setModelLabels(LABELS)
+                //.setModelFileName("Object.tflite")
+
+                // The following default settings are available to un-comment and edit as needed to
+                // set parameters for custom models.
+                //.setModelLabels(LABELS)
+                //.setIsModelTensorFlow2(true)
+                //.setIsModelQuantized(true)
+                //.setModelInputSize(300)
+                //.setModelAspectRatio(16.0 / 9.0)
+
+                .build();
+
+        // Create the vision portal by using a builder.
+        VisionPortal.Builder builder = new VisionPortal.Builder();
+
+        // Set the camera (webcam vs. built-in RC phone camera).
+        if (USE_WEBCAM) {
+            builder.setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"));
+        } else {
+            builder.setCamera(BuiltinCameraDirection.BACK);
+        }
+
+        // Choose a camera resolution. Not all cameras support all resolutions.
+        //builder.setCameraResolution(new Size(640, 480));
+
+        // Enable the RC preview (LiveView).  Set "false" to omit camera monitoring.
+        //builder.enableLiveView(true);
+
+        // Set the stream format; MJPEG uses less bandwidth than default YUY2.
+        //builder.setStreamFormat(VisionPortal.StreamFormat.YUY2);
+
+        // Choose whether or not LiveView stops if no processors are enabled.
+        // If set "true", monitor shows solid orange screen if no processors enabled.
+        // If set "false", monitor shows camera view without annotations.
+        //builder.setAutoStopLiveView(false);
+
+        // Set and enable the processor.
+        builder.addProcessor(tfod);
+
+        // Build the Vision Portal, using the above settings.
+        visionPortal = builder.build();
+
+
+        // Set confidence threshold for TFOD recognitions, at any time.
+        tfod.setMinResultConfidence(0.60f);
+
+        // Disable or re-enable the TFOD processor at any time.
+        //visionPortal.setProcessorEnabled(tfod, true);
+
+    }   // end method initTfod()
     public void liftArm(double power, int pos) throws InterruptedException
     {
         robot.motorBottomArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

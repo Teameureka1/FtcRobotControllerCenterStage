@@ -122,10 +122,11 @@ public class AutoBlueRight extends LinearOpMode
                 StrafeLeftEncoder(.4, 15);
                 liftArm(-.3, -900);
                 armHold();
+                extendArm(.5, true);
+                armHold();
                 DriveForwardEncoder(.3, 12);
                 liftArm(.3, 500);
                 armHold();
-                extendArm(.5, true);
                 OpenClaw();
                 liftArm(-0.3, -300);
             }
@@ -143,7 +144,6 @@ public class AutoBlueRight extends LinearOpMode
             paths = 3;
             telemetry.addLine("right");
             telemetry.update();
-
         }
     }
     public void liftArm(double power, int pos) throws InterruptedException
@@ -175,51 +175,102 @@ public class AutoBlueRight extends LinearOpMode
             }
         }
     }
-    public void StrafeRightEncoder(double power, int pos)
+
+    public void OpenClaw()
     {
-        robot.motorFrontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.motorBackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        // robot.motorFrontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.motorBackLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        sleep(1000);
+        armHold();
+        robot.servoHandR.setPosition(robot.CLOSED);
+        robot.servoHandL.setPosition(robot.OPEN);
+        robot.servoTallon.setPosition(.3);
+        sleep(500);
+    }
 
-        robot.motorFrontRight.setTargetPosition(pos);
-        robot.motorBackRight.setTargetPosition(pos);
-        //robot.motorFrontLeft.setTargetPosition(pos);
-        robot.motorBackLeft.setTargetPosition(pos);
-
-        robot.motorFrontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.motorBackRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        //robot.motorFrontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.motorBackLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        robot.motorFrontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.motorBackRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        //robot.motorFrontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.motorBackLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        robot.motorFrontRight.setPower(power);
-        robot.motorBackRight.setPower(-power);
-        //robot.motorFrontLeft.setPower(power);
-        robot.motorBackLeft.setPower(-power);
-
-        while(robot.motorBackRight.getCurrentPosition() > pos)
-        {
-            robot.motorFrontLeft.setPower(power);
-
-            telemetry.addData("FRmotorPos", robot.motorFrontRight.getCurrentPosition());
-            telemetry.addData("FLmotorPos", robot.motorFrontLeft.getCurrentPosition());
-            telemetry.addData("BRmotorPos", robot.motorBackRight.getCurrentPosition());
-            telemetry.addData("BLmotorPos", robot.motorBackLeft.getCurrentPosition());
-            telemetry.update();
-        }
-
-        //turn motor power to 0
-        robot.motorFrontRight.setPower(0);
-        robot.motorBackRight.setPower(0);
-        robot.motorFrontLeft.setPower(0);
-        robot.motorBackLeft.setPower(0);
+    public void CloseClaw()
+    {
+        robot.servoHandR.setPosition(robot.OPEN);
+        robot.servoHandL.setPosition(robot.CLOSED);
+        sleep(200);
 
     }
+
+    private void armHold()
+    {
+        robot.motorBottomArm.setPower((robot.armHold - robot.motorBottomArm.getCurrentPosition()) / robot.slopeVal);
+
+    }
+
+    private void armMove(double power, int pos)
+    {
+        robot.motorBottomArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.motorBottomArm.setTargetPosition(pos);
+        robot.motorBottomArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.motorBottomArm.setPower(power);
+        sleep(500);
+        robot.motorBottomArm.setPower(0);
+        // Set the arm hold position to the final position of the arm
+        robot.armHold = pos;
+    }
+
+    private void pushDown() throws InterruptedException {
+        robot.servoP.setPosition(.5);
+        sleep(500);
+    }
+
+    private void pushUp() throws InterruptedException {
+        robot.servoP.setPosition(1);
+        sleep(500);
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////
+    //Below are the Gyro and Encoder methods
+    //////////////////////////////////////////////////////////////////////////////
+
+   public void StrafeRightEncoder(double power, int pos)
+   {
+       robot.motorFrontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+       robot.motorBackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+       // robot.motorFrontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+       robot.motorBackLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+       robot.motorFrontRight.setTargetPosition(pos);
+       robot.motorBackRight.setTargetPosition(pos);
+       //robot.motorFrontLeft.setTargetPosition(pos);
+       robot.motorBackLeft.setTargetPosition(pos);
+
+       robot.motorFrontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+       robot.motorBackRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+       //robot.motorFrontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+       robot.motorBackLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+       robot.motorFrontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+       robot.motorBackRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+       //robot.motorFrontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+       robot.motorBackLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+       robot.motorFrontRight.setPower(power);
+       robot.motorBackRight.setPower(-power);
+       //robot.motorFrontLeft.setPower(power);
+       robot.motorBackLeft.setPower(-power);
+
+       while(robot.motorBackRight.getCurrentPosition() > pos)
+       {
+           robot.motorFrontLeft.setPower(power);
+
+           telemetry.addData("FRmotorPos", robot.motorFrontRight.getCurrentPosition());
+           telemetry.addData("FLmotorPos", robot.motorFrontLeft.getCurrentPosition());
+           telemetry.addData("BRmotorPos", robot.motorBackRight.getCurrentPosition());
+           telemetry.addData("BLmotorPos", robot.motorBackLeft.getCurrentPosition());
+           telemetry.update();
+       }
+
+       //turn motor power to 0
+       robot.motorFrontRight.setPower(0);
+       robot.motorBackRight.setPower(0);
+       robot.motorFrontLeft.setPower(0);
+       robot.motorBackLeft.setPower(0);
+
+   }
 
     public void StrafeLeftEncoder(double power, int pos)
     {
@@ -454,52 +505,6 @@ public class AutoBlueRight extends LinearOpMode
         robot.motorBackLeft.setPower(0);
 
     }
-    public void OpenClaw()
-    {
-        sleep(1000);
-        armHold();
-        robot.servoHandR.setPosition(robot.CLOSED);
-        robot.servoHandL.setPosition(robot.OPEN);
-        robot.servoTallon.setPosition(.3);
-        sleep(500);
-    }
-
-    public void CloseClaw()
-    {
-        robot.servoHandR.setPosition(robot.OPEN);
-        robot.servoHandL.setPosition(robot.CLOSED);
-        sleep(200);
-
-    }
-    private void armHold()
-    {
-        robot.motorBottomArm.setPower((robot.armHold - robot.motorBottomArm.getCurrentPosition()) / robot.slopeVal);
-
-    }
-
-    private void armMove(double power, int pos)
-    {
-        robot.motorBottomArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.motorBottomArm.setTargetPosition(pos);
-        robot.motorBottomArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.motorBottomArm.setPower(power);
-        sleep(500);
-        robot.motorBottomArm.setPower(0);
-        // Set the arm hold position to the final position of the arm
-        robot.armHold = pos;
-    }
-    private void pushDown() throws InterruptedException {
-        robot.servoP.setPosition(.5);
-        sleep(500);
-    }
-    private void pushUp() throws InterruptedException {
-        robot.servoP.setPosition(1);
-        sleep(500);
-    }
-
-   /////////////////////////////////////////////////////////////////////////////////
-    //Below are the Gyro and Encoder methods
-    //////////////////////////////////////////////////////////////////////////////
 
     private  void DriveEncoder(double speed, double distance){
 
@@ -613,6 +618,7 @@ public class AutoBlueRight extends LinearOpMode
         sleep(500);
 
     }
+
     public double GetHeading()
     {
         YawPitchRollAngles orientation = robot.imu.getRobotYawPitchRollAngles();

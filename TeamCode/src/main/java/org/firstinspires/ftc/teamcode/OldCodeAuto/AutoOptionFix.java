@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.OldCodeAuto;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -8,6 +8,7 @@ import org.firstinspires.ftc.teamcode.OldCodeAuto.AutonomousBooleanOption;
 import org.firstinspires.ftc.teamcode.OldCodeAuto.AutonomousIntOption;
 import org.firstinspires.ftc.teamcode.OldCodeAuto.AutonomousOption;
 import org.firstinspires.ftc.teamcode.OldCodeAuto.AutonomousTextOption;
+import org.firstinspires.ftc.teamcode.OldCodeAuto.HardwareSettup;
 
 import java.util.List;
 //import org.firstinspires.ftc.teamcode.imu.ExampleHardwareSetupHolonomic_IMU_Encoder;
@@ -16,7 +17,7 @@ import java.util.List;
 //@Disabled
 public class AutoOptionFix extends LinearOpMode {
 
-    HardwareSetupHolonomic robot = new HardwareSetupHolonomic();
+    HardwareSettup robot = new HardwareSettup();
 
 
     //VARIABLES USED FOR DIFFERENT GAME ELEMENTS. CAN BE CHANGED

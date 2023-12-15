@@ -125,11 +125,13 @@ public class teleOp8Bit extends LinearOpMode
                 // the difference between hold and current positions will
                 // attempt to drive the motor back to be equal with holdPosition.
                 // By adjusting slopeVal you can achieved perfect hold power
+                /**
                 if(gamepad2.y)
                 {
-                    robot.motorBottomArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                    robot.motorBottomArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                    //robot.motorBottomArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    //robot.motorBottomArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 }
+                **/
             }//end of left y == 0
 
 

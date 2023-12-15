@@ -24,7 +24,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.HardwareSetupHolonomic;
 
-@Autonomous(name="BlueBack", group="Blue")
+@Autonomous(name="BlueBackKangarrooooo", group="Blue")
 @Disabled
 public class AutoBlueBack extends LinearOpMode
 {
