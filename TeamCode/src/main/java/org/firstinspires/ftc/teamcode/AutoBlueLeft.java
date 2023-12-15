@@ -110,7 +110,7 @@ public class AutoBlueLeft extends LinearOpMode
             telemetry.addData("- Size", "%.0f x %.0f", recognition.getWidth(), recognition.getHeight());
             telemetry.update();
 
-            /**
+            
             if(x <= 320)// assuming the robot is on the blue front position
             {
                 paths = 1;
@@ -152,12 +152,12 @@ public class AutoBlueLeft extends LinearOpMode
                 OpenClaw();
                 liftArm(-0.3, -300);
             }
-             **/
+
 
 
         }   // end for() loop
 
-        /**
+
         if(detectedProp == false)
         {
             paths = 3;
@@ -166,9 +166,9 @@ public class AutoBlueLeft extends LinearOpMode
             telemetry.update();
 
         }
-         **/
+
     }
-    void initTfod() {
+    public void initTfod() {
 
         // Create the TensorFlow processor by using a builder.
         tfod = new TfodProcessor.Builder()
