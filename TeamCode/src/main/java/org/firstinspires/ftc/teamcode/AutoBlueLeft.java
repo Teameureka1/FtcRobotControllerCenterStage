@@ -87,9 +87,8 @@ public class AutoBlueLeft extends LinearOpMode
 
     /** Below: Basic Drive Methods used in Autonomous code...**/
     //set Drive Power variable
-    public void AutoPaths() throws InterruptedException {
-
-
+    public void AutoPaths() throws InterruptedException
+    {
         List<Recognition> currentRecognitions = robot.tfod.getRecognitions();
         telemetry.addData("# Objects Detected", currentRecognitions.size());
 
@@ -110,7 +109,6 @@ public class AutoBlueLeft extends LinearOpMode
             telemetry.addData("- Size", "%.0f x %.0f", recognition.getWidth(), recognition.getHeight());
             telemetry.update();
 
-            
             if(x <= 320)// assuming the robot is on the blue front position
             {
                 paths = 1;
@@ -153,8 +151,6 @@ public class AutoBlueLeft extends LinearOpMode
                 liftArm(-0.3, -300);
             }
 
-
-
         }   // end for() loop
 
 
@@ -164,7 +160,6 @@ public class AutoBlueLeft extends LinearOpMode
 
             telemetry.addLine("right");
             telemetry.update();
-
         }
 
     }
