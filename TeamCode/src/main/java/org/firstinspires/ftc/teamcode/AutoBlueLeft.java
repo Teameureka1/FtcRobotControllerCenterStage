@@ -33,12 +33,17 @@ import java.util.List;
 //@Disabled
 public class AutoBlueLeft extends LinearOpMode
 {
-
-    private ElapsedTime runtime = new ElapsedTime();
-
     /* Define Hardware setup */
     // assumes left motors are reversed
     HardwareSetupHolonomic robot = new HardwareSetupHolonomic();
+
+    private static final boolean USE_WEBCAM = true;
+
+    private static final String TFOD_MODEL_ASSET = "Hats.tflite";
+    private static final String TFOD_MODEL_FILE = "/sdcard/FIRST/tflitemodels/Hats.tflite";
+    private static final String[] LABELS = {"blue hat", "red hat", "white pixel", "yellow pixel"};
+
+    public TfodProcessor tfod;
     public VisionPortal visionPortal;
 
     int FRtarget = 0;
@@ -48,11 +53,10 @@ public class AutoBlueLeft extends LinearOpMode
     int paths = 0;
     double x = 0;
     double y = 0;
-    public TfodProcessor tfod;
-    private static final String TFOD_MODEL_ASSET = "Hats.tflite";
 
-    private static final boolean USE_WEBCAM = true;
-    private static final String[] LABELS = {"blue hat", "red hat", "white pixel", "yellow pixel"};
+
+    private ElapsedTime runtime = new ElapsedTime();
+
 
     /**
      * Constructor
@@ -173,14 +177,14 @@ public class AutoBlueLeft extends LinearOpMode
                 // choose one of the following:
                 //   Use setModelAssetName() if the custom TF Model is built in as an asset (AS only).
                 //   Use setModelFileName() if you have downloaded a custom team model to the Robot Controller.
-                //.setModelAssetName("Hats.tflite")
+
                 .setModelAssetName(TFOD_MODEL_ASSET)
-                .setModelLabels(LABELS)
-                //.setModelFileName("Object.tflite")
+                //or
+                //.setModelFileName("TFOD_MODEL_FILE")
 
                 // The following default settings are available to un-comment and edit as needed to
                 // set parameters for custom models.
-                //.setModelLabels(LABELS)
+                .setModelLabels(LABELS)
                 //.setIsModelTensorFlow2(true)
                 //.setIsModelQuantized(true)
                 //.setModelInputSize(300)
@@ -225,7 +229,8 @@ public class AutoBlueLeft extends LinearOpMode
         // Disable or re-enable the TFOD processor at any time.
         //visionPortal.setProcessorEnabled(tfod, true);
 
-    }   // end method initTfod()
+    }// end method initTfod()
+
     public void liftArm(double power, int pos) throws InterruptedException
     {
         robot.motorBottomArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -237,7 +242,6 @@ public class AutoBlueLeft extends LinearOpMode
         // Set the arm hold position to the final position of the arm
         robot.armHold = pos;
     }
-
     public void extendArm(double power, boolean out)
     {
         if(!robot.MagOut.isPressed() && out)
@@ -300,7 +304,6 @@ public class AutoBlueLeft extends LinearOpMode
         robot.motorBackLeft.setPower(0);
 
     }
-
     public void StrafeLeftEncoder(double power, int pos)
     {
         robot.motorFrontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -346,7 +349,6 @@ public class AutoBlueLeft extends LinearOpMode
         robot.motorBackLeft.setPower(0);
 
     }
-
     public void DriveForwardEncoder(double power, int pos)
     {
         robot.motorFrontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -698,5 +700,5 @@ public class AutoBlueLeft extends LinearOpMode
         YawPitchRollAngles orientation = robot.imu.getRobotYawPitchRollAngles();
         return orientation.getYaw(AngleUnit.DEGREES);
     }
-}
-//OpMode
+
+}//endClass
