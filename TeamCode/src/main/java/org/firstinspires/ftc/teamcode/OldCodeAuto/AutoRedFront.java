@@ -27,7 +27,7 @@ import org.firstinspires.ftc.teamcode.HardwareSetupHolonomic;
 
 import java.util.List;
 
-@Autonomous(name="RedFront", group="Red")
+@Autonomous(name="RedFrontBBBBBBBBBBBB", group="Red")
 @Disabled
 public class AutoRedFront extends LinearOpMode
 {

@@ -53,7 +53,7 @@ import java.util.List;
 public class CameraTenserFlowTest extends LinearOpMode {
 
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
-    private static final String TFOD_MODEL_ASSET = "Hats.tflite";
+    private static final String TFOD_MODEL_ASSET = "Claw.tflite";
 
     private static final String[] LABELS = {
             "blue hat", "red hat", "white pixel", "yellow pixel"
@@ -122,7 +122,7 @@ public class CameraTenserFlowTest extends LinearOpMode {
                 // choose one of the following:
                 //   Use setModelAssetName() if the custom TF Model is built in as an asset (AS only).
                 //   Use setModelFileName() if you have downloaded a custom team model to the Robot Controller.
-                //.setModelAssetName("Hats.tflite")
+                //.setModelAssetName("Claw.tflite")
                 .setModelAssetName(TFOD_MODEL_ASSET)
                 .setModelLabels(LABELS)
                 //.setModelFileName("Object.tflite")

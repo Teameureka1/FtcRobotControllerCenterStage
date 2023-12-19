@@ -121,7 +121,7 @@ public class HardwareSetupHolonomic
     /* local OpMode members. */
     HardwareMap hwMap        = null;
 
-    private static final String TFOD_MODEL_ASSET = "Hats.tflite";
+    private static final String TFOD_MODEL_ASSET = "Claw.tflite";
 
     private static final String[] LABELS = {"blue hat", "red hat", "white pixel", "yellow pixel"};
 
@@ -219,10 +219,10 @@ public class HardwareSetupHolonomic
                 // choose one of the following:
                 //   Use setModelAssetName() if the custom TF Model is built in as an asset (AS only).
                 //   Use setModelFileName() if you have downloaded a custom team model to the Robot Controller.
-                //.setModelAssetName("Hats.tflite")
+                //.setModelAssetName("Claw.tflite")
                 .setModelAssetName(TFOD_MODEL_ASSET)
                 .setModelLabels(LABELS)
-                //.setModelFileName("Object.tflite")
+                //.setModelFileName("Claw.tflite")
 
                 // The following default settings are available to un-comment and edit as needed to
                 // set parameters for custom models.

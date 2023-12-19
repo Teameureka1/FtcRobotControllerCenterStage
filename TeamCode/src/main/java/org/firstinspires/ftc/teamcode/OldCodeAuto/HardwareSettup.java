@@ -114,7 +114,7 @@ public class HardwareSettup
     //I wanna make closed be 0-0.3 and open a higher value
     final static double MOTOR_STOP = 0.0; // sets motor power to zero
 
-    private static final String TFOD_MODEL_ASSET = "Hats.tflite";
+    private static final String TFOD_MODEL_ASSET = "Claw.tflite";
 
     private static final String[] LABELS = {
             "blue hat", "red hat", "white pixel", "yellow pixel"
@@ -220,7 +220,7 @@ public class HardwareSettup
                 // choose one of the following:
                 //   Use setModelAssetName() if the custom TF Model is built in as an asset (AS only).
                 //   Use setModelFileName() if you have downloaded a custom team model to the Robot Controller.
-                //.setModelAssetName("Hats.tflite")
+                //.setModelAssetName("Claw.tflite")
                 .setModelAssetName(TFOD_MODEL_ASSET)
                 .setModelLabels(LABELS)
                 //.setModelFileName("Object.tflite")
