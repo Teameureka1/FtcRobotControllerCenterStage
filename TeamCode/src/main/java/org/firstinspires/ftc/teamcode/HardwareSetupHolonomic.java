@@ -41,37 +41,14 @@ public class HardwareSetupHolonomic
     static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
     static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_INCHES * 3.1415);
-    public double  slopeVal  = 1500.0;
+    public double  slopeVal  = 1200.0;
     //Create and set default servo positions & MOTOR STOP variables.
     //Possible servo values: 0.0 - 1.0  For CRServo 0.5=stop greater or less than will spin in that direction
     final static double OPEN = 0.5;//original servo 0.8
     final static double CLOSED = 0.3;//original servo 0.6
     //I wanna make closed be 0-0.3 and open a higher value
     final static double MOTOR_STOP = 0.0; // sets motor power to zero
-    static final double     TURN_SPEED              = 0.2;     // Max Turn speed to limit turn rate
-    static final double     HEADING_THRESHOLD       = 1.0 ;    // How close must the heading get to the target before moving to next step.
-    // Requiring more accuracy (a smaller number) will often make the turn take longer to get into the final position.
-    // Define the Proportional control coefficient (or GAIN) for "heading control".
-    // We define one value when Turning (larger errors), and the other is used when Driving straight (smaller errors).
-    // Increase these numbers if the heading does not corrects strongly enough (eg: a heavy robot or using tracks)
-    // Decrease these numbers if the heading does not settle on the correct value (eg: very agile robot with omni wheels)
-    static final double     P_TURN_GAIN            = 0.02;     // Larger is more responsive, but also less stable
-    static final double     P_DRIVE_GAIN           = 0.03;     // Larger is more responsive, but also less stable
-    static double  targetHeading = 0;
-    static double  driveSpeed    = 0;
-    static double  turnSpeed    = 0;
-    static double  leftSpeed     = 0;
-    static double  rightSpeed    = 0;
-    public int     BleftTarget    = 0;
-    public int     BrightTarget   = 0;
-    public int     FleftTarget   = 0;
-    public int     FrightTarget   = 0;
 
-    public int MFL = 0;
-    public int MBL = 0;
-    public int MFR = 0;
-    public int MBR = 0;
-    //endregion
 
 
     private static final boolean USE_WEBCAM = true;

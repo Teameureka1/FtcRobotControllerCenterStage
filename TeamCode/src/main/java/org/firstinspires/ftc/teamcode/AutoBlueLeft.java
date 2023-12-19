@@ -15,7 +15,6 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -30,9 +29,9 @@ import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 
 import java.util.List;
 
-@Autonomous(name="RedBack", group="Blue")
+@Autonomous(name="TFUTYV", group="Blue")
 //@Disabled
-public class AutoRedRight extends LinearOpMode
+public class AutoBlueLeft extends LinearOpMode
 {
     /* Define Hardware setup */
     // assumes left motors are reversed
@@ -62,7 +61,7 @@ public class AutoRedRight extends LinearOpMode
     /**
      * Constructor
      */
-    public AutoRedRight() {
+    public AutoBlueLeft() {
     }
 
     @Override
@@ -147,7 +146,7 @@ public class AutoRedRight extends LinearOpMode
                 armHold();
                 DriveForwardEncoder(0.5,36);
                 pushUp();
-                DriveForwardEncoder(-.5, -17);
+                DriveBackwardEncoder(.5, 17);
                 CloseClaw();
                 SpinLeftEncoder(.3, 80);
                 DriveForwardEncoder(.5, 84);
@@ -177,26 +176,8 @@ public class AutoRedRight extends LinearOpMode
             GyroTurn(-60);
             DriveEncoder(.5,8);
             pushUp();
-            DriveForwardEncoder(-.5, -10);
-            GyroTurn(-35);
-            DriveForwardEncoder(.5, 21);
-            GyroTurn(20);
-            armMove(-.5, -280);
-            armHold();
-            DriveForwardEncoder(.5, 30);
-            armMove(.5, 100);
-            armHold();
-            OpenClaw();
-            sleep(200);
-            armMove(-.5, -280);
-            armHold();
-            DriveForwardEncoder(-.3, -2);
-            GyroTurn(-80);
-            DriveForwardEncoder(.5, 20);
-            GyroTurn(-80);
-
-
-
+            DriveBackwardEncoder(.5, 4);
+            GyroTurn(-20);
 
         }
 
@@ -620,10 +601,9 @@ public class AutoRedRight extends LinearOpMode
         robot.motorBottomArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.motorBottomArm.setPower(power);
         sleep(500);
-        robot.armHold = pos;
         robot.motorBottomArm.setPower(0);
-
         // Set the arm hold position to the final position of the arm
+        robot.armHold = pos;
     }
     private void pushDown() throws InterruptedException {
         robot.servoP.setPosition(.5);
