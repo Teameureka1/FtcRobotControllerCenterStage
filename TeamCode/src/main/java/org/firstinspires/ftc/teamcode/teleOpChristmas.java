@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 
 @TeleOp(name = "christmas", group = "comp")
-//@Disabled
+@Disabled
 public class teleOpChristmas extends LinearOpMode
 {
     // create timer

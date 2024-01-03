@@ -186,7 +186,9 @@ public class HardwareSetupHolonomic
         imu = hwMap.get(IMU.class, "imu");
         imu.initialize(new IMU.Parameters(orientationOnRobot));
    }
-    void initTfod() {
+   /**
+   void initTfod()
+    {
 
         // Create the TensorFlow processor by using a builder.
         tfod = new TfodProcessor.Builder()
@@ -249,6 +251,7 @@ public class HardwareSetupHolonomic
         //visionPortal.setProcessorEnabled(tfod, true);
 
     }   // end method initTfod()
+    **/
 
 }
 

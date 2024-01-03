@@ -41,7 +41,7 @@ public class AutoRedRight extends LinearOpMode
     private static final boolean USE_WEBCAM = true;
 
     private static final String TFOD_MODEL_ASSET = "Claw.tflite";
-    private static final String TFOD_MODEL_FILE = "/sdcard/FIRST/tflitemodels/Claw.tflite";
+    //private static final String TFOD_MODEL_FILE = "/sdcard/FIRST/tflitemodels/Claw.tflite";
     private static final String[] LABELS = {"blue hat", "red hat", "white pixel", "yellow pixel"};
 
     public TfodProcessor tfod;
