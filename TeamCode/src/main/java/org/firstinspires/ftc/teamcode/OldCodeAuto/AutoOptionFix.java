@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.OldCodeAuto;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
@@ -14,7 +15,7 @@ import java.util.List;
 //import org.firstinspires.ftc.teamcode.imu.ExampleHardwareSetupHolonomic_IMU_Encoder;
 
 @Autonomous(name = "AutoOptionsFix", group = "Comp")
-//@Disabled
+@Disabled
 public class AutoOptionFix extends LinearOpMode {
 
     HardwareSettup robot = new HardwareSettup();

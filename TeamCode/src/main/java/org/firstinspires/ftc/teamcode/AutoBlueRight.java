@@ -113,23 +113,24 @@ public class AutoBlueRight extends LinearOpMode
             telemetry.addData("- Size", "%.0f x %.0f", recognition.getWidth(), recognition.getHeight());
             telemetry.update();
 
-            if(x <= 320)// assuming the robot is on the blue front position
+            if(x>320)// assuming the robot is on the blue front position
             {
+                ///The spike mark delivery lines up with the possition accross from it
                 paths = 1;
                 telemetry.addLine("right");
                 telemetry.update();
                 CloseClaw();
-                armMove(-.5, -200);
+                armMove(-.5, -250);
                 armHold();
                 DriveEncoder(.5, 30);
-                GyroTurn(-60);
-                DriveEncoder(.5,8);
+                GyroTurn(-65);
+                DriveEncoder(.5,7.5);
                 pushUp();
 
 
 
             }
-            else if(x > 320)
+            else if(x <= 320)
             {
                 paths = 2;
                 telemetry.addLine("center");
@@ -157,7 +158,7 @@ public class AutoBlueRight extends LinearOpMode
             armHold();
             DriveEncoder(.5, 28);
             GyroTurn(65);
-            DriveEncoder(.5,8);
+            DriveEncoder(.5,6);
             pushUp();
 
         }

@@ -29,9 +29,9 @@ import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 
 import java.util.List;
 
-@Autonomous(name="RedBack", group="Red")
+@Autonomous(name="RedFront", group="Red")
 //@Disabled
-public class AutoRedRight extends LinearOpMode
+public class AutoRedLeft extends LinearOpMode
 {
     /* Define Hardware setup */
     // assumes left motors are reversed
@@ -61,7 +61,7 @@ public class AutoRedRight extends LinearOpMode
     /**
      * Constructor
      */
-    public AutoRedRight() {
+    public AutoRedLeft() {
     }
 
     @Override
@@ -113,29 +113,24 @@ public class AutoRedRight extends LinearOpMode
             telemetry.addData("- Size", "%.0f x %.0f", recognition.getWidth(), recognition.getHeight());
             telemetry.update();
 
-            if(x <= 320)// assuming the robot is on the blue front position
+            if(x>320)// assuming the robot is on the blue front position
             {
+                ///The spike mark delivery lines up with the possition accross from it
                 paths = 1;
-                telemetry.addLine("left");
+                telemetry.addLine("right");
                 telemetry.update();
-
                 CloseClaw();
                 armMove(-.5, -200);
                 armHold();
-                DriveForwardEncoder(.4, 15);
-                GyroTurn(65);
-                DriveForwardEncoder(.4, 5);
+                DriveEncoder(.5, 30);
+                GyroTurn(-65);
+                DriveEncoder(.5,7.5);
                 pushUp();
-                liftArm(-.4, -300);
-                armHold();
-                DriveForwardEncoder(.4, -5);
-                GyroTurn(-90);
-                DriveForwardEncoder(.4,35);
-                liftArm(-.4, -400);
-                armHold();
+
+
 
             }
-            else if(x > 320)
+            else if(x <= 320)
             {
                 paths = 2;
                 telemetry.addLine("center");
@@ -146,18 +141,7 @@ public class AutoRedRight extends LinearOpMode
                 armHold();
                 DriveForwardEncoder(0.5,36);
                 pushUp();
-                DriveForwardEncoder(-.5, -17);
-                CloseClaw();
-                SpinLeftEncoder(.3, 80);
-                DriveForwardEncoder(.5, 84);
-                CloseClaw();
-                StrafeLeftEncoder(.4, 15);
-                liftArm(-.3, -900);
-                armHold();
-                DriveForwardEncoder(.3, 12);
-                liftArm(.3, 500);
-                OpenClaw();
-                liftArm(-0.3, -300);
+
             }
 
         }   // end for() loop
@@ -166,33 +150,16 @@ public class AutoRedRight extends LinearOpMode
         if(detectedProp == false)
         {
             paths = 3;
-
-            telemetry.addLine("right");
+            telemetry.addLine("left");
             telemetry.update();
+
             CloseClaw();
             armMove(-.5, -200);
             armHold();
-            DriveEncoder(.5, 30);
-            GyroTurn(-60);
-            DriveEncoder(.5,8);
+            DriveEncoder(.5, 28);
+            GyroTurn(65);
+            DriveEncoder(.5,6);
             pushUp();
-            DriveForwardEncoder(-.5, -10);
-            GyroTurn(-35);
-            DriveForwardEncoder(.5, 20);
-            GyroTurn(20);
-            armMove(-.5, -280);
-            armHold();
-            DriveForwardEncoder(.5, 30);
-            armMove(.5, 100);
-            armHold();
-            OpenClaw();
-            sleep(200);
-            armMove(-.5, -280);
-            armHold();
-            DriveForwardEncoder(-.3, -4);
-            GyroTurn(-80);
-            DriveForwardEncoder(.5, 18);
-            GyroTurn(-80);
 
         }
 
