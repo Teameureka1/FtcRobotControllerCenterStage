@@ -15,7 +15,6 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -30,7 +29,7 @@ import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 
 import java.util.List;
 
-@Autonomous(name="RedBack", group="Blue")
+@Autonomous(name="RedBack", group="Red")
 //@Disabled
 public class AutoRedRight extends LinearOpMode
 {
@@ -40,8 +39,8 @@ public class AutoRedRight extends LinearOpMode
 
     private static final boolean USE_WEBCAM = true;
 
-    private static final String TFOD_MODEL_ASSET = "Claw.tflite";
-    //private static final String TFOD_MODEL_FILE = "/sdcard/FIRST/tflitemodels/Claw.tflite";
+    private static final String TFOD_MODEL_ASSET = "Combined.tflite";
+    //private static final String TFOD_MODEL_FILE = "/sdcard/FIRST/tflitemodels/Combined.tflite";
     private static final String[] LABELS = {"blue hat", "red hat", "white pixel", "yellow pixel"};
 
     public TfodProcessor tfod;

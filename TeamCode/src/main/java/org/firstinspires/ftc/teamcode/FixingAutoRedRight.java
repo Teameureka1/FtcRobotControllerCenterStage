@@ -15,14 +15,12 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
@@ -30,7 +28,7 @@ import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 import java.util.List;
 
 @Autonomous(name="FixingRedBack", group="TEST")
-//@Disabled
+@Disabled
 public class FixingAutoRedRight extends LinearOpMode
 {
     /* Define Hardware setup */
@@ -39,18 +37,13 @@ public class FixingAutoRedRight extends LinearOpMode
 
     private static final boolean USE_WEBCAM = true;
 
-    private static final String TFOD_MODEL_ASSET = "Claw.tflite";
-    //private static final String TFOD_MODEL_FILE = "/sdcard/FIRST/tflitemodels/Claw.tflite";
+    private static final String TFOD_MODEL_ASSET = "Combined.tflite";
+    //private static final String TFOD_MODEL_FILE = "/sdcard/FIRST/tflitemodels/Combined.tflite";
     private static final String[] LABELS = {"blue hat", "red hat", "white pixel", "yellow pixel"};
 
     public TfodProcessor tfod;
     public VisionPortal visionPortal;
 
-    int FRtarget = 0;
-    int BRtarget = 0;
-    int FLtarget = 0;
-    int BLtarget = 0;
-    int paths = 0;
     double x = 0;
     double y = 0;
 

@@ -2,8 +2,6 @@ package org.firstinspires.ftc.teamcode;
 
 //import com.google.ftcresearch.tfod.util.Size;
 
-import android.util.Size;
-
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -11,8 +9,6 @@ import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
-import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 
@@ -98,7 +94,7 @@ public class HardwareSetupHolonomic
     /* local OpMode members. */
     HardwareMap hwMap        = null;
 
-    private static final String TFOD_MODEL_ASSET = "Claw.tflite";
+    private static final String TFOD_MODEL_ASSET = "Combined.tflite";
 
     private static final String[] LABELS = {"blue hat", "red hat", "white pixel", "yellow pixel"};
 
@@ -198,10 +194,10 @@ public class HardwareSetupHolonomic
                 // choose one of the following:
                 //   Use setModelAssetName() if the custom TF Model is built in as an asset (AS only).
                 //   Use setModelFileName() if you have downloaded a custom team model to the Robot Controller.
-                //.setModelAssetName("Claw.tflite")
+                //.setModelAssetName("Combined.tflite")
                 .setModelAssetName(TFOD_MODEL_ASSET)
                 .setModelLabels(LABELS)
-                //.setModelFileName("Claw.tflite")
+                //.setModelFileName("Combined.tflite")
 
                 // The following default settings are available to un-comment and edit as needed to
                 // set parameters for custom models.
