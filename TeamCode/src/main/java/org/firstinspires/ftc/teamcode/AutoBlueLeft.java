@@ -155,18 +155,19 @@ public class AutoBlueLeft extends LinearOpMode
                 DriveEncoder(.5,8);
                 pushUp();
                 DriveEncoder(-.5, -10);
-                GyroTurn(150);
+                GyroTurn(145);
                 DriveEncoder(.5, 30);
                 armMove(-.5, -300);
                 armHold();
-                DriveEncoder(.3, 8);
+                GyroTurn(5);
+                DriveEncoder(.3, 10);
                 armMove(.3, 100);
                 OpenClaw();
                 armMove(-.5, -300);
                 armHold();
                 DriveEncoder(-.4, -5);
                 GyroTurn(90);
-                DriveEncoder(.5, 20);
+                DriveEncoder(.5, 25   );
 
             }
 

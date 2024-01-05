@@ -116,48 +116,62 @@ public class AutoRedRight extends LinearOpMode
             if(x <= 320)// assuming the robot is on the blue front position
             {
                 paths = 1;
-                telemetry.addLine("left");
+                telemetry.addLine("center");
                 telemetry.update();
+                detectedProp = false;
 
                 CloseClaw();
                 armMove(-.5, -200);
                 armHold();
-                DriveForwardEncoder(.4, 15);
-                GyroTurn(65);
-                DriveForwardEncoder(.4, 5);
+                DriveEncoder(0.5,36);
                 pushUp();
-                liftArm(-.4, -300);
+                DriveEncoder(-.5, -17);
+                CloseClaw();
+                SpinLeftEncoder(.3, 80);
+                DriveEncoder(.5, 84);
+                CloseClaw();
+                StrafeLeftEncoder(.4, 15);
+                liftArm(-.3, -900);
                 armHold();
-                DriveForwardEncoder(.4, -5);
-                GyroTurn(-90);
-                DriveForwardEncoder(.4,35);
-                liftArm(-.4, -400);
-                armHold();
+                DriveEncoder(.3, 12);
+                liftArm(.3, 500);
+                OpenClaw();
+                liftArm(-0.3, -300);
+
+
 
             }
             else if(x > 320)
             {
                 paths = 2;
-                telemetry.addLine("center");
+                detectedProp = false;
+                telemetry.addLine("right");
                 telemetry.update();
-
                 CloseClaw();
                 armMove(-.5, -200);
                 armHold();
-                DriveForwardEncoder(0.5,36);
+                DriveEncoder(.5, 30);
+                GyroTurn(-60);
+                DriveEncoder(.5,8);
                 pushUp();
-                DriveForwardEncoder(-.5, -17);
-                CloseClaw();
-                SpinLeftEncoder(.3, 80);
-                DriveForwardEncoder(.5, 84);
-                CloseClaw();
-                StrafeLeftEncoder(.4, 15);
-                liftArm(-.3, -900);
+                DriveEncoder(-.5, -10);
+                GyroTurn(-90);
+                DriveEncoder(.5, 20);
+                GyroTurn(20);
+                armMove(-.5, -280);
                 armHold();
-                DriveForwardEncoder(.3, 12);
-                liftArm(.3, 500);
+                DriveEncoder(.5, 30);
+                armMove(.5, 100);
+                armHold();
                 OpenClaw();
-                liftArm(-0.3, -300);
+                sleep(200);
+                armMove(-.5, -280);
+                armHold();
+                DriveEncoder(-.3, -4);
+                GyroTurn(-80);
+                DriveEncoder(.5, 18);
+                GyroTurn(-80);
+
             }
 
         }   // end for() loop
@@ -166,33 +180,24 @@ public class AutoRedRight extends LinearOpMode
         if(detectedProp == false)
         {
             paths = 3;
+            telemetry.addLine("left");
 
-            telemetry.addLine("right");
             telemetry.update();
             CloseClaw();
             armMove(-.5, -200);
             armHold();
-            DriveEncoder(.5, 30);
-            GyroTurn(-60);
-            DriveEncoder(.5,8);
+            DriveForwardEncoder(.4, 15);
+            GyroTurn(65);
+            DriveForwardEncoder(.4, 5);
             pushUp();
-            DriveForwardEncoder(-.5, -10);
-            GyroTurn(-35);
-            DriveForwardEncoder(.5, 20);
-            GyroTurn(20);
-            armMove(-.5, -280);
+            liftArm(-.4, -300);
             armHold();
-            DriveForwardEncoder(.5, 30);
-            armMove(.5, 100);
+            DriveForwardEncoder(.4, -5);
+            GyroTurn(-90);
+            DriveForwardEncoder(.4,35);
+            liftArm(-.4, -400);
             armHold();
-            OpenClaw();
-            sleep(200);
-            armMove(-.5, -280);
-            armHold();
-            DriveForwardEncoder(-.3, -4);
-            GyroTurn(-80);
-            DriveForwardEncoder(.5, 18);
-            GyroTurn(-80);
+
 
         }
 
