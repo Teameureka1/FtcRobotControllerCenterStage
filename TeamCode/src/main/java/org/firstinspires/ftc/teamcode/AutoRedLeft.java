@@ -117,6 +117,20 @@ public class AutoRedLeft extends LinearOpMode
             {
                 ///The spike mark delivery lines up with the possition accross from it
                 paths = 1;
+                telemetry.addLine("center");
+                telemetry.update();
+
+                CloseClaw();
+                armMove(-.5, -200);
+                armHold();
+                DriveForwardEncoder(0.5,36);
+                pushUp();
+
+
+            }
+            else if(x <= 320)
+            {
+                paths = 2;
                 telemetry.addLine("right");
                 telemetry.update();
                 CloseClaw();
@@ -125,21 +139,6 @@ public class AutoRedLeft extends LinearOpMode
                 DriveEncoder(.5, 30);
                 GyroTurn(-65);
                 DriveEncoder(.5,7.5);
-                pushUp();
-
-
-
-            }
-            else if(x <= 320)
-            {
-                paths = 2;
-                telemetry.addLine("center");
-                telemetry.update();
-
-                CloseClaw();
-                armMove(-.5, -200);
-                armHold();
-                DriveForwardEncoder(0.5,36);
                 pushUp();
 
             }

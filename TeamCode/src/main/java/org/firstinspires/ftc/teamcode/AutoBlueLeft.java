@@ -145,16 +145,29 @@ public class AutoBlueLeft extends LinearOpMode
             {
                 paths = 2;
                 detectedProp = true;
-                telemetry.addLine("left");
+                telemetry.addLine("right");
                 telemetry.update();
-
                 CloseClaw();
-                armMove(-.5, -200);
+                armMove(-.5, -250);
                 armHold();
-                DriveForwardEncoder(.4, 28);
-                GyroTurn(65);
-                DriveForwardEncoder(.4, 6);
+                DriveEncoder(.5, 30);
+                GyroTurn(-65);
+                DriveEncoder(.5,8);
                 pushUp();
+                DriveEncoder(-.5, -10);
+                GyroTurn(150);
+                DriveEncoder(.5, 30);
+                armMove(-.5, -300);
+                armHold();
+                DriveEncoder(.3, 8);
+                armMove(.3, 100);
+                OpenClaw();
+                armMove(-.5, -300);
+                armHold();
+                DriveEncoder(-.4, -5);
+                GyroTurn(90);
+                DriveEncoder(.5, 20);
+
             }
 
         }   // end for() loop
@@ -163,16 +176,33 @@ public class AutoBlueLeft extends LinearOpMode
         if(detectedProp == false)
         {
             paths = 3;
-
-            telemetry.addLine("right");
+            telemetry.addLine("left");
             telemetry.update();
+
             CloseClaw();
-            armMove(-.5, -250);
+            armMove(-.5, -200);
             armHold();
-            DriveEncoder(.5, 30);
-            GyroTurn(-65);
-            DriveEncoder(.5,8);
+            DriveForwardEncoder(.4, 28);
+            GyroTurn(65);
+            DriveForwardEncoder(.4, 6);
             pushUp();
+            DriveEncoder(-.3, -13);
+            GyroTurn(20);
+            DriveEncoder(.5, 15);
+            GyroTurn(-9);
+            armMove(-.5, -300);
+            armHold();
+            StrafeLeft(.2, 200);
+            DriveEncoder(.5, 32);
+            armMove(.3, 100);
+            OpenClaw();
+            DriveEncoder(-.5, -5);
+            GyroTurn(80);
+            DriveEncoder(.5, 18);
+
+
+
+
 
         }
 
@@ -251,6 +281,16 @@ public class AutoBlueLeft extends LinearOpMode
         robot.motorBottomArm.setPower(0);
         // Set the arm hold position to the final position of the arm
         robot.armHold = pos;
+    }
+    public void StrafeLeft(double power, long time) throws InterruptedException
+    {
+        // write the values to the motors
+        robot.motorFrontRight.setPower(power);
+        robot.motorFrontLeft.setPower(-power);
+        robot.motorBackRight.setPower(-power);
+        robot.motorBackLeft.setPower(power);
+        Thread.sleep(time);
+        sleep(500);
     }
     public void extendArm(double power, boolean out)
     {
