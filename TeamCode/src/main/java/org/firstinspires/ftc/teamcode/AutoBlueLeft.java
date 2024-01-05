@@ -116,22 +116,8 @@ public class AutoBlueLeft extends LinearOpMode
             if(x <= 320)// assuming the robot is on the blue front position
             {
                 paths = 1;
-                telemetry.addLine("left");
-                telemetry.update();
+                detectedProp = true;
 
-                CloseClaw();
-                armMove(-.5, -250);
-                armHold();
-                DriveForwardEncoder(.4, 15);
-                GyroTurn(65);
-                DriveForwardEncoder(.4, 5);
-                pushUp();
-
-
-            }
-            else if(x > 320)
-            {
-                paths = 2;
                 telemetry.addLine("center");
                 telemetry.update();
 
@@ -140,7 +126,35 @@ public class AutoBlueLeft extends LinearOpMode
                 armHold();
                 DriveForwardEncoder(0.5,36);
                 pushUp();
+                DriveEncoder(-.3, -10);
+                GyroTurn(80);
+                DriveEncoder(.5, 30);
+                armMove(-.5, -300);
+                armHold();
+                DriveEncoder(.3, 10);
+                armMove(.2, 100);
+                OpenClaw();
+                armMove(-.5, -200);
+                armHold();
+                DriveEncoder(-.4, -5);
+                GyroTurn(90);
+                DriveEncoder(.5, 20);
 
+            }
+            else if(x > 320)
+            {
+                paths = 2;
+                detectedProp = true;
+                telemetry.addLine("left");
+                telemetry.update();
+
+                CloseClaw();
+                armMove(-.5, -200);
+                armHold();
+                DriveForwardEncoder(.4, 28);
+                GyroTurn(65);
+                DriveForwardEncoder(.4, 6);
+                pushUp();
             }
 
         }   // end for() loop
