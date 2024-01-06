@@ -118,13 +118,27 @@ public class AutoRedRight extends LinearOpMode
                 paths = 1;
                 telemetry.addLine("center");
                 telemetry.update();
-                detectedProp = false;
+
 
                 CloseClaw();
                 armMove(-.5, -200);
                 armHold();
-                DriveEncoder(0.5,36);
+                DriveEncoder(0.5,37);
                 pushUp();
+                DriveEncoder(-.4, -7);
+                GyroTurn(-80);
+                DriveEncoder(.5, 25);
+                armMove(-.4, -300);
+                armHold();
+                DriveEncoder(.4, 23);
+                armMove(-.3, -100);
+                OpenClaw();
+                armMove(-.4, -200);
+                armHold();
+                DriveEncoder(-.4, -5);
+                GyroTurn(-80);
+                DriveEncoder(.4, 20);
+
 
 
 
@@ -133,7 +147,6 @@ public class AutoRedRight extends LinearOpMode
             else if(x > 320)
             {
                 paths = 2;
-                detectedProp = false;
                 telemetry.addLine("right");
                 telemetry.update();
                 CloseClaw();
@@ -144,22 +157,23 @@ public class AutoRedRight extends LinearOpMode
                 DriveEncoder(.5,8);
                 pushUp();
                 DriveEncoder(-.5, -10);
-                GyroTurn(-90);
+                GyroTurn(-50);
+                DriveEncoder(.5, 10);
+                GyroTurn(30);
                 DriveEncoder(.5, 20);
-                GyroTurn(20);
-                armMove(-.5, -280);
+                armMove(-.5, -300);
                 armHold();
-                DriveEncoder(.5, 30);
-                armMove(.5, 100);
-                armHold();
+                DriveEncoder(.3, 20);
+                armMove(.2, 100);
                 OpenClaw();
-                sleep(200);
-                armMove(-.5, -280);
+                armMove(-.4, -200);
                 armHold();
-                DriveEncoder(-.3, -4);
+                DriveEncoder(-.4, -5);
                 GyroTurn(-80);
-                DriveEncoder(.5, 18);
-                GyroTurn(-80);
+                DriveEncoder(.4, 15);
+
+
+
 
             }
 
@@ -175,18 +189,22 @@ public class AutoRedRight extends LinearOpMode
             CloseClaw();
             armMove(-.5, -200);
             armHold();
-            DriveForwardEncoder(.4, 15);
+            DriveForwardEncoder(.4, 25);
             GyroTurn(65);
-            DriveForwardEncoder(.4, 5);
+            DriveForwardEncoder(.4, 6);
             pushUp();
-            liftArm(-.4, -300);
+            DriveEncoder(-.4, -8);
+            GyroTurn(-130);
+            DriveEncoder(.4, 27);
+            armMove(-.5, -300);
             armHold();
-            DriveForwardEncoder(.4, -5);
-            GyroTurn(-90);
-            DriveForwardEncoder(.4,35);
-            liftArm(-.4, -400);
-            armHold();
-
+            GyroTurn(-10);
+            DriveEncoder(.4, 20);
+            armMove(.3, 100);
+            OpenClaw();
+            DriveEncoder(-.4, -5);
+            GyroTurn(-80);
+            DriveEncoder(-1, 30);
 
         }
 
