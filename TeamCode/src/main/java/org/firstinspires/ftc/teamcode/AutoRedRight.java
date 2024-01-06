@@ -125,18 +125,7 @@ public class AutoRedRight extends LinearOpMode
                 armHold();
                 DriveEncoder(0.5,36);
                 pushUp();
-                DriveEncoder(-.5, -17);
-                CloseClaw();
-                SpinLeftEncoder(.3, 80);
-                DriveEncoder(.5, 84);
-                CloseClaw();
-                StrafeLeftEncoder(.4, 15);
-                liftArm(-.3, -900);
-                armHold();
-                DriveEncoder(.3, 12);
-                liftArm(.3, 500);
-                OpenClaw();
-                liftArm(-0.3, -300);
+
 
 
 
