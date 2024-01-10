@@ -126,6 +126,7 @@ public class AutoRedLeft extends LinearOpMode
                 GyroTurn(-65);
                 DriveEncoder(.5,7.5);
                 pushUp();
+                DriveEncoder(-.4, -10);
 
 
             }
@@ -140,6 +141,7 @@ public class AutoRedLeft extends LinearOpMode
                 armHold();
                 DriveForwardEncoder(0.5,36);
                 pushUp();
+                DriveEncoder(-.4, -10);
 
 
             }
@@ -158,8 +160,26 @@ public class AutoRedLeft extends LinearOpMode
             armHold();
             DriveEncoder(.5, 28);
             GyroTurn(65);
-            DriveEncoder(.5,6);
+            DriveEncoder(.5,7);
             pushUp();
+            DriveEncoder(-.4, -10);
+            GyroTurn(-50);
+            DriveEncoder(.5, 28);
+            GyroTurn(-90);
+            DriveEncoder(.6, 50);
+            GyroTurn(-30);
+            DriveEncoder(.6, 43);
+            GyroTurn(25);
+            armMove(-.5, -300);
+            armHold();
+            DriveEncoder(.4, 8);
+            armMove(.3, 100);
+            OpenClaw();
+            armMove(-5, -200);
+            armHold();
+            DriveEncoder(-.4, -5);
+            GyroTurn(90);
+            DriveEncoder(.4, 5);
 
         }
 
