@@ -66,6 +66,7 @@ public class HardwareSetupHolonomic
     public DcMotor motorFrontLeft = null;
     public DcMotor motorBackRight = null;
     public DcMotor motorBackLeft = null;
+    public DcMotor OdoPod = null;
 
     //Accessories motors
     public DcMotor motorBottomArm = null;
@@ -127,6 +128,7 @@ public class HardwareSetupHolonomic
         motorFrontRight = hwMap.get(DcMotor.class,"motorFR");
         motorBackLeft = hwMap.get(DcMotor.class,"motorBL");
         motorBackRight = hwMap.get(DcMotor.class,"motorBR");
+        OdoPod = hwMap.get(DcMotor.class, "OdoPod");
 
         motorBottomArm = hwMap.get(DcMotor.class, "armMotor");
         motorTopArm = hwMap.get(DcMotor.class, "topArm");
@@ -139,6 +141,9 @@ public class HardwareSetupHolonomic
 
         motorBottomArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorBottomArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        OdoPod.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
 
         //Keep the motors from moving during initialize.
         motorFrontLeft.setPower(MOTOR_STOP);

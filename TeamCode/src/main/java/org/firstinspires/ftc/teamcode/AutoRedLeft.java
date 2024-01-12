@@ -138,13 +138,13 @@ public class AutoRedLeft extends LinearOpMode
                 paths = 2;
 
                 CloseClaw();
-                armMove(-.5, -100);
-                armHold();
-               DriveForwardEncoder(0.5,36);
+                //armMove(-.5, -100);
+              //  armHold();
+                DriveForwardEncoder(0.5,36);
                 pushUp();
-                DriveEncoder(.4, 15);
-                GyroTurn(-90);
-                DriveEncoder(.5, 40);
+                DriveEncoder(.4, 16);
+                GyroTurn(-80);
+                DriveEncoder(.5, 60);
                 StrafeRightEncoder(.5, 500);
 
 
@@ -160,7 +160,9 @@ public class AutoRedLeft extends LinearOpMode
             paths = 3;
             telemetry.addLine("left");
             telemetry.update();
+            DriveOP(.5, 10);
 
+            /**
             CloseClaw();
             armMove(-.5, -200);
             armHold();
@@ -188,6 +190,8 @@ public class AutoRedLeft extends LinearOpMode
             DriveEncoder(-.4, -5);
             GyroTurn(80);
             DriveEncoder(.4, 5);
+             **/
+
         }
 
     }
@@ -266,25 +270,15 @@ public class AutoRedLeft extends LinearOpMode
         // Set the arm hold position to the final position of the arm
         robot.armHold = pos;
     }
-    public void extendArm(double power, boolean out)
+    public void extendArm(double power)
     {
-        if(!robot.MagOut.isPressed() && out)
-        {
-            while(!robot.MagOut.isPressed())
-            {
-                robot.motorTopArm.setPower(power);
-            }
-        }
-        else if(!robot.MagOut.isPressed() && !out)
-        {
-            while(!robot.MagIn.isPressed())
-            {
-                robot.motorTopArm.setPower(-power);
-            }
-        }
+       robot.motorTopArm.setPower(power);
+       sleep(1500);
     }
     public void StrafeRightEncoder(double power, int pos)
     {
+        pos = pos * 53;
+
         robot.motorFrontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.motorBackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
          robot.motorFrontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -333,6 +327,8 @@ public class AutoRedLeft extends LinearOpMode
     }
     public void StrafeLeftEncoder(double power, int pos)
     {
+        pos = pos * 53;
+
         robot.motorFrontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.motorBackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.motorFrontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -348,25 +344,23 @@ public class AutoRedLeft extends LinearOpMode
         robot.motorFrontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.motorBackLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        robot.motorFrontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.motorBackRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.motorFrontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.motorBackLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        robot.motorFrontRight.setPower(-power);
-        robot.motorBackRight.setPower(power);
-        robot.motorFrontLeft.setPower(power);
-        robot.motorBackLeft.setPower(-power);
 
-        while(robot.motorBackRight.getCurrentPosition() < pos)
+        robot.motorFrontRight.setPower(power);
+        robot.motorBackRight.setPower(-power);
+        robot.motorFrontLeft.setPower(-power);
+        robot.motorBackLeft.setPower(power);
+
+        while(Math.abs(robot.motorBackRight.getCurrentPosition()) < pos)
         {
-            robot.motorFrontLeft.setPower(-power);
 
-            telemetry.addData("FRmotorPos", robot.motorFrontRight.getCurrentPosition());
-            telemetry.addData("FLmotorPos", robot.motorFrontLeft.getCurrentPosition());
-            telemetry.addData("BRmotorPos", robot.motorBackRight.getCurrentPosition());
-            telemetry.addData("BLmotorPos", robot.motorBackLeft.getCurrentPosition());
+            telemetry.addData("target position ", pos);
+            telemetry.addData("FRmotorPos ", robot.motorFrontRight.getCurrentPosition());
+            telemetry.addData("FLmotorPos ", robot.motorFrontLeft.getCurrentPosition());
+            telemetry.addData("BRmotorPos ", robot.motorBackRight.getCurrentPosition());
+            telemetry.addData("BLmotorPos ", robot.motorBackLeft.getCurrentPosition());
             telemetry.update();
+            sleep(5000);
         }
 
         //turn motor power to 0
@@ -374,6 +368,11 @@ public class AutoRedLeft extends LinearOpMode
         robot.motorBackRight.setPower(0);
         robot.motorFrontLeft.setPower(0);
         robot.motorBackLeft.setPower(0);
+
+        robot.motorFrontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.motorBackRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.motorFrontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.motorBackLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
     }
     public void DriveForwardEncoder(double power, int distance)
@@ -441,6 +440,36 @@ public class AutoRedLeft extends LinearOpMode
         robot.motorFrontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         robot.motorFrontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
+
+    }
+
+    public void DriveOP(double power, int pos)
+    {
+        //reset Mode
+      pos = pos * 330;
+
+        //reset the motor encoders
+        robot.OdoPod.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+
+        //Set motor speed "turn on motors"
+        robot.motorFrontLeft.setPower(power);
+        robot.motorBackLeft.setPower(power);
+        robot.motorFrontRight.setPower(power);
+        robot.motorBackRight.setPower(power);
+
+        //Keep looping until target reached and display target & encoder
+        while (robot.OdoPod.getCurrentPosition() < pos)
+        {
+            telemetry.addLine("Straight");
+            telemetry.addData("OdoPod ",  robot.OdoPod.getCurrentPosition());
+            telemetry.update();
+        }
+        //Motors Off
+        robot.motorFrontLeft.setPower(0);
+        robot.motorBackLeft.setPower(0);
+        robot.motorFrontRight.setPower(0);
+        robot.motorBackRight.setPower(0);
 
     }
 

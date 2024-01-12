@@ -83,6 +83,7 @@ public class teleOp8Bit extends LinearOpMode
             telemetry.addData("holdPos:", robot.armHold);
             telemetry.addData("current position", robot.motorBottomArm.getCurrentPosition());
             telemetry.addData("arm Power ",(robot.armHold - robot.motorBottomArm.getCurrentPosition()) / robot.slopeVal);
+            telemetry.addData("odoPod ", robot.OdoPod.getCurrentPosition());
 
             //region Control Functions
 
