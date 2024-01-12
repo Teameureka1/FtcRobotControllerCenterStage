@@ -138,14 +138,20 @@ public class AutoRedLeft extends LinearOpMode
                 paths = 2;
 
                 CloseClaw();
-                //armMove(-.5, -100);
-              //  armHold();
                 DriveForwardEncoder(0.5,36);
                 pushUp();
-                DriveEncoder(.4, 16);
+               // armMove(-.5, -100);
+                //armHold();
+                //DriveEncoder(-.5, -15);
+              //  StrafeLeftEncoder(.5, 15);
+                DriveEncoder(.4, 17);
                 GyroTurn(-80);
-                DriveEncoder(.5, 60);
-                StrafeRightEncoder(.5, 500);
+                DriveEncoder(.5, 80);
+                StrafeRightEncoder(.5, 15);
+                armMove(-.5, -300);
+                armHold();
+                extendArm(.5);
+
 
 
 
@@ -160,9 +166,7 @@ public class AutoRedLeft extends LinearOpMode
             paths = 3;
             telemetry.addLine("left");
             telemetry.update();
-            DriveOP(.5, 10);
 
-            /**
             CloseClaw();
             armMove(-.5, -200);
             armHold();
@@ -174,14 +178,12 @@ public class AutoRedLeft extends LinearOpMode
             GyroTurn(-50);
             DriveEncoder(.5, 28);
             GyroTurn(-95);
-            DriveEncoder(.6, 50);
-            GyroTurn(-25);
-            DriveEncoder(.6, 33);
-            GyroTurn(30);
-            DriveEncoder(.5, 14);
-            armMove(-.5, -300);
+            DriveEncoder(.6, 90);
+            StrafeRightEncoder(.5, 12);
+            armMove(-.5, -400);
             armHold();
-            DriveEncoder(.3, 5);
+            extendArm(.5);
+            DriveEncoder(.3, 9);
             armMove(.3, 100);
             armHold();
             OpenClaw();
@@ -190,7 +192,7 @@ public class AutoRedLeft extends LinearOpMode
             DriveEncoder(-.4, -5);
             GyroTurn(80);
             DriveEncoder(.4, 5);
-             **/
+
 
         }
 
@@ -259,21 +261,11 @@ public class AutoRedLeft extends LinearOpMode
 
     }// end method initTfod()
 
-    public void liftArm(double power, int pos) throws InterruptedException
-    {
-        robot.motorBottomArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.motorBottomArm.setTargetPosition(pos);
-        robot.motorBottomArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.motorBottomArm.setPower(power);
-        sleep(500);
-        robot.motorBottomArm.setPower(0);
-        // Set the arm hold position to the final position of the arm
-        robot.armHold = pos;
-    }
     public void extendArm(double power)
     {
        robot.motorTopArm.setPower(power);
-       sleep(1500);
+       sleep(1000);
+       robot.motorTopArm.setPower(0);
     }
     public void StrafeRightEncoder(double power, int pos)
     {
@@ -301,7 +293,7 @@ public class AutoRedLeft extends LinearOpMode
         robot.motorFrontLeft.setPower(power);
         robot.motorBackLeft.setPower(-power);
 
-        while(Math.abs(robot.motorBackRight.getCurrentPosition()) < pos)
+        while(Math.abs(robot.motorBackRight.getCurrentPosition()) < pos && robot.motorBackRight.isBusy())
         {
 
             telemetry.addData("target position ", pos);
@@ -310,7 +302,6 @@ public class AutoRedLeft extends LinearOpMode
             telemetry.addData("BRmotorPos ", robot.motorBackRight.getCurrentPosition());
             telemetry.addData("BLmotorPos ", robot.motorBackLeft.getCurrentPosition());
             telemetry.update();
-            sleep(5000);
         }
 
         //turn motor power to 0
@@ -360,7 +351,7 @@ public class AutoRedLeft extends LinearOpMode
             telemetry.addData("BRmotorPos ", robot.motorBackRight.getCurrentPosition());
             telemetry.addData("BLmotorPos ", robot.motorBackLeft.getCurrentPosition());
             telemetry.update();
-            sleep(5000);
+
         }
 
         //turn motor power to 0
