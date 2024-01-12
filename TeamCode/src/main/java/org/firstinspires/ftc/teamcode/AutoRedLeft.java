@@ -138,7 +138,7 @@ public class AutoRedLeft extends LinearOpMode
                 paths = 2;
 
                 CloseClaw();
-                DriveForwardEncoder(0.5,36);
+                DriveForwardEncoder(0.5,35);
                 pushUp();
                // armMove(-.5, -100);
                 //armHold();
@@ -148,13 +148,15 @@ public class AutoRedLeft extends LinearOpMode
                 GyroTurn(-80);
                 DriveEncoder(.5, 80);
                 StrafeRightEncoder(.5, 15);
-                armMove(-.5, -300);
+                armMove(-.5, -500);
                 armHold();
                 extendArm(.5);
-
-
-
-
+                DriveEncoder(.5, 18);
+               // armMove(.3, 100);
+                OpenClaw();
+                RetractArm(.8);
+                DriveEncoder(-.5, -5);
+                GyroTurn(-90);
 
             }
 
@@ -266,6 +268,17 @@ public class AutoRedLeft extends LinearOpMode
        robot.motorTopArm.setPower(power);
        sleep(1000);
        robot.motorTopArm.setPower(0);
+    }
+    public void RetractArm(double power)
+    {
+        if(!robot.MagIn.isPressed())
+        {
+            while(!robot.MagIn.isPressed())
+            {
+                robot.motorTopArm.setPower(-power);
+            }
+            robot.motorTopArm.setPower(0);
+        }
     }
     public void StrafeRightEncoder(double power, int pos)
     {
@@ -685,10 +698,10 @@ public class AutoRedLeft extends LinearOpMode
         robot.motorFrontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         //Set motor speed "turn on motors"
-        robot.motorFrontLeft.setPower(.3);
-        robot.motorBackLeft.setPower(.3);
-        robot.motorFrontRight.setPower(.3);
-        robot.motorBackRight.setPower(.3);
+        robot.motorFrontLeft.setPower(speed);
+        robot.motorBackLeft.setPower(speed);
+        robot.motorFrontRight.setPower(speed);
+        robot.motorBackRight.setPower(speed);
 
         //Keep looping until target reached and display target & encoder
         while (opModeIsActive() && robot.motorBackRight.isBusy()
