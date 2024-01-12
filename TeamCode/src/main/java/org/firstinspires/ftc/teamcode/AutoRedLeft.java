@@ -123,11 +123,25 @@ public class AutoRedLeft extends LinearOpMode
                 CloseClaw();
                 armMove(-.5, -200);
                 armHold();
-                DriveEncoder(.5, 30);
+                DriveEncoder(.4, 30);
                 GyroTurn(-65);
-                DriveEncoder(.5,7.5);
+                DriveEncoder(.4,7.5);
                 pushUp();
                 DriveEncoder(-.4, -10);
+                GyroTurn(65);
+                DriveEncoder(.4, 24);
+                GyroTurn(-80);
+                DriveEncoder(.5, 93);
+                StrafeRightEncoder(.4, 32);
+                armMove(-.5, -400);
+                armHold();
+                extendArm(.5);
+                DriveEncoder(.4, 8);
+                OpenClaw();
+                DriveEncoder(-.4, -5);
+                GyroTurn(90);
+                DriveEncoder(.4, 15);
+
 
 
             }
@@ -138,26 +152,22 @@ public class AutoRedLeft extends LinearOpMode
                 paths = 2;
 
                 CloseClaw();
-                DriveForwardEncoder(0.5,35);
+                DriveEncoder(0.5,35);
                 pushUp();
-               // armMove(-.5, -100);
-                //armHold();
-                //DriveEncoder(-.5, -15);
-              //  StrafeLeftEncoder(.5, 15);
                 DriveEncoder(.4, 17);
                 GyroTurn(-80);
                 DriveEncoder(.5, 80);
-                StrafeRightEncoder(.5, 15);
+                StrafeRightEncoder(.5, 18);
                 armMove(-.5, -500);
                 armHold();
                 extendArm(.5);
                 DriveEncoder(.5, 18);
-               // armMove(.3, 100);
                 OpenClaw();
+                // YEAH - Pixel delivered to Center!!!
+                DriveEncoder(-0.5, -5);
+                GyroTurn(90);
+                DriveEncoder(.5, 10);
                 RetractArm(.8);
-                DriveEncoder(-.5, -5);
-                GyroTurn(-90);
-
             }
 
         }   // end for() loop
@@ -271,14 +281,11 @@ public class AutoRedLeft extends LinearOpMode
     }
     public void RetractArm(double power)
     {
-        if(!robot.MagIn.isPressed())
+        while(!robot.MagIn.isPressed())
         {
-            while(!robot.MagIn.isPressed())
-            {
-                robot.motorTopArm.setPower(-power);
-            }
-            robot.motorTopArm.setPower(0);
+            robot.motorTopArm.setPower(-power);
         }
+        robot.motorTopArm.setPower(0);
     }
     public void StrafeRightEncoder(double power, int pos)
     {
@@ -743,20 +750,16 @@ public class AutoRedLeft extends LinearOpMode
             robot.motorBackLeft.setPower(-0.3);
             robot.motorFrontLeft.setPower(-0.3);
             //Turns right
-
         }
 
         //Reminder: the program only works if its less than zero
-
         if(position < 0)
         {
-
             robot.motorBackRight.setPower(-0.3);
             robot.motorFrontRight.setPower(-0.3);
             robot.motorBackLeft.setPower(0.3);
             robot.motorFrontLeft.setPower(0.3);
             //Turns Left
-
         }
 
         while (opModeIsActive() && !isStopRequested() && Math.abs(GetHeading()) < Math.abs(position))
@@ -765,16 +768,12 @@ public class AutoRedLeft extends LinearOpMode
             telemetry.addData("position", GetHeading());
             telemetry.update();
         }
-
-
-
         //deactivates the motors
         robot.motorFrontLeft.setPower(0);
         robot.motorFrontRight.setPower(0);
         robot.motorBackLeft.setPower(0);
         robot.motorBackRight.setPower(0);
         sleep(500);
-
     }
     public double GetHeading()
     {
