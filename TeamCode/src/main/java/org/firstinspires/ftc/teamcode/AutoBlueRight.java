@@ -123,11 +123,25 @@ public class AutoBlueRight extends LinearOpMode
                 armMove(-.5, -250);
                 armHold();
                 DriveEncoder(.5, 30);
-                GyroTurn(-65);
+                GyroTurn(-75);
                 DriveEncoder(.5,7.5);
                 pushUp();
-
-
+                DriveEncoder(-.4, -9);
+                GyroTurn(65);
+                DriveEncoder(.5, 20);
+                GyroTurn(85);
+                DriveEncoder(.5, 80);
+                StrafeLeftEncoder(.5, 18);
+                armMove(-.5, -400);
+                armHold();
+                extendArm(.5);
+                DriveEncoder(.5, 20);
+                OpenClaw();
+                armMove(-.5, -200);
+                armHold();
+                extendArm(-.6);
+                DriveEncoder(-.4, -5);
+                StrafeRightEncoder(.5, 10);
 
             }
             else if(x <= 320)
@@ -137,10 +151,22 @@ public class AutoBlueRight extends LinearOpMode
                 telemetry.update();
 
                 CloseClaw();
-                armMove(-.5, -200);
-                armHold();
                 DriveForwardEncoder(0.5,36);
                 pushUp();
+                DriveEncoder(.5, 15);
+                GyroTurn(85);
+                DriveEncoder(.5, 80);
+                armMove(-.5,-500);
+                armHold();
+                extendArm(.5);
+                StrafeLeftEncoder(.5, 15);
+                DriveEncoder(.5, 22);
+                OpenClaw();
+                armMove(-.5, -200);
+                armHold();
+                extendArm(-.6);
+                DriveEncoder(-.5, -5);
+                StrafeRightEncoder(.5, 15);
 
             }
 
@@ -165,7 +191,7 @@ public class AutoBlueRight extends LinearOpMode
             DriveEncoder(.5, 28);
             GyroTurn(85);
             DriveEncoder(.5, 80);
-            StrafeLeftEncoder(.5, 36);
+            StrafeLeftEncoder(.5, 27);
             armMove(-.5, -300);
             armHold();
             extendArm(.5);
@@ -175,7 +201,7 @@ public class AutoBlueRight extends LinearOpMode
             armHold();
             extendArm(-.6);
             DriveEncoder(-.4, -5);
-            StrafeLeftEncoder(.5, 20);
+            StrafeRightEncoder(.5, 20);
 
 
         }
