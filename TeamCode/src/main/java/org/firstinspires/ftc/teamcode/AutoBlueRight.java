@@ -163,9 +163,9 @@ public class AutoBlueRight extends LinearOpMode
             DriveEncoder(-.4, -10);
             GyroTurn(-65);
             DriveEncoder(.5, 28);
-            GyroTurn(80);
+            GyroTurn(85);
             DriveEncoder(.5, 80);
-            StrafeLeftEncoder(.5, 23);
+            StrafeLeftEncoder(.5, 36);
             armMove(-.5, -300);
             armHold();
             extendArm(.5);
@@ -173,6 +173,7 @@ public class AutoBlueRight extends LinearOpMode
             OpenClaw();
             armMove(-5, -200);
             armHold();
+            extendArm(-.6);
             DriveEncoder(-.4, -5);
             StrafeLeftEncoder(.5, 20);
 
