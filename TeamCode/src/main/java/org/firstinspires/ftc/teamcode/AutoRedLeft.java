@@ -167,7 +167,7 @@ public class AutoRedLeft extends LinearOpMode
                 DriveEncoder(-0.5, -5);
                 GyroTurn(90);
                 DriveEncoder(.5, 10);
-                RetractArm(.8);
+                extendArm(-.5);;
             }
 
         }   // end for() loop
@@ -279,14 +279,7 @@ public class AutoRedLeft extends LinearOpMode
        sleep(1000);
        robot.motorTopArm.setPower(0);
     }
-    public void RetractArm(double power)
-    {
-        while(!robot.MagIn.isPressed())
-        {
-            robot.motorTopArm.setPower(-power);
-        }
-        robot.motorTopArm.setPower(0);
-    }
+
     public void StrafeRightEncoder(double power, int pos)
     {
         pos = pos * 53;
