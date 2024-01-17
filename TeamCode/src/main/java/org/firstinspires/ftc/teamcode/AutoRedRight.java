@@ -128,11 +128,11 @@ public class AutoRedRight extends LinearOpMode
                 DriveEncoder(-.4, -7);
                 GyroTurn(-80);
                 DriveEncoder(.5, 25);
-                armMove(-.4, -300);
+                armMove(-.4, -400);
                 armHold();
                 extendArm(.5);
-                DriveEncoder(.4, 23);
-                armMove(-.3, -100);
+                DriveEncoder(.4, 20);
+                armMove(.3, 100);
                 OpenClaw();
                 armMove(-.4, -200);
                 armHold();
@@ -140,10 +140,6 @@ public class AutoRedRight extends LinearOpMode
                 DriveEncoder(-.4, -5);
                 GyroTurn(-80);
                 DriveEncoder(.4, 20);
-
-
-
-
 
             }
             else if(x > 320)
@@ -161,7 +157,7 @@ public class AutoRedRight extends LinearOpMode
                 DriveEncoder(-.5, -10);
                 GyroTurn(-50);
                 DriveEncoder(.5, 10);
-                GyroTurn(30);
+                GyroTurn(35);
                 DriveEncoder(.5, 20);
                 armMove(-.5, -300);
                 armHold();
@@ -175,9 +171,6 @@ public class AutoRedRight extends LinearOpMode
                 DriveEncoder(-.4, -5);
                 GyroTurn(-80);
                 DriveEncoder(.4, 15);
-
-
-
 
             }
 
@@ -203,7 +196,7 @@ public class AutoRedRight extends LinearOpMode
             armMove(-.5, -300);
             armHold();
             extendArm(.5);
-            GyroTurn(-10);
+            GyroTurn(-15);
             DriveEncoder(.4, 20);
             armMove(.3, 100);
             OpenClaw();
