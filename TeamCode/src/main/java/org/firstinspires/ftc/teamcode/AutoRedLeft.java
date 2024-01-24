@@ -140,6 +140,7 @@ public class AutoRedLeft extends LinearOpMode
                 OpenClaw();
                 DriveEncoder(-.4, -5);
                 GyroTurn(90);
+                armMove(.3, 300);
                 DriveEncoder(.4, 15);
 
 
@@ -166,6 +167,7 @@ public class AutoRedLeft extends LinearOpMode
                 // YEAH - Pixel delivered to Center!!!
                 DriveEncoder(-0.5, -5);
                 GyroTurn(90);
+                armMove(.3, 300);
                 DriveEncoder(.5, 10);
                 extendArm(-.5);;
             }
@@ -203,6 +205,7 @@ public class AutoRedLeft extends LinearOpMode
             armHold();
             DriveEncoder(-.4, -5);
             GyroTurn(80);
+            armMove(.3, 300);
             DriveEncoder(.4, 5);
 
 

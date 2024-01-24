@@ -141,6 +141,7 @@ public class AutoBlueRight extends LinearOpMode
                 armHold();
                 extendArm(-.6);
                 DriveEncoder(-.4, -5);
+                armMove(.3, 300);
                 StrafeRightEncoder(.5, 10);
 
             }
@@ -166,6 +167,7 @@ public class AutoBlueRight extends LinearOpMode
                 armHold();
                 extendArm(-.6);
                 DriveEncoder(-.5, -5);
+                armMove(.3, 300);
                 StrafeRightEncoder(.5, 15);
 
             }
@@ -201,6 +203,7 @@ public class AutoBlueRight extends LinearOpMode
             armHold();
             extendArm(-.6);
             DriveEncoder(-.4, -5);
+            armMove(.3, 300);
             StrafeRightEncoder(.5, 20);
 
 
