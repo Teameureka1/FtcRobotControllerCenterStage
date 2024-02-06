@@ -8,6 +8,9 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+/**
+ * Example Auto for holding arm while driving
+ */
 @Autonomous(name = "danArmHold")
 @Disabled
 public class danArmHold extends LinearOpMode {
@@ -51,7 +54,7 @@ public class danArmHold extends LinearOpMode {
       armMove(0.5, 1000);
       motorMoveArmHold(2000, 2000, 0.5, 0.5);
       // open servo
-      SevoPosition(0.8);
+      ServoPosition(0.8);
       // back up
       motorMoveArmHold(-2000, -2000, -0.5, -0.5);
       // turn
@@ -76,7 +79,7 @@ public class danArmHold extends LinearOpMode {
   /**
    * servo method
    */
-  private void SevoPosition(double ServoPosition) {
+  private void ServoPosition(double ServoPosition) {
     servoL.setPosition(ServoPosition);
     sleepAndHold(100);
   }
@@ -120,6 +123,7 @@ public class danArmHold extends LinearOpMode {
     while (motorL.isBusy() || motorR.isBusy()) {
       // Holds Arm until other motor(s) finish
 	  armHold();
+      //Display all motor positions
       telemetry.addData("armPos", motorArm.getCurrentPosition());
       telemetry.addData("posMotorL", motorL.getCurrentPosition());
       telemetry.addData("PosMotorR", motorR.getCurrentPosition());
@@ -129,7 +133,7 @@ public class danArmHold extends LinearOpMode {
 	// STOP all drive motors
     motorL.setPower(0);
     motorR.setPower(0);
-    //run the armHold method for a set period of time
+    //run the armHold method for a set period of time to make sure it doesn't drop while going to next step in program
     sleepAndHold(100);
   }
    /**

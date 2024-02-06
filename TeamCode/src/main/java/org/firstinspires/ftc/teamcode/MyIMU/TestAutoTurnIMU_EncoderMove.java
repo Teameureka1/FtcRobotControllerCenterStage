@@ -1,33 +1,19 @@
 package org.firstinspires.ftc.teamcode.MyIMU;
 
-import com.qualcomm.hardware.bosch.BNO055IMU;
-import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
-import org.firstinspires.ftc.teamcode.MyIMU.SimpleHardwareSetupHolonomicIMU;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.TouchSensor;
-import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
-
-
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 
 @Autonomous(name = "TestIMUturnStraightEnc", group = "TEST")
 //@Disabled
-public class TestAutoTurnIMU extends LinearOpMode {
+public class TestAutoTurnIMU_EncoderMove extends LinearOpMode {
 
     // Create Hardware object
-    SimpleHardwareSetupHolonomicIMU robot = new SimpleHardwareSetupHolonomicIMU();
+    ExampleHardwareSetupHolonomic_IMU_Encoder robot = new ExampleHardwareSetupHolonomic_IMU_Encoder();
 
     // State used for updating telemetry
    // Orientation angles;
@@ -68,12 +54,12 @@ public class TestAutoTurnIMU extends LinearOpMode {
     /////////////////////Methods////////////////////////////
 
     /**
-     *  Drive in a straight line, on a fixed compass heading (angle), based on encoder counts.
+     *  Drive straight based on encoder counts.
      *  Move will stop if either of these conditions occur:
      *  1) Move gets to the desired position
      *  2) Driver stops the OpMode running.
      *
-     * @param driveSpeed MAX Speed for forward/rev motion (range 0 to +1.0) .
+     * @param driveSpeed Speed for forward/rev motion
      * @param distance   Distance (in inches) to move from current position.  Negative distance means move backward.
      * */
     public void driveStraight(double driveSpeed,
@@ -98,7 +84,7 @@ public class TestAutoTurnIMU extends LinearOpMode {
             robot.motorFrontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
             // Set the required driving speed  (must be positive for RUN_TO_POSITION)
-            // Start driving straight, and then enter the control loop
+            // Start driving, and then enter the control loop
             robot.motorFrontLeft.setPower(driveSpeed);
             robot.motorFrontRight.setPower(driveSpeed);
 
@@ -116,7 +102,7 @@ public class TestAutoTurnIMU extends LinearOpMode {
             //stop motors
             robot.motorFrontLeft.setPower(0.0);
             robot.motorFrontRight.setPower(0.0);
-
+            //return motors to RunMode
             robot.motorFrontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             robot.motorFrontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             sleep(500);
@@ -128,8 +114,8 @@ public class TestAutoTurnIMU extends LinearOpMode {
         // Reset Yaw
         robot.imu.resetYaw();
 
-        //need to determine +- value to turn left or right
-        //use abs value for getHeading to compare with abs value of angle
+        //determine +- angle value to turn left or right
+
         if(angle > 0) {
             //start turning Right
             robot.motorFrontLeft.setPower(0.5);
@@ -140,7 +126,7 @@ public class TestAutoTurnIMU extends LinearOpMode {
             robot.motorFrontRight.setPower(0.5);
         }
 
-
+        //use abs value for getHeading to compare with abs value of angle
         while(opModeIsActive() && !isStopRequested() && Math.abs(getHeading()) < Math.abs(angle)) {
            //Display Heading
             telemetry.addLine("Turning: ");
