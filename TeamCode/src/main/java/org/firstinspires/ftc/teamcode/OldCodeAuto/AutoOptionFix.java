@@ -5,11 +5,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
-import org.firstinspires.ftc.teamcode.OldCodeAuto.AutonomousBooleanOption;
-import org.firstinspires.ftc.teamcode.OldCodeAuto.AutonomousIntOption;
-import org.firstinspires.ftc.teamcode.OldCodeAuto.AutonomousOption;
-import org.firstinspires.ftc.teamcode.OldCodeAuto.AutonomousTextOption;
-import org.firstinspires.ftc.teamcode.OldCodeAuto.HardwareSettup;
 
 import java.util.List;
 //import org.firstinspires.ftc.teamcode.imu.ExampleHardwareSetupHolonomic_IMU_Encoder;
