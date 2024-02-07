@@ -32,6 +32,7 @@ package org.firstinspires.ftc.teamcode.AutoOptionsTest;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -40,8 +41,11 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 //these imports are not used. They were part of auto gamepad selection for Freight Frenzy
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
+import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
+
+import java.util.List;
 
 /**
  * This 2020-2021 OpMode illustrates the basics of using the TensorFlow Object Detection API to
@@ -155,6 +159,9 @@ public class AutoOpTest extends LinearOpMode {
     int BRtarget = 0;
     int FLtarget = 0;
     int BLtarget = 0;
+    double x = 0;
+    double y = 0;
+    private ElapsedTime runtime = new ElapsedTime();
 
     //region Autonomous Options
     // This is how we get our autonomous options to show up on our phones.
@@ -276,16 +283,40 @@ public class AutoOpTest extends LinearOpMode {
          * Do it here so that the Camera Stream window will have the TensorFlow annotations visible.
          **/
 
-
         selectOptions();
 
         /** Wait for the game to begin */
         telemetry.addData(">", "Press Play to start op mode");
         telemetry.update();
         waitForStart();
-        sleep(waitStart.getValue()*1000);
+        runtime.reset();
+        if(waitStart.getValue()>0)
+        {
+            sleep(waitStart.getValue()*1000);
+        }
+        /***********************************************
+         ************Autonomous code bellow***************
+         ***********************************************/
 
+            List<Recognition> currentRecognitions = tfod.getRecognitions();
+            telemetry.addData("# Objects Detected", currentRecognitions.size());
 
+            // Step through the list of recognitions and display info for each one.
+            for (Recognition recognition : currentRecognitions) {
+
+                   x = (recognition.getLeft() + recognition.getRight()) / 2;
+                   y = (recognition.getTop() + recognition.getBottom()) / 2;
+                   telemetry.addLine(String.valueOf(recognition.getConfidence()));
+                   telemetry.addData("", " ");
+                   telemetry.addData("Image", "%s (%.0f %% Conf.)", recognition.getLabel(), recognition.getConfidence() * 100);
+                   telemetry.addData("- Position", "%.0f / %.0f", x, y);
+                   telemetry.addData("- Size", "%.0f x %.0f", recognition.getWidth(), recognition.getHeight());
+                   telemetry.update();
+            }
+
+        /***********************************************
+         ************Autonomous code above***************
+         ***********************************************/
         //endregion
     }
 
