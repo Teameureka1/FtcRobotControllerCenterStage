@@ -1,222 +1,76 @@
-/*
-   Holonomic/Mecanum concept autonomous program. Driving motors for TIME
+package org.firstinspires.ftc.teamcode.AutoOptionsTest;
 
-   Robot wheel mapping:
-          X FRONT X
-        X           X
-      X  FL       FR  X
-              X
-             XXX
-              X
-      X  BL       BR  X
-        X           X
-          X       X
-*/
-package org.firstinspires.ftc.teamcode;
+/* Copyright (c) 2019 FIRST. All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted (subject to the limitations in the disclaimer below) provided that
+ * the following conditions are met:
+ *
+ * Redistributions of source code must retain the above copyright notice, this list
+ * of conditions and the following disclaimer.
+ *
+ * Redistributions in binary form must reproduce the above copyright notice, this
+ * list of conditions and the following disclaimer in the documentation and/or
+ * other materials provided with the distribution.
+ *
+ * Neither the name of FIRST nor the names of its contributors may be used to endorse or
+ * promote products derived from this software without specific prior written permission.
+ *
+ * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS
+ * LICENSE. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+//import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+
+//these imports are not used. They were part of auto gamepad selection for Freight Frenzy
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
-import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 
-import java.util.List;
-
-@Autonomous(name="RedBack", group="Red")
+/**
+ * This 2020-2021 OpMode illustrates the basics of using the TensorFlow Object Detection API to
+ * determine the position of the Freight Frenzy game elements.
+ *
+ * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
+ * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list.
+ *
+ * IMPORTANT: In order to use this OpMode, you need to obtain your own Vuforia license key as
+ * is explained below.
+ */
+@Autonomous(name = "AutoOpTest", group = "Auto")
 //@Disabled
-public class AutoRedRight extends LinearOpMode
-{
-    /* Define Hardware setup */
-    // assumes left motors are reversed
-    HardwareSetupHolonomic robot = new HardwareSetupHolonomic();
+public class AutoOpTest extends LinearOpMode {
 
-    private static final boolean USE_WEBCAM = true;
-
+    HardwareSetupHolonomicTest robot = new HardwareSetupHolonomicTest();
     private static final String TFOD_MODEL_ASSET = "Combined.tflite";
-    //private static final String TFOD_MODEL_FILE = "/sdcard/FIRST/tflitemodels/Combined.tflite";
-    private static final String[] LABELS = {"blue hat", "red hat", "white pixel", "yellow pixel"};
-
+    private static final String[] LABELS = {
+            "blue hat", "red hat", "white pixel", "yellow pixel"
+    };
     public TfodProcessor tfod;
     public VisionPortal visionPortal;
 
-    int FRtarget = 0;
-    int BRtarget = 0;
-    int FLtarget = 0;
-    int BLtarget = 0;
-    int paths = 0;
-    double x = 0;
-    double y = 0;
-
-
-    private ElapsedTime runtime = new ElapsedTime();
+    private static final boolean USE_WEBCAM = true;
 
 
     /**
-     * Constructor
+     * Initialize the TensorFlow Object Detection engine.
      */
-    public AutoRedRight() {
-    }
-
-    @Override
-    public void runOpMode() throws InterruptedException
-    {
-        robot.init(hardwareMap);  //Initialize hardware from the Hardware Setup Class
-        robot.imu.resetYaw();
-        initTfod();
-        //adds feedback telemetry to DS
-        telemetry.addData("Status", "Initialized");
-        telemetry.update();
-
-        // Wait for the game to start (driver presses PLAY)
-        waitForStart();
-        runtime.reset();
-        /*************************
-         * Autonomous Code Below://
-         *************************/
-        AutoPaths();
-
-
-        /*************************
-         * Autonomous Code Above://
-         *************************/
-
-    }//EndOpMode
-
-    /** Below: Basic Drive Methods used in Autonomous code...**/
-    //set Drive Power variable
-    public void AutoPaths() throws InterruptedException
-    {
-        List<Recognition> currentRecognitions = tfod.getRecognitions();
-        telemetry.addData("# Objects Detected", currentRecognitions.size());
-
-        boolean detectedProp = false;
-
-        // Step through the list of recognitions and display info for each one.
-        for (Recognition recognition : currentRecognitions)
-        {
-            detectedProp = true;
-
-             x = (recognition.getLeft() + recognition.getRight()) / 2 ;
-             y = (recognition.getTop()  + recognition.getBottom()) / 2 ;
-
-            telemetry.addLine(String.valueOf(recognition.getConfidence()));
-            telemetry.addData(""," ");
-            telemetry.addData("Image", "%s (%.0f %% Conf.)", recognition.getLabel(), recognition.getConfidence() * 100);
-            telemetry.addData("- Position", "%.0f / %.0f", x, y);
-            telemetry.addData("- Size", "%.0f x %.0f", recognition.getWidth(), recognition.getHeight());
-            telemetry.update();
-
-            if(x <= 320)// assuming the robot is on the blue front position
-            {
-                paths = 1;
-                telemetry.addLine("center");
-                telemetry.update();
-
-
-                CloseClaw();
-                armMove(-.5, -200);
-                armHold();
-                DriveEncoder(0.5,37);
-                pushUp();
-                DriveEncoder(-.4, -7);
-                GyroTurn(-80);
-                DriveEncoder(.5, 25);
-                armMove(-.4, -400);
-                armHold();
-                extendArm(.5);
-                DriveEncoder(.4, 20);
-                armMove(.3, 100);
-                OpenClaw();
-                armMove(-.4, -200);
-                armHold();
-                extendArm(-.6);
-                DriveEncoder(-.4, -5);
-                GyroTurn(-80);
-                armMove(.3, 300);
-
-                DriveEncoder(.4, 20);
-
-            }
-            else if(x > 320)
-            {
-                paths = 2;
-                telemetry.addLine("right");
-                telemetry.update();
-                CloseClaw();
-                armMove(-.5, -200);
-                armHold();
-                DriveEncoder(.5, 30);
-                GyroTurn(-60);
-                DriveEncoder(.5,6);
-                pushUp();
-                DriveEncoder(-.5, -10);
-                GyroTurn(-50);
-                DriveEncoder(.5, 10);
-                GyroTurn(35);
-                DriveEncoder(.5, 20);
-                armMove(-.5, -300);
-                armHold();
-                extendArm(.5);
-                StrafeRightEncoder(.4, 3);
-                DriveEncoder(.3, 20);
-                armMove(.2, 100);
-                OpenClaw();
-                armMove(-.4, -200);
-                armHold();
-                extendArm(-.6);
-                DriveEncoder(-.4, -5);
-                GyroTurn(-80);
-                armMove(.3, 300);
-                DriveEncoder(.4, 15);
-
-            }
-
-        }   // end for() loop
-
-
-        if(detectedProp == false)
-        {
-            paths = 3;
-            telemetry.addLine("left");
-
-            telemetry.update();
-            CloseClaw();
-            armMove(-.5, -200);
-            armHold();
-            DriveForwardEncoder(.4, 25);
-            GyroTurn(65);
-            DriveForwardEncoder(.4, 8);
-            pushUp();
-            DriveEncoder(-.4, -8);
-            GyroTurn(-130);
-            DriveEncoder(.4, 27);
-            armMove(-.5, -300);
-            armHold();
-            extendArm(.5);
-            GyroTurn(-15);
-            StrafeLeftEncoder(.4, 1);
-
-            DriveEncoder(.4, 20);
-            armMove(.3, 100);
-            OpenClaw();
-            armMove(-.5, -300);
-            armHold();
-            extendArm(-.5);
-            DriveEncoder(-.4, -5);
-            GyroTurn(-80);
-            armMove(.3, 300);
-            DriveEncoder(-1, 30);
-
-        }
-
-    }
     public void initTfod() {
 
         // Create the TensorFlow processor by using a builder.
@@ -280,7 +134,160 @@ public class AutoRedRight extends LinearOpMode
         //visionPortal.setProcessorEnabled(tfod, true);
 
     }// end method initTfod()
+    //endregion
 
+    // For each auto option the parameters are essentially 1- the label to show on the driver station, 2 - starting value, 3 - the possible values
+    AutonomousTextOption    allianceColor       = new AutonomousTextOption("Alliance Color", "blue", new String[] {"blue", "red"});
+    AutonomousTextOption    startPos       = new AutonomousTextOption("Start Position", "X", new String[] {"X", "Y"});
+    AutonomousTextOption    endPos = new AutonomousTextOption("End Position", "Right", new String[] {"right","left"});
+    AutonomousIntOption     waitStart           = new AutonomousIntOption("Wait at Start", 0, 0, 20);
+
+    //This is the order of our options and setting them all to their preset value.
+    AutonomousOption[] autoOptions       = {allianceColor, startPos, endPos, waitStart};
+    int currentOption = 0;
+
+    //this setting the buttons to false to make sure options are not being chosen for us.
+    boolean aPressed = false;
+    boolean bPressed = false;
+    boolean xPressed = false;
+    boolean yPressed = false;
+    int FRtarget = 0;
+    int BRtarget = 0;
+    int FLtarget = 0;
+    int BLtarget = 0;
+
+    //region Autonomous Options
+    // This is how we get our autonomous options to show up on our phones.
+    public void showOptions (){
+        int index = 0;
+        String str = "";
+
+        while (index < autoOptions.length){
+            switch (autoOptions[index].optionType){
+                case STRING:
+                    str = ((AutonomousTextOption)autoOptions[index]).getValue();
+                    break;
+                case INT:
+                    str = Integer.toString(((AutonomousIntOption)autoOptions[index]).getValue());
+                    break;
+                case BOOLEAN:
+                    str = String.valueOf(((AutonomousBooleanOption)autoOptions[index]).getValue());
+                    break;
+            }
+
+            if (index == currentOption){
+                telemetry.addData(Integer.toString(index) + ") ==> " + autoOptions[index].name,str);
+            } else {
+                telemetry.addData(Integer.toString(index) + ")     " + autoOptions[index].name, str);
+            }
+
+            index = index + 1;
+        }
+        telemetry.update();
+    }
+    // This is how we select our auto options
+    public void selectOptions () {
+
+        while (currentOption< autoOptions.length && !opModeIsActive()){
+            showOptions();
+
+            if (gamepad1.a && !aPressed) {
+                currentOption = currentOption + 1;
+            }
+            aPressed = gamepad1.a;
+
+            if (gamepad1.y && !yPressed) {
+                currentOption = currentOption - 1;
+            }
+            yPressed = gamepad1.y;
+
+            if (gamepad1.b && !bPressed) {
+                autoOptions[currentOption].nextValue();
+            }
+            bPressed = gamepad1.b;
+
+            if (gamepad1.x && !xPressed) {
+                autoOptions[currentOption].previousValue();
+            }
+            xPressed = gamepad1.x;
+
+            telemetry.update();
+            Thread.yield();
+        }
+
+        telemetry.addData("Robot","READY!!");
+        telemetry.update();
+    }
+    //endregion
+
+    private void BlueF() throws InterruptedException
+    {
+
+        if(endPos.getValue().equals("right"))
+        {
+        }
+        else if(endPos.getValue().equals("left"))
+        {
+
+        }
+
+    }
+
+    private void BlueB() throws InterruptedException
+    {
+        if(endPos.getValue().equals("right"))
+        {
+        }
+        else if(endPos.getValue().equals("left"))
+        {
+
+        }
+    }
+
+    private void RedF() throws InterruptedException
+    {
+        if(endPos.getValue().equals("right"))
+        {
+        }
+        else if(endPos.getValue().equals("left"))
+        {
+
+        }
+    }
+
+    private void RedB() throws InterruptedException
+    {
+        if(endPos.getValue().equals("right"))
+        {
+        }
+        else if(endPos.getValue().equals("left"))
+        {
+
+        }
+    }
+
+    @Override
+    public void runOpMode() throws InterruptedException {
+        initTfod();
+        robot.init(hardwareMap);
+
+        /**
+         * Activate TensorFlow Object Detection before we wait for the start command.
+         * Do it here so that the Camera Stream window will have the TensorFlow annotations visible.
+         **/
+
+
+        selectOptions();
+
+        /** Wait for the game to begin */
+        telemetry.addData(">", "Press Play to start op mode");
+        telemetry.update();
+        waitForStart();
+        sleep(waitStart.getValue()*1000);
+
+
+        //endregion
+    }
 
     public void extendArm(double power)
     {
@@ -501,7 +508,7 @@ public class AutoRedRight extends LinearOpMode
         sleep(500);
     }
 
-   /////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////
     //Below are the Gyro and Encoder methods
     //////////////////////////////////////////////////////////////////////////////
 
@@ -623,4 +630,6 @@ public class AutoRedRight extends LinearOpMode
         return orientation.getYaw(AngleUnit.DEGREES);
     }
 
-}//endClass
+    //endregion
+    //endregion
+}

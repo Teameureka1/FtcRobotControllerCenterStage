@@ -14,4 +14,7 @@ public abstract class AutonomousOption {
     public abstract void previousValue();
 	
 	abstract String getStrValue ();
+
+
+
 }
