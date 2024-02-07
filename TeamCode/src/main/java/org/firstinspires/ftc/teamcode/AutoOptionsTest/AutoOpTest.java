@@ -69,6 +69,7 @@ public class AutoOpTest extends LinearOpMode {
     public TfodProcessor tfod;
     public VisionPortal visionPortal;
 
+    public String hatPos = "";
     private static final boolean USE_WEBCAM = true;
 
 
@@ -80,23 +81,9 @@ public class AutoOpTest extends LinearOpMode {
         // Create the TensorFlow processor by using a builder.
         tfod = new TfodProcessor.Builder()
 
-                // With the following lines commented out, the default TfodProcessor Builder
-                // will load the default model for the season. To define a custom model to load,
-                // choose one of the following:
-                //   Use setModelAssetName() if the custom TF Model is built in as an asset (AS only).
-                //   Use setModelFileName() if you have downloaded a custom team model to the Robot Controller.
-
                 .setModelAssetName(TFOD_MODEL_ASSET)
-                //or
-                //.setModelFileName("TFOD_MODEL_FILE")
 
-                // The following default settings are available to un-comment and edit as needed to
-                // set parameters for custom models.
                 .setModelLabels(LABELS)
-                //.setIsModelTensorFlow2(true)
-                //.setIsModelQuantized(true)
-                //.setModelInputSize(300)
-                //.setModelAspectRatio(16.0 / 9.0)
 
                 .build();
 
@@ -110,39 +97,19 @@ public class AutoOpTest extends LinearOpMode {
             builder.setCamera(BuiltinCameraDirection.BACK);
         }
 
-        // Choose a camera resolution. Not all cameras support all resolutions.
-        //builder.setCameraResolution(new Size(640, 480));
-
-        // Enable the RC preview (LiveView).  Set "false" to omit camera monitoring.
-        //builder.enableLiveView(true);
-
-        // Set the stream format; MJPEG uses less bandwidth than default YUY2.
-        //builder.setStreamFormat(VisionPortal.StreamFormat.YUY2);
-
-        // Choose whether or not LiveView stops if no processors are enabled.
-        // If set "true", monitor shows solid orange screen if no processors enabled.
-        // If set "false", monitor shows camera view without annotations.
-        //builder.setAutoStopLiveView(false);
-
-        // Set and enable the processor.
         builder.addProcessor(tfod);
 
-        // Build the Vision Portal, using the above settings.
         visionPortal = builder.build();
 
 
-        // Set confidence threshold for TFOD recognitions, at any time.
         tfod.setMinResultConfidence(0.60f);
-
-        // Disable or re-enable the TFOD processor at any time.
-        //visionPortal.setProcessorEnabled(tfod, true);
 
     }// end method initTfod()
     //endregion
 
     // For each auto option the parameters are essentially 1- the label to show on the driver station, 2 - starting value, 3 - the possible values
     AutonomousTextOption    allianceColor       = new AutonomousTextOption("Alliance Color", "blue", new String[] {"blue", "red"});
-    AutonomousTextOption    startPos       = new AutonomousTextOption("Start Position", "X", new String[] {"X", "Y"});
+    AutonomousTextOption    startPos       = new AutonomousTextOption("Start Position", "front", new String[] {"front", "back"});
     AutonomousTextOption    endPos = new AutonomousTextOption("End Position", "Right", new String[] {"right","left"});
     AutonomousIntOption     waitStart           = new AutonomousIntOption("Wait at Start", 0, 0, 20);
 
@@ -227,97 +194,129 @@ public class AutoOpTest extends LinearOpMode {
     }
     //endregion
 
-    private void BlueF() throws InterruptedException
-    {
-
-        if(endPos.getValue().equals("right"))
-        {
-        }
-        else if(endPos.getValue().equals("left"))
-        {
-
-        }
-
-    }
-
-    private void BlueB() throws InterruptedException
-    {
-        if(endPos.getValue().equals("right"))
-        {
-        }
-        else if(endPos.getValue().equals("left"))
-        {
-
-        }
-    }
-
-    private void RedF() throws InterruptedException
-    {
-        if(endPos.getValue().equals("right"))
-        {
-        }
-        else if(endPos.getValue().equals("left"))
-        {
-
-        }
-    }
-
-    private void RedB() throws InterruptedException
-    {
-        if(endPos.getValue().equals("right"))
-        {
-        }
-        else if(endPos.getValue().equals("left"))
-        {
-
-        }
-    }
-
     @Override
     public void runOpMode() throws InterruptedException {
         initTfod();
         robot.init(hardwareMap);
 
-        /**
+        /*
          * Activate TensorFlow Object Detection before we wait for the start command.
          * Do it here so that the Camera Stream window will have the TensorFlow annotations visible.
          **/
 
         selectOptions();
 
-        /** Wait for the game to begin */
+        /* Wait for the game to begin */
         telemetry.addData(">", "Press Play to start op mode");
         telemetry.update();
         waitForStart();
         runtime.reset();
-        if(waitStart.getValue()>0)
-        {
-            sleep(waitStart.getValue()*1000);
-        }
-        /***********************************************
-         ************Autonomous code bellow***************
-         ***********************************************/
 
+        sleep(waitStart.getValue()*1000);
+
+        /***********************************************
+         ************Autonomous Code Bellow***************
+         ***********************************************/
+         if(allianceColor.equals("red"))
+         {
+             List<Recognition> currentRecognitions = tfod.getRecognitions();
+             telemetry.addData("# Objects Detected", currentRecognitions.size());
+
+             // Step through the list of recognitions and display info for each one.
+             for (Recognition recognition : currentRecognitions) {
+
+                 x = (recognition.getLeft() + recognition.getRight()) / 2;
+                 y = (recognition.getTop() + recognition.getBottom()) / 2;
+                 /*telemetry.addLine(String.valueOf(recognition.getConfidence()));
+                 telemetry.addData("", " ");
+                 telemetry.addData("Image", "%s (%.0f %% Conf.)", recognition.getLabel(), recognition.getConfidence() * 100);
+                 telemetry.addData("- Position", "%.0f / %.0f", x, y);
+                 telemetry.addData("- Size", "%.0f x %.0f", recognition.getWidth(), recognition.getHeight());
+                 telemetry.update();*/
+                 if(startPos.equals("front"))
+                 {
+                     if(x>320)
+                     {
+                         hatPos = "right";
+                        // DriveEncoder(8,10);
+
+                     } else if (x<=320)
+                     {
+                         hatPos = "center";
+                     }
+                 }
+                 else if(startPos.equals("back"))
+                 {
+                     if(x>320)
+                     {
+                         hatPos = "center";
+                     } else if (x<=320)
+                     {
+                         hatPos = "left";
+                     }
+                 }
+             }
+             if (startPos.equals("front") && hatPos.equals(""))
+             {
+                 hatPos = "right";
+
+             }
+             else if (startPos.equals("back") && hatPos.equals(""))
+             {
+                hatPos = "left";
+             }
+         }
+        else if(allianceColor.equals("blue"))
+        {
             List<Recognition> currentRecognitions = tfod.getRecognitions();
             telemetry.addData("# Objects Detected", currentRecognitions.size());
 
             // Step through the list of recognitions and display info for each one.
             for (Recognition recognition : currentRecognitions) {
 
-                   x = (recognition.getLeft() + recognition.getRight()) / 2;
-                   y = (recognition.getTop() + recognition.getBottom()) / 2;
-                   telemetry.addLine(String.valueOf(recognition.getConfidence()));
-                   telemetry.addData("", " ");
-                   telemetry.addData("Image", "%s (%.0f %% Conf.)", recognition.getLabel(), recognition.getConfidence() * 100);
-                   telemetry.addData("- Position", "%.0f / %.0f", x, y);
-                   telemetry.addData("- Size", "%.0f x %.0f", recognition.getWidth(), recognition.getHeight());
-                   telemetry.update();
+                x = (recognition.getLeft() + recognition.getRight()) / 2;
+                y = (recognition.getTop() + recognition.getBottom()) / 2;
+               /* telemetry.addLine(String.valueOf(recognition.getConfidence()));
+                telemetry.addData("", " ");
+                telemetry.addData("Image", "%s (%.0f %% Conf.)", recognition.getLabel(), recognition.getConfidence() * 100);
+                telemetry.addData("- Position", "%.0f / %.0f", x, y);
+                telemetry.addData("- Size", "%.0f x %.0f", recognition.getWidth(), recognition.getHeight());
+                telemetry.update();*/
+                if(startPos.equals("front"))
+                {
+                    if(x>320)
+                    {
+                        hatPos = "right";
+                    } else if (x<=320)
+                    {
+                        hatPos = "center";
+                    }
+                }
+                else if(startPos.equals("back"))
+                {
+                    if(x>320)
+                    {
+                        hatPos = "center";
+                    } else if (x<=320)
+                    {
+                        hatPos = "left";
+                    }
+                }
             }
+            if (startPos.equals("front") && hatPos.equals(""))
+            {
+
+            }
+            else if (startPos.equals("back") && hatPos.equals(""))
+            {
+
+            }
+        }
 
         /***********************************************
-         ************Autonomous code above***************
+         ************Autonomous Code Above***************
          ***********************************************/
-        //endregion
+
     }
 
     public void extendArm(double power)
@@ -326,7 +325,6 @@ public class AutoOpTest extends LinearOpMode {
         sleep(1000);
         robot.motorTopArm.setPower(0);
     }
-
     public void StrafeRightEncoder(double power, int pos)
     {
         pos = pos * 53;
@@ -426,75 +424,6 @@ public class AutoOpTest extends LinearOpMode {
         robot.motorBackLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
     }
-    public void DriveForwardEncoder(double power, int distance)
-    {
-        //reset Mode
-        robot.motorBackRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        robot.motorBackLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        robot.motorFrontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        robot.motorFrontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-        //reset the motor encoders
-        robot.motorBackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.motorBackLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.motorFrontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.motorFrontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        //Determine new targets
-        int moveCounts = (int)(distance*robot.COUNTS_PER_INCH);
-        BLtarget = robot.motorBackLeft.getCurrentPosition()+moveCounts;
-        BRtarget = robot.motorBackRight.getCurrentPosition()+moveCounts;
-        FRtarget = robot.motorFrontRight.getCurrentPosition()+moveCounts;
-        FLtarget = robot.motorFrontLeft.getCurrentPosition()+moveCounts;
-
-        //Set Target, then turn on "RUN_TO_POSITION"
-        robot.motorBackRight.setTargetPosition(BRtarget);
-        robot.motorBackLeft.setTargetPosition(BLtarget);
-        robot.motorFrontRight.setTargetPosition(FRtarget);
-        robot.motorFrontLeft.setTargetPosition(FLtarget);
-
-        //Set Mode
-        robot.motorBackRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.motorBackLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.motorFrontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.motorFrontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        //Set motor speed "turn on motors"
-        robot.motorFrontLeft.setPower(.3);
-        robot.motorBackLeft.setPower(.3);
-        robot.motorFrontRight.setPower(.3);
-        robot.motorBackRight.setPower(.3);
-
-        //Keep looping until target reached and display target & encoder
-        while (opModeIsActive() && robot.motorBackRight.isBusy()
-                && robot.motorFrontRight.isBusy())
-        {
-
-            telemetry.addLine("Straight");
-            telemetry.addData("Target: ", "%5.0f", BRtarget/robot.COUNTS_PER_INCH);
-            telemetry.addData("CurrentBR: ", "%5.0f", robot.motorBackRight.getCurrentPosition()/robot.COUNTS_PER_INCH);
-            telemetry.addData("CurrentBL: ", "%5.0f", robot.motorBackLeft.getCurrentPosition()/robot.COUNTS_PER_INCH);
-            telemetry.addData("CurrentFR: ", "%5.0f", robot.motorFrontRight.getCurrentPosition()/robot.COUNTS_PER_INCH);
-            telemetry.addData("CurrentFL: ", "%5.0f", robot.motorFrontLeft.getCurrentPosition()/robot.COUNTS_PER_INCH);
-
-            telemetry.update();
-        }
-        //Motors Off
-        robot.motorFrontLeft.setPower(0);
-        robot.motorBackLeft.setPower(0);
-        robot.motorFrontRight.setPower(0);
-        robot.motorBackRight.setPower(0);
-
-        //reset Mode
-        robot.motorBackRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        robot.motorBackLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        robot.motorFrontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        robot.motorFrontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-
-    }
-
-
     public void OpenClaw()
     {
         sleep(1000);
@@ -504,7 +433,6 @@ public class AutoOpTest extends LinearOpMode {
         sleep(500);
 
     }
-
     public void CloseClaw()
     {
         robot.servoHandR.setPosition(robot.OPEN);
@@ -517,7 +445,6 @@ public class AutoOpTest extends LinearOpMode {
         robot.motorBottomArm.setPower((robot.armHold - robot.motorBottomArm.getCurrentPosition()) / robot.slopeVal);
 
     }
-
     private void armMove(double power, int pos)
     {
         robot.motorBottomArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -527,7 +454,7 @@ public class AutoOpTest extends LinearOpMode {
         sleep(500);
         robot.armHold = pos;
         robot.motorBottomArm.setPower(0);
-
+        armHold();
         // Set the arm hold position to the final position of the arm
     }
     private void pushDown() throws InterruptedException {
@@ -538,11 +465,9 @@ public class AutoOpTest extends LinearOpMode {
         robot.servoP.setPosition(1);
         sleep(500);
     }
-
     /////////////////////////////////////////////////////////////////////////////////
     //Below are the Gyro and Encoder methods
     //////////////////////////////////////////////////////////////////////////////
-
     private  void DriveEncoder(double speed, double distance){
 
         //reset Mode
@@ -610,7 +535,6 @@ public class AutoOpTest extends LinearOpMode {
         robot.motorFrontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
     }//EndDriveEncoder
-
     private void GyroTurn(double position)
     {
         //Left is positive
@@ -661,6 +585,4 @@ public class AutoOpTest extends LinearOpMode {
         return orientation.getYaw(AngleUnit.DEGREES);
     }
 
-    //endregion
-    //endregion
 }
