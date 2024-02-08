@@ -105,7 +105,6 @@ public class AutoOpTest extends LinearOpMode {
         tfod.setMinResultConfidence(0.60f);
 
     }// end method initTfod()
-    //endregion
 
     // For each auto option the parameters are essentially 1- the label to show on the driver station, 2 - starting value, 3 - the possible values
     AutonomousTextOption    allianceColor       = new AutonomousTextOption("Alliance Color", "blue", new String[] {"blue", "red"});
@@ -347,7 +346,7 @@ public class AutoOpTest extends LinearOpMode {
          ***********************************************/
 
     }
-
+    //region robot methods
     public void extendArm(double power)
     {
         robot.motorTopArm.setPower(power);
@@ -613,5 +612,5 @@ public class AutoOpTest extends LinearOpMode {
         YawPitchRollAngles orientation = robot.imu.getRobotYawPitchRollAngles();
         return orientation.getYaw(AngleUnit.DEGREES);
     }
-
+    //endregion
 }
