@@ -110,11 +110,13 @@ public class AutoOpTest extends LinearOpMode {
     // For each auto option the parameters are essentially 1- the label to show on the driver station, 2 - starting value, 3 - the possible values
     AutonomousTextOption    allianceColor       = new AutonomousTextOption("Alliance Color", "blue", new String[] {"blue", "red"});
     AutonomousTextOption    startPos       = new AutonomousTextOption("Start Position", "front", new String[] {"front", "back"});
+    AutonomousTextOption    park    = new AutonomousTextOption("Go straight to park? ", "straight park", new String[] {"straight park", "normal"});
+    AutonomousBooleanOption cycle = new AutonomousBooleanOption("Cycle Pixels ", false);
     AutonomousTextOption    endPos = new AutonomousTextOption("End Position", "Right", new String[] {"right","left"});
     AutonomousIntOption     waitStart           = new AutonomousIntOption("Wait at Start", 0, 0, 20);
 
     //This is the order of our options and setting them all to their preset value.
-    AutonomousOption[] autoOptions       = {allianceColor, startPos, endPos, waitStart};
+    AutonomousOption[] autoOptions       = {allianceColor, startPos, park, cycle, endPos, waitStart};
     int currentOption = 0;
 
     //this setting the buttons to false to make sure options are not being chosen for us.
@@ -219,97 +221,124 @@ public class AutoOpTest extends LinearOpMode {
          ***********************************************/
          if(allianceColor.equals("red"))
          {
-             List<Recognition> currentRecognitions = tfod.getRecognitions();
-             telemetry.addData("# Objects Detected", currentRecognitions.size());
+             if(park.equals("straight park"))//the robot goes straight to the backstage and parks
+             {
+                 if(endPos.equals("right"))
+                 {
 
-             // Step through the list of recognitions and display info for each one.
-             for (Recognition recognition : currentRecognitions) {
+                 } else if (endPos.equals("left"))
+                 {
 
-                 x = (recognition.getLeft() + recognition.getRight()) / 2;
-                 y = (recognition.getTop() + recognition.getBottom()) / 2;
+                 }
+             }
+             else if(park.equals("normal"))//the robot does a normal autonomous run
+             {
+
+                 List<Recognition> currentRecognitions = tfod.getRecognitions();
+                 telemetry.addData("# Objects Detected", currentRecognitions.size());
+
+                 // Step through the list of recognitions and display info for each one.
+                 for (Recognition recognition : currentRecognitions) {
+
+                     x = (recognition.getLeft() + recognition.getRight()) / 2;
+                     y = (recognition.getTop() + recognition.getBottom()) / 2;
                  /*telemetry.addLine(String.valueOf(recognition.getConfidence()));
                  telemetry.addData("", " ");
                  telemetry.addData("Image", "%s (%.0f %% Conf.)", recognition.getLabel(), recognition.getConfidence() * 100);
                  telemetry.addData("- Position", "%.0f / %.0f", x, y);
                  telemetry.addData("- Size", "%.0f x %.0f", recognition.getWidth(), recognition.getHeight());
                  telemetry.update();*/
-                 if(startPos.equals("front"))
-                 {
-                     if(x>320)
+                     if(startPos.equals("front"))//The front autonomous position
                      {
-                         hatPos = "right";
-                        // DriveEncoder(8,10);
+                         if(x>320)//Prop is randomized to the right position
+                         {
+                             hatPos = "right";
 
-                     } else if (x<=320)
+
+                         } else if (x<=320)//prop is randomized to the center position
+                         {
+                             hatPos = "center";
+                         }
+                     }
+                     else if(startPos.equals("back"))//the back autonomous position
                      {
-                         hatPos = "center";
+                         if(x>320)//Prop is randomized to center
+                         {
+                             hatPos = "center";
+                         } else if (x<=320)//prop is randomized to left
+                         {
+                             hatPos = "left";
+                         }
                      }
                  }
-                 else if(startPos.equals("back"))
+                 if (startPos.equals("front") && hatPos.equals(""))//front autonomous position and prop is right position
                  {
-                     if(x>320)
-                     {
-                         hatPos = "center";
-                     } else if (x<=320)
-                     {
-                         hatPos = "left";
-                     }
-                 }
-             }
-             if (startPos.equals("front") && hatPos.equals(""))
-             {
-                 hatPos = "right";
+                     hatPos = "right";
 
-             }
-             else if (startPos.equals("back") && hatPos.equals(""))
-             {
-                hatPos = "left";
+                 }
+                 else if (startPos.equals("back") && hatPos.equals(""))//back auto position, and prop is left position
+                 {
+                     hatPos = "left";
+                 }
              }
          }
         else if(allianceColor.equals("blue"))
         {
-            List<Recognition> currentRecognitions = tfod.getRecognitions();
-            telemetry.addData("# Objects Detected", currentRecognitions.size());
+            if(park.equals("straight park"))//The robot goes straight to the backstage and parks
+            {
+                if(endPos.equals("right"))
+                {
 
-            // Step through the list of recognitions and display info for each one.
-            for (Recognition recognition : currentRecognitions) {
+                } else if (endPos.equals("left"))
+                {
 
-                x = (recognition.getLeft() + recognition.getRight()) / 2;
-                y = (recognition.getTop() + recognition.getBottom()) / 2;
+                }
+            } else if (park.equals("normal")) //The robot does a normal run and delivers the pixels
+            {
+
+                List<Recognition> currentRecognitions = tfod.getRecognitions();
+                telemetry.addData("# Objects Detected", currentRecognitions.size());
+
+                // Step through the list of recognitions and display info for each one.
+                for (Recognition recognition : currentRecognitions) {
+
+                    x = (recognition.getLeft() + recognition.getRight()) / 2;
+                    y = (recognition.getTop() + recognition.getBottom()) / 2;
                /* telemetry.addLine(String.valueOf(recognition.getConfidence()));
                 telemetry.addData("", " ");
                 telemetry.addData("Image", "%s (%.0f %% Conf.)", recognition.getLabel(), recognition.getConfidence() * 100);
                 telemetry.addData("- Position", "%.0f / %.0f", x, y);
                 telemetry.addData("- Size", "%.0f x %.0f", recognition.getWidth(), recognition.getHeight());
                 telemetry.update();*/
-                if(startPos.equals("front"))
-                {
-                    if(x>320)
+                    if(startPos.equals("front"))//Front auto position
                     {
-                        hatPos = "right";
-                    } else if (x<=320)
+                        if(x>320)//right prop randomization
+                        {
+                            hatPos = "right";
+                        } else if (x<=320)//center prop randomization
+                        {
+                            hatPos = "center";
+                        }
+                    }
+                    else if(startPos.equals("back"))//back auto position
                     {
-                        hatPos = "center";
+                        if(x>320)//center prop randomization
+                        {
+                            hatPos = "center";
+                        } else if (x<=320)//left prop randomization
+                        {
+                            hatPos = "left";
+                        }
                     }
                 }
-                else if(startPos.equals("back"))
+                if (startPos.equals("front") && hatPos.equals(""))//front position left prop randomization
                 {
-                    if(x>320)
-                    {
-                        hatPos = "center";
-                    } else if (x<=320)
-                    {
-                        hatPos = "left";
-                    }
+
                 }
-            }
-            if (startPos.equals("front") && hatPos.equals(""))
-            {
+                else if (startPos.equals("back") && hatPos.equals(""))//back position right prop randomization
+                {
 
-            }
-            else if (startPos.equals("back") && hatPos.equals(""))
-            {
-
+                }
             }
         }
 
