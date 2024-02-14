@@ -107,12 +107,12 @@ public class AutoOpTest extends LinearOpMode {
     }// end method initTfod()
 
     // For each auto option the parameters are essentially 1- the label to show on the driver station, 2 - starting value, 3 - the possible values
-    AutonomousTextOption    allianceColor       = new AutonomousTextOption("Alliance Color", "blue", new String[] {"blue", "red"});
-    AutonomousTextOption    startPos       = new AutonomousTextOption("Start Position", "front", new String[] {"front", "back"});
+    AutonomousTextOption    allianceColor   = new AutonomousTextOption("Alliance Color", "blue", new String[] {"blue", "red"});
+    AutonomousTextOption    startPos        = new AutonomousTextOption("Start Position", "front", new String[] {"front", "back"});
     AutonomousTextOption    park    = new AutonomousTextOption("Go straight to park? ", "normal", new String[] {"straight park", "normal"});
-    AutonomousBooleanOption cycle = new AutonomousBooleanOption("Cycle Pixels ", false);
-    AutonomousTextOption    endPos = new AutonomousTextOption("End Position", "Right", new String[] {"right","left"});
-    AutonomousIntOption     waitStart           = new AutonomousIntOption("Wait at Start", 0, 0, 20);
+    AutonomousBooleanOption cycle   = new AutonomousBooleanOption("Cycle Pixels ", false);
+    AutonomousTextOption    endPos  = new AutonomousTextOption("End Position", "Right", new String[] {"right","left"});
+    AutonomousIntOption     waitStart       = new AutonomousIntOption("Wait at Start", 0, 0, 20);
 
     //This is the order of our options and setting them all to their preset value.
     AutonomousOption[] autoOptions       = {allianceColor, startPos, park, cycle, endPos, waitStart};
