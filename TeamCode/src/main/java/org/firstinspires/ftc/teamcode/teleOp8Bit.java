@@ -129,9 +129,10 @@ public class teleOp8Bit extends LinearOpMode
 
             if(gamepad2.a)//alltered claw opening for the test claw
             {
-                robot.servoHandL.setPosition(.37);
-                robot.servoHandR.setPosition(.43);
-                robot.servoTallon.setPosition(.3);
+                robot.servoHandR.setPosition(robot.CLOSED);
+                robot.servoHandL.setPosition(robot.OPEN);
+                robot.servoTallon.setPosition(.1);
+
             }
             else if (gamepad2.b)
             {
@@ -141,9 +142,13 @@ public class teleOp8Bit extends LinearOpMode
             }
             else if(gamepad2.y)
             {
+                robot.servoTallon.setPosition(.26);//.3
+                robot.servoHandL.setPosition(.37);
+                robot.servoHandR.setPosition(.43);
+                sleep(400);
                 robot.servoHandR.setPosition(robot.CLOSED);
                 robot.servoHandL.setPosition(robot.OPEN);
-                robot.servoTallon.setPosition(.3);
+
             }
 
             //the claw servos open a and close b.
