@@ -118,22 +118,18 @@ public class teleOp8Bit extends LinearOpMode
                 robot.motorBottomArm.setPower(gamepad2.left_stick_y / 2);// let stick drive UP (note this is positive value on joystick)
                 robot.armHold = robot.motorBottomArm.getCurrentPosition();
             }
-             else if(gamepad2.left_stick_y > -.1 && gamepad2.left_stick_y < .1 && opModeIsActive()) //joystick is released - try to maintain the current position
+             else if(gamepad2.left_stick_y > -.1 && gamepad2.left_stick_y < .1 && robot.MagIn.isPressed()) //joystick is released - try to maintain the current position
             {
-                //robot.motorBottomArm.setPower((robot.armHold - robot.motorBottomArm.getCurrentPosition()) / robot.slopeVal);// Note depending on encoder/motor values it may be necessary to reverse sign for motor power by making neg -slopeVal
-                if(!robot.MagIn.isPressed())
-                {
-                    robot.motorBottomArm.setPower((robot.armHold - robot.motorBottomArm.getCurrentPosition()) / 1000);// Note depending on encoder/motor values it may be necessary to reverse sign for motor power by making neg -slopeVal
-                }
-                else if(robot.MagIn.isPressed())
-                {
-                    robot.motorBottomArm.setPower((robot.armHold - robot.motorBottomArm.getCurrentPosition()) / robot.slopeVal);// Note depending on encoder/motor values it may be necessary to reverse sign for motor power by making neg -slopeVal
-                }
+                robot.motorBottomArm.setPower((robot.armHold - robot.motorBottomArm.getCurrentPosition()) / robot.slopeVal);// Note depending on encoder/motor values it may be necessary to reverse sign for motor power by making neg -slopeVal
+
                 // the difference between hold and current positions will
                 // attempt to drive the motor back to be equal with holdPosition.
                 // By adjusting slopeVal you can achieved perfect hold power
 
-            }//end of left y == 0
+            } else  {
+                robot.motorBottomArm.setPower((robot.armHold - robot.motorBottomArm.getCurrentPosition()) / 800.0);// Note depending on encoder/motor values it may be necessary to reverse sign for motor power by making neg -slopeVal
+            }
+
 
             if(gamepad2.a)//alltered claw opening for the test claw
             {
@@ -159,7 +155,7 @@ public class teleOp8Bit extends LinearOpMode
 
             }
 
-            //the claw servos open a and close b.
+            //the original open close of the claw
             /*if(gamepad2.a)
             {
                 //The right servo is reversed
@@ -180,7 +176,7 @@ public class teleOp8Bit extends LinearOpMode
                 robot.servoTallon.setPosition(.3);
             }*/
 
-            if(gamepad2.dpad_up)
+            if(gamepad2.dpad_up)//broom
             {
                 robot.servoP.setPosition(1);
             }
@@ -189,7 +185,7 @@ public class teleOp8Bit extends LinearOpMode
                 robot.servoP.setPosition(.5);
             }
 
-            if(gamepad1.y)
+            if(gamepad1.y)//drone
             {
                 robot.servoD.setPosition(.9);
             }

@@ -37,7 +37,7 @@ public class HardwareSetupHolonomic
     static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
     static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_INCHES * 3.1415);
-    public double  slopeVal  = 1200.0;
+    public double  slopeVal  = 1000.0;
     //Create and set default servo positions & MOTOR STOP variables.
     //Possible servo values: 0.0 - 1.0  For CRServo 0.5=stop greater or less than will spin in that direction
     final static double OPEN = 0.5;//original servo 0.8
