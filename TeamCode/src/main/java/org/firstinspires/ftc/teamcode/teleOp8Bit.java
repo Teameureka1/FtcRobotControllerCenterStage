@@ -120,7 +120,15 @@ public class teleOp8Bit extends LinearOpMode
             }
              else if(gamepad2.left_stick_y > -.1 && gamepad2.left_stick_y < .1 && opModeIsActive()) //joystick is released - try to maintain the current position
             {
-                robot.motorBottomArm.setPower((robot.armHold - robot.motorBottomArm.getCurrentPosition()) / robot.slopeVal);// Note depending on encoder/motor values it may be necessary to reverse sign for motor power by making neg -slopeVal
+                //robot.motorBottomArm.setPower((robot.armHold - robot.motorBottomArm.getCurrentPosition()) / robot.slopeVal);// Note depending on encoder/motor values it may be necessary to reverse sign for motor power by making neg -slopeVal
+                if(!robot.MagIn.isPressed())
+                {
+                    robot.motorBottomArm.setPower((robot.armHold - robot.motorBottomArm.getCurrentPosition()) / 1000);// Note depending on encoder/motor values it may be necessary to reverse sign for motor power by making neg -slopeVal
+                }
+                else if(robot.MagIn.isPressed())
+                {
+                    robot.motorBottomArm.setPower((robot.armHold - robot.motorBottomArm.getCurrentPosition()) / robot.slopeVal);// Note depending on encoder/motor values it may be necessary to reverse sign for motor power by making neg -slopeVal
+                }
                 // the difference between hold and current positions will
                 // attempt to drive the motor back to be equal with holdPosition.
                 // By adjusting slopeVal you can achieved perfect hold power
