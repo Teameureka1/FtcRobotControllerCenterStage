@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.HardwareSetupHolonomic;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
-@TeleOp(name = "Motor Tester", group = "d")
+@TeleOp(name = "Motor Tester", group = "z")
 //@Disabled //Do not forget to remove this line to make it active
 public class MotorTester extends LinearOpMode {
 

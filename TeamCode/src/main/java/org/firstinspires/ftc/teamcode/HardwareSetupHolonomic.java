@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 //import com.google.ftcresearch.tfod.util.Size;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -12,6 +13,8 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
+
+import dev.narlyx.ftc.tweetybird.TweetyBirdProcessor;
 
 
 public class HardwareSetupHolonomic
@@ -60,6 +63,9 @@ public class HardwareSetupHolonomic
      * The variable to store our instance of the vision portal.
      */
     public VisionPortal visionPortal;
+
+    //Defining TweetyBird
+    public TweetyBirdProcessor TweetyBird;
 
     //region IntMotors/servos/mag Functions
     //Drive motors
@@ -207,6 +213,45 @@ public class HardwareSetupHolonomic
         rightEncoder.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         middleEncoder.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
    }
+
+    public void initTweetyBird(LinearOpMode opMode) {
+        TweetyBird = new TweetyBirdProcessor.Builder()
+                //Setting opmode
+                .setOpMode(opMode)
+
+                //Hardware Config
+                .setFrontLeftMotor(motorFrontLeft)
+                .setFrontRightMotor(motorFrontRight)
+                .setBackLeftMotor(motorBackLeft)
+                .setBackRightMotor(motorBackRight)
+
+                .setLeftEncoder(leftEncoder)
+                .setRightEncoder(rightEncoder)
+                .setMiddleEncoder(middleEncoder)
+
+                .flipLeftEncoder(false)
+                .flipRightEncoder(false)
+                .flipMiddleEncoder(false)
+
+                .setSideEncoderDistance(14+(3.0/8.0))
+                .setMiddleEncoderOffset(6)
+
+                .setTicksPerEncoderRotation(2000)
+                .setEncoderWheelRadius(1)
+
+                //Other Config
+                .setMinSpeed(0.25)
+                .setMaxSpeed(0.8)
+                .setStartSpeed(0.4)
+                .setSpeedModifier(0.04)
+                .setStopForceSpeed(0.1)
+
+                .setCorrectionOverpowerDistance(5)
+                .setDistanceBuffer(1)
+                .setRotationBuffer(8)
+
+                .build();
+    }
 
 }
 
