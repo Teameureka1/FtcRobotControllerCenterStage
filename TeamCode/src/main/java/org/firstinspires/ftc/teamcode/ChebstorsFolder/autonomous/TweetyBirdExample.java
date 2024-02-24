@@ -19,11 +19,15 @@ public class TweetyBirdExample extends LinearOpMode {
     @Override
     public void runOpMode() {
         robot.init(hardwareMap);  //Initialize hardware from the Hardware Setup Class
-
-        telemetry.addLine("Setup and configure your encoders and I'll set everything up saturday (or sooner) and walk you though it.");
-        telemetry.update();
+        initTweetyBird();
 
         waitForStart();
+
+        tweety.engage();
+
+        while (opModeIsActive());
+
+        tweety.stop();
     }
 
     public void initTweetyBird() {
@@ -37,9 +41,9 @@ public class TweetyBirdExample extends LinearOpMode {
                 .setBackLeftMotor(robot.motorBackLeft)
                 .setBackRightMotor(robot.motorBackRight)
 
-                .setLeftEncoder(null)
-                .setRightEncoder(null)
-                .setMiddleEncoder(null)
+                .setLeftEncoder(robot.leftEncoder)
+                .setRightEncoder(robot.rightEncoder)
+                .setMiddleEncoder(robot.middleEncoder)
 
                 .flipLeftEncoder(false)
                 .flipRightEncoder(false)

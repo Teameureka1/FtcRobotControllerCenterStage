@@ -456,7 +456,7 @@ public class AutoRedLeft extends LinearOpMode
       pos = pos * 330;
 
         //reset the motor encoders
-        robot.OdoPod.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+       // robot.OdoPod.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
 
         //Set motor speed "turn on motors"
@@ -466,12 +466,12 @@ public class AutoRedLeft extends LinearOpMode
         robot.motorBackRight.setPower(power);
 
         //Keep looping until target reached and display target & encoder
-        while (robot.OdoPod.getCurrentPosition() < pos)
+        /*while (robot.OdoPod.getCurrentPosition() < pos)
         {
             telemetry.addLine("Straight");
             telemetry.addData("OdoPod ",  robot.OdoPod.getCurrentPosition());
             telemetry.update();
-        }
+        }*/
         //Motors Off
         robot.motorFrontLeft.setPower(0);
         robot.motorBackLeft.setPower(0);

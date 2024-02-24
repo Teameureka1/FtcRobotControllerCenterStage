@@ -6,7 +6,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-
 /**
  *
  * This is a Linear version program (i.e. uses runOpMode() and waitForStart() methods,  instead of init, loop and stop)
@@ -83,7 +82,7 @@ public class teleOp8Bit extends LinearOpMode
             telemetry.addData("holdPos:", robot.armHold);
             telemetry.addData("current position", robot.motorBottomArm.getCurrentPosition());
             telemetry.addData("arm Power ",(robot.armHold - robot.motorBottomArm.getCurrentPosition()) / robot.slopeVal);
-            telemetry.addData("odoPod ", robot.OdoPod.getCurrentPosition());
+            //telemetry.addData("odoPod ", robot.OdoPod.getCurrentPosition());
 
             //region Control Functions
 
@@ -115,7 +114,7 @@ public class teleOp8Bit extends LinearOpMode
 
             if (gamepad2.left_stick_y != 0)  //add this to check encoder within limits
             {
-                robot.motorBottomArm.setPower(gamepad2.left_stick_y / 2);// let stick drive UP (note this is positive value on joystick)
+                robot.motorBottomArm.setPower(gamepad2.left_stick_y);// let stick drive UP (note this is positive value on joystick)
                 robot.armHold = robot.motorBottomArm.getCurrentPosition();
             }
              else if(gamepad2.left_stick_y > -.1 && gamepad2.left_stick_y < .1 && robot.MagIn.isPressed()) //joystick is released - try to maintain the current position

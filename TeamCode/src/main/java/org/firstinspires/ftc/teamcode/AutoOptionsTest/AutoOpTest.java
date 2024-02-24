@@ -42,6 +42,7 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import org.firstinspires.ftc.teamcode.HardwareSetupHolonomic;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 
@@ -61,7 +62,7 @@ import java.util.List;
 //@Disabled
 public class AutoOpTest extends LinearOpMode {
 
-    HardwareSetupHolonomicTest robot = new HardwareSetupHolonomicTest();
+    HardwareSetupHolonomic robot = new HardwareSetupHolonomic();
     private static final String TFOD_MODEL_ASSET = "Combined.tflite";
     private static final String[] LABELS = {
             "blue hat", "red hat", "white pixel", "yellow pixel"
@@ -447,9 +448,15 @@ public class AutoOpTest extends LinearOpMode {
         robot.motorBackLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
     }
+    public void partialOpen()
+    {
+        robot.servoTallon.setPosition(.26);//.3
+        robot.servoHandL.setPosition(.37);
+        robot.servoHandR.setPosition(.43);
+    }
     public void OpenClaw()
     {
-        sleep(1000);
+        sleep(5000);
         armHold();
         robot.servoHandR.setPosition(robot.CLOSED); //note: uses servo instead of motor.
         robot.servoHandL.setPosition(robot.OPEN);
