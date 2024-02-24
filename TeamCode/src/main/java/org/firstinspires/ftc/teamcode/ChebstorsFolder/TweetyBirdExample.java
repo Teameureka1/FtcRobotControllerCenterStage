@@ -45,8 +45,8 @@ public class TweetyBirdExample extends LinearOpMode {
                 .flipRightEncoder(true)
                 .flipMiddleEncoder(true)
 
-                .setInchesBetweenSideEncoders(12+5.0/8.0)
-                .setInchesToBackEncoder(-3)
+                .setSideEncoderDistance(12+5.0/8.0)
+                .setMiddleEncoderOffset(-3)
 
                 .setTicksPerEncoderRotation(8192)
                 .setEncoderWheelRadius(1)
