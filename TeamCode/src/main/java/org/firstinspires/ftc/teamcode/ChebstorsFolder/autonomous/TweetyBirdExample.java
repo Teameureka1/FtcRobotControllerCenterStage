@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.ChebstorsFolder;
+package org.firstinspires.ftc.teamcode.ChebstorsFolder.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -41,14 +41,14 @@ public class TweetyBirdExample extends LinearOpMode {
                 .setRightEncoder(null)
                 .setMiddleEncoder(null)
 
-                .flipLeftEncoder(true)
-                .flipRightEncoder(true)
-                .flipMiddleEncoder(true)
+                .flipLeftEncoder(false)
+                .flipRightEncoder(false)
+                .flipMiddleEncoder(false)
 
-                .setInchesBetweenSideEncoders(12+5.0/8.0)
-                .setInchesToBackEncoder(-3)
+                .setSideEncoderDistance(14+(3.0/8.0))
+                .setMiddleEncoderOffset(6)
 
-                .setTicksPerEncoderRotation(8192)
+                .setTicksPerEncoderRotation(2000)
                 .setEncoderWheelRadius(1)
 
                 //Other Config
