@@ -14,9 +14,11 @@ public class TweetyBirdHold extends LinearOpMode {
     @Override
     public void runOpMode() {
         robot.init(hardwareMap);  //Initialize hardware from the Hardware Setup Class
+
         robot.initTweetyBird(this); //Initialize TweetyBird AFTER the robot
 
         waitForStart();
+
         robot.TweetyBird.engage(); //Allow TweetyBird to Control the Robot
 
         while (opModeIsActive()); //Wait until the stop button is pressed

@@ -39,8 +39,6 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 //import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 
 //these imports are not used. They were part of auto gamepad selection for Freight Frenzy
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.teamcode.HardwareSetupHolonomic;
 import org.firstinspires.ftc.vision.VisionPortal;
@@ -58,11 +56,13 @@ import java.util.List;
  * IMPORTANT: In order to use this OpMode, you need to obtain your own Vuforia license key as
  * is explained below.
  */
-@Autonomous(name = "AutoOpTest", group = "Auto")
+@Autonomous(name = "MainAutoStuffyStuff", group = "Auto")
 //@Disabled
-public class AutoOpTest extends LinearOpMode {
+public class AutoOpAll extends LinearOpMode {
 
     HardwareSetupHolonomic robot = new HardwareSetupHolonomic();
+    //region stuff
+
     private static final String TFOD_MODEL_ASSET = "Combined.tflite";
     private static final String[] LABELS = {
             "blue hat", "red hat", "white pixel", "yellow pixel"
@@ -114,7 +114,6 @@ public class AutoOpTest extends LinearOpMode {
     AutonomousBooleanOption cycle   = new AutonomousBooleanOption("Cycle Pixels ", false);
     AutonomousTextOption    endPos  = new AutonomousTextOption("End Position", "Right", new String[] {"right","left"});
     AutonomousIntOption     waitStart       = new AutonomousIntOption("Wait at Start", 0, 0, 20);
-
     //This is the order of our options and setting them all to their preset value.
     AutonomousOption[] autoOptions       = {allianceColor, startPos, park, cycle, endPos, waitStart};
     int currentOption = 0;
@@ -195,11 +194,13 @@ public class AutoOpTest extends LinearOpMode {
         telemetry.update();
     }
     //endregion
+//endregion stuff
 
     @Override
     public void runOpMode() throws InterruptedException {
         initTfod();
         robot.init(hardwareMap);
+        robot.initTweetyBird(this);
 
         /*
          * Activate TensorFlow Object Detection before we wait for the start command.
@@ -213,6 +214,7 @@ public class AutoOpTest extends LinearOpMode {
         telemetry.update();
         waitForStart();
         runtime.reset();
+        robot.TweetyBird.engage();
 
         sleep(waitStart.getValue()*1000);
 
@@ -225,10 +227,10 @@ public class AutoOpTest extends LinearOpMode {
              {
                  if(endPos.equals("right"))
                  {
-
+                    redStraightParkRight();
                  } else if (endPos.equals("left"))
                  {
-
+                    redStraightParkLeft();
                  }
              }
              else if(park.equals("normal"))//the robot does a normal autonomous run
@@ -248,11 +250,11 @@ public class AutoOpTest extends LinearOpMode {
                          if(x>320)//Prop is randomized to the right position
                          {
                              hatPos = "right";
-
-
+                             redFrontRight();
                          } else if (x<=320)//prop is randomized to the center position
                          {
                              hatPos = "center";
+                             redFrontCenter();
                          }
                      }
                      else if(startPos.equals("back"))//the back autonomous position
@@ -260,20 +262,24 @@ public class AutoOpTest extends LinearOpMode {
                          if(x>320)//Prop is randomized to center
                          {
                              hatPos = "center";
+                             redBackCenter();
                          } else if (x<=320)//prop is randomized to left
                          {
                              hatPos = "left";
+                             redBackLeft();
                          }
                      }
                  }
                  if (startPos.equals("front") && hatPos.equals(""))//front autonomous position and prop is right position
                  {
                      hatPos = "right";
+                     redFrontLeft();
 
                  }
                  else if (startPos.equals("back") && hatPos.equals(""))//back auto position, and prop is left position
                  {
                      hatPos = "left";
+                     redBackRight();
                  }
              }
          }
@@ -283,10 +289,10 @@ public class AutoOpTest extends LinearOpMode {
             {
                 if(endPos.equals("right"))
                 {
-
+                    blueStraightParkRight();
                 } else if (endPos.equals("left"))
                 {
-
+                    blueStraightParkLeft();
                 }
             } else if (park.equals("normal")) //The robot does a normal run and delivers the pixels
             {
@@ -310,9 +316,11 @@ public class AutoOpTest extends LinearOpMode {
                         if(x>320)//right prop randomization
                         {
                             hatPos = "right";
+                            blueFrontRight();
                         } else if (x<=320)//center prop randomization
                         {
                             hatPos = "center";
+                            blueFrontCenter();
                         }
                     }
                     else if(startPos.equals("back"))//back auto position
@@ -320,19 +328,21 @@ public class AutoOpTest extends LinearOpMode {
                         if(x>320)//center prop randomization
                         {
                             hatPos = "center";
+                            blueBackCenter();
                         } else if (x<=320)//left prop randomization
                         {
                             hatPos = "left";
+                            blueBackLeft();
                         }
                     }
                 }
                 if (startPos.equals("front") && hatPos.equals(""))//front position left prop randomization
                 {
-
+                    blueFrontLeft();
                 }
                 else if (startPos.equals("back") && hatPos.equals(""))//back position right prop randomization
                 {
-
+                    blueBackRight();
                 }
             }
         }
@@ -340,113 +350,82 @@ public class AutoOpTest extends LinearOpMode {
         /***********************************************
          ************Autonomous Code Above***************
          ***********************************************/
+        while (opModeIsActive()); //Wait until the stop button is pressed
+
+        robot.TweetyBird.stop();
+    }
+    //robot.TweetyBird.straightLineTo(0,10,0);//Left/right,forward/backward,spin
+    //region blue methods
+    private void blueStraightParkRight()
+    {
+        robot.TweetyBird.straightLineTo(0,10,0);
+        robot.TweetyBird.straightLineTo(0,20,0);
+        robot.TweetyBird.straightLineTo(0,30,0);
+    }
+    private void blueStraightParkLeft()
+    {
 
     }
+    private void blueFrontRight()
+    {
+
+    }
+    private void blueFrontCenter()
+    {
+
+    }
+    private void blueFrontLeft()
+    {
+
+    }
+    private void blueBackCenter()
+    {
+
+    }
+    private void blueBackLeft()
+    {
+
+    }
+    private void blueBackRight()
+    {
+
+    }
+    //endregion blue methods
+    //region red methods
+    private void redStraightParkRight()
+    {
+
+    }
+    private void redStraightParkLeft()
+    {
+
+    }
+    private void redFrontRight()
+    {
+
+    }
+    private void redFrontCenter()
+    {}
+    private void redFrontLeft()
+    {
+
+    }
+    private void redBackCenter()
+    {}
+    private void redBackLeft()
+    {}
+    private void redBackRight()
+    {
+
+    }
+    //endregion
+
     //region robot methods
     public void extendArm(double power)
     {
         robot.motorTopArm.setPower(power);
         sleep(1000);
         robot.motorTopArm.setPower(0);
-    }
-    public void StrafeRightEncoder(double power, int pos)
-    {
-        pos = pos * 53;
-
-        robot.motorFrontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.motorBackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.motorFrontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.motorBackLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        robot.motorFrontRight.setTargetPosition(-pos);
-        robot.motorBackRight.setTargetPosition(pos);
-        robot.motorFrontLeft.setTargetPosition(pos);
-        robot.motorBackLeft.setTargetPosition(-pos);
-
-        robot.motorFrontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.motorBackRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.motorFrontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.motorBackLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-
-
-        robot.motorFrontRight.setPower(-power);
-        robot.motorBackRight.setPower(power);
-        robot.motorFrontLeft.setPower(power);
-        robot.motorBackLeft.setPower(-power);
-
-        while(Math.abs(robot.motorBackRight.getCurrentPosition()) < pos && robot.motorBackRight.isBusy())
-        {
-
-            telemetry.addData("target position ", pos);
-            telemetry.addData("FRmotorPos ", robot.motorFrontRight.getCurrentPosition());
-            telemetry.addData("FLmotorPos ", robot.motorFrontLeft.getCurrentPosition());
-            telemetry.addData("BRmotorPos ", robot.motorBackRight.getCurrentPosition());
-            telemetry.addData("BLmotorPos ", robot.motorBackLeft.getCurrentPosition());
-            telemetry.update();
-        }
-
-        //turn motor power to 0
-        robot.motorFrontRight.setPower(0);
-        robot.motorBackRight.setPower(0);
-        robot.motorFrontLeft.setPower(0);
-        robot.motorBackLeft.setPower(0);
-
-        robot.motorFrontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.motorBackRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.motorFrontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.motorBackLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-    }
-    public void StrafeLeftEncoder(double power, int pos)
-    {
-        pos = pos * 53;
-
-        robot.motorFrontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.motorBackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.motorFrontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.motorBackLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        robot.motorFrontRight.setTargetPosition(pos);
-        robot.motorBackRight.setTargetPosition(-pos);
-        robot.motorFrontLeft.setTargetPosition(-pos);
-        robot.motorBackLeft.setTargetPosition(pos);
-
-        robot.motorFrontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.motorBackRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.motorFrontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.motorBackLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-
-
-        robot.motorFrontRight.setPower(power);
-        robot.motorBackRight.setPower(-power);
-        robot.motorFrontLeft.setPower(-power);
-        robot.motorBackLeft.setPower(power);
-
-        while(Math.abs(robot.motorBackRight.getCurrentPosition()) < pos)
-        {
-
-            telemetry.addData("target position ", pos);
-            telemetry.addData("FRmotorPos ", robot.motorFrontRight.getCurrentPosition());
-            telemetry.addData("FLmotorPos ", robot.motorFrontLeft.getCurrentPosition());
-            telemetry.addData("BRmotorPos ", robot.motorBackRight.getCurrentPosition());
-            telemetry.addData("BLmotorPos ", robot.motorBackLeft.getCurrentPosition());
-            telemetry.update();
-
-        }
-
-        //turn motor power to 0
-        robot.motorFrontRight.setPower(0);
-        robot.motorBackRight.setPower(0);
-        robot.motorFrontLeft.setPower(0);
-        robot.motorBackLeft.setPower(0);
-
-        robot.motorFrontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.motorBackRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.motorFrontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.motorBackLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
     }
     public void partialOpen()
     {
@@ -495,124 +474,6 @@ public class AutoOpTest extends LinearOpMode {
         robot.servoP.setPosition(1);
         sleep(500);
     }
-    /////////////////////////////////////////////////////////////////////////////////
-    //Below are the Gyro and Encoder methods
-    //////////////////////////////////////////////////////////////////////////////
-    private  void DriveEncoder(double speed, double distance){
 
-        //reset Mode
-        robot.motorBackRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        robot.motorBackLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        robot.motorFrontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        robot.motorFrontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-        //reset the motor encoders
-        robot.motorBackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.motorBackLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.motorFrontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.motorFrontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        //Determine new targets
-        int moveCounts = (int)(distance*robot.COUNTS_PER_INCH);
-        BLtarget = robot.motorBackLeft.getCurrentPosition()+moveCounts;
-        BRtarget = robot.motorBackRight.getCurrentPosition()+moveCounts;
-        FRtarget = robot.motorFrontRight.getCurrentPosition()+moveCounts;
-        FLtarget = robot.motorFrontLeft.getCurrentPosition()+moveCounts;
-
-        //Set Target, then turn on "RUN_TO_POSITION"
-        robot.motorBackRight.setTargetPosition(BRtarget);
-        robot.motorBackLeft.setTargetPosition(BLtarget);
-        robot.motorFrontRight.setTargetPosition(FRtarget);
-        robot.motorFrontLeft.setTargetPosition(FLtarget);
-
-        //Set Mode
-        robot.motorBackRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.motorBackLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.motorFrontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.motorFrontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        //Set motor speed "turn on motors"
-        robot.motorFrontLeft.setPower(.3);
-        robot.motorBackLeft.setPower(.3);
-        robot.motorFrontRight.setPower(.3);
-        robot.motorBackRight.setPower(.3);
-
-        //Keep looping until target reached and display target & encoder
-        while (opModeIsActive() && robot.motorBackRight.isBusy()
-
-                && robot.motorFrontRight.isBusy())
-        {
-
-            telemetry.addLine("Straight");
-            telemetry.addData("Target: ", "%5.0f", BRtarget/robot.COUNTS_PER_INCH);
-            telemetry.addData("CurrentBR: ", "%5.0f", robot.motorBackRight.getCurrentPosition()/robot.COUNTS_PER_INCH);
-            telemetry.addData("CurrentBL: ", "%5.0f", robot.motorBackLeft.getCurrentPosition()/robot.COUNTS_PER_INCH);
-            telemetry.addData("CurrentFR: ", "%5.0f", robot.motorFrontRight.getCurrentPosition()/robot.COUNTS_PER_INCH);
-            telemetry.addData("CurrentFL: ", "%5.0f", robot.motorFrontLeft.getCurrentPosition()/robot.COUNTS_PER_INCH);
-
-            telemetry.update();
-        }
-        //Motors Off
-        robot.motorFrontLeft.setPower(0);
-        robot.motorBackLeft.setPower(0);
-        robot.motorFrontRight.setPower(0);
-        robot.motorBackRight.setPower(0);
-
-        //reset Mode
-        robot.motorBackRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        robot.motorBackLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        robot.motorFrontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        robot.motorFrontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-    }//EndDriveEncoder
-    private void GyroTurn(double position)
-    {
-        //Left is positive
-
-        robot.imu.resetYaw();
-        if(position > 0)
-        {   robot.motorBackRight.setPower(0.3);
-            robot.motorFrontRight.setPower(0.3);
-            robot.motorBackLeft.setPower(-0.3);
-            robot.motorFrontLeft.setPower(-0.3);
-            //Turns right
-
-        }
-
-        //Reminder: the program only works if its less than zero
-
-        if(position < 0)
-        {
-
-            robot.motorBackRight.setPower(-0.3);
-            robot.motorFrontRight.setPower(-0.3);
-            robot.motorBackLeft.setPower(0.3);
-            robot.motorFrontLeft.setPower(0.3);
-            //Turns Left
-
-        }
-
-        while (opModeIsActive() && !isStopRequested() && Math.abs(GetHeading()) < Math.abs(position))
-        {
-            telemetry.addData("target: ", position);
-            telemetry.addData("position", GetHeading());
-            telemetry.update();
-        }
-
-
-
-        //deactivates the motors
-        robot.motorFrontLeft.setPower(0);
-        robot.motorFrontRight.setPower(0);
-        robot.motorBackLeft.setPower(0);
-        robot.motorBackRight.setPower(0);
-        sleep(500);
-
-    }
-    public double GetHeading()
-    {
-        YawPitchRollAngles orientation = robot.imu.getRobotYawPitchRollAngles();
-        return orientation.getYaw(AngleUnit.DEGREES);
-    }
     //endregion
 }
