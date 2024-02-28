@@ -218,21 +218,20 @@ public class AutoOpAll extends LinearOpMode {
 
         sleep(waitStart.getValue()*1000);
 
-        blueStraightParkFront();
+       // blueStraightParkFront();
         /***********************************************
          ************Autonomous Code Bellow***************
          ***********************************************/
          if(allianceColor.equals("red"))
          {
-             CloseClaw();
-             if(park.equals("straight park"))//the robot goes straight to the backstage and parks
+             if(park.equals("straight park"))//The robot goes straight to the backstage and parks
              {
-                 if(endPos.equals("right"))
+                 if(startPos.equals("front"))
                  {
-                    redStraightParkRight();
-                 } else if (endPos.equals("left"))
+                     redStraightParkFront();
+                 } else if (startPos.equals("back"))
                  {
-                    redStraightParkLeft();
+                     redStraightParkBack();
                  }
              }
              else if(park.equals("normal"))//the robot does a normal autonomous run
@@ -287,7 +286,6 @@ public class AutoOpAll extends LinearOpMode {
          }
         else if(allianceColor.equals("blue"))
         {
-            CloseClaw();
             if(park.equals("straight park"))//The robot goes straight to the backstage and parks
             {
                 if(startPos.equals("front"))
@@ -395,11 +393,11 @@ public class AutoOpAll extends LinearOpMode {
     }
     //endregion blue methods
     //region red methods
-    private void redStraightParkRight()
+    private void redStraightParkFront()
     {
 
     }
-    private void redStraightParkLeft()
+    private void redStraightParkBack()
     {
 
     }
