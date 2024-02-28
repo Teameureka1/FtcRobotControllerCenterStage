@@ -218,6 +218,7 @@ public class AutoOpAll extends LinearOpMode {
 
         sleep(waitStart.getValue()*1000);
 
+        blueStraightParkFront();
         /***********************************************
          ************Autonomous Code Bellow***************
          ***********************************************/
@@ -289,12 +290,12 @@ public class AutoOpAll extends LinearOpMode {
             CloseClaw();
             if(park.equals("straight park"))//The robot goes straight to the backstage and parks
             {
-                if(endPos.equals("right"))
+                if(startPos.equals("front"))
                 {
-                    blueStraightParkRight();
-                } else if (endPos.equals("left"))
+                    blueStraightParkFront();
+                } else if (startPos.equals("back"))
                 {
-                    blueStraightParkLeft();
+                    blueStraightParkBack();
                 }
             } else if (park.equals("normal")) //The robot does a normal run and delivers the pixels
             {
@@ -358,13 +359,13 @@ public class AutoOpAll extends LinearOpMode {
     }
     //robot.TweetyBird.straightLineTo(0,10,0);//Left/right,forward/backward,spin
     //region blue methods
-    private void blueStraightParkRight()
+    private void blueStraightParkFront()//delivers purple then parks
     {
-        robot.TweetyBird.straightLineTo(0,10,0);
         robot.TweetyBird.straightLineTo(0,20,0);
-        robot.TweetyBird.straightLineTo(0,30,0);
+       // robot.TweetyBird.straightLineTo(0,20,0);
+        //robot.TweetyBird.straightLineTo(0,30,0);
     }
-    private void blueStraightParkLeft()
+    private void blueStraightParkBack()//delivers purple then parks
     {
 
     }
