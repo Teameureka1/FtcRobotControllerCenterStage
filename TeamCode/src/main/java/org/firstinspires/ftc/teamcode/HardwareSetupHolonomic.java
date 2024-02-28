@@ -205,7 +205,7 @@ public class HardwareSetupHolonomic
         middleEncoder = hwMap.get(DcMotor.class, "topArm");
 
         leftEncoder.setDirection(DcMotorSimple.Direction.FORWARD);
-        rightEncoder.setDirection(DcMotorSimple.Direction.REVERSE);
+        //rightEncoder.setDirection(DcMotorSimple.Direction.REVERSE);
         motorDrone.setDirection(DcMotorSimple.Direction.FORWARD);
 
         leftEncoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -233,7 +233,7 @@ public class HardwareSetupHolonomic
                 .setMiddleEncoder(middleEncoder)
 
                 .flipLeftEncoder(false)
-                .flipRightEncoder(false)
+                .flipRightEncoder(true)
                 .flipMiddleEncoder(false)
 
                 .setSideEncoderDistance(14+(3.0/8.0))

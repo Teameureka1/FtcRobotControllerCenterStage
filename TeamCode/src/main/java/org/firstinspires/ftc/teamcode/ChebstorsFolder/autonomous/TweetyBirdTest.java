@@ -44,7 +44,7 @@ public class TweetyBirdTest extends LinearOpMode {
         robot.TweetyBird.waitWhileBusy();
         robot.TweetyBird.waitWhileBusy();
         robot.TweetyBird.waitWhileBusy();
-        
+
         robot.TweetyBird.straightLineTo(10,10,-90);
 
         while (opModeIsActive()); //Wait until the stop button is pressed
