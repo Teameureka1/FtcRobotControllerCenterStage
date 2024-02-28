@@ -6,6 +6,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.internal.camera.delegating.DelegatingCaptureSequence;
+
 /**
  *
  * This is a Linear version program (i.e. uses runOpMode() and waitForStart() methods,  instead of init, loop and stop)
@@ -117,7 +119,7 @@ public class teleOp8Bit extends LinearOpMode
                 robot.motorBottomArm.setPower(gamepad2.left_stick_y);// let stick drive UP (note this is positive value on joystick)
                 robot.armHold = robot.motorBottomArm.getCurrentPosition();
             }
-             else if(gamepad2.left_stick_y > -.1 && gamepad2.left_stick_y < .1 && robot.MagIn.isPressed()) //joystick is released - try to maintain the current position
+             else if(gamepad2.left_stick_y > -.1 && gamepad2.left_stick_y < .1 ) //joystick is released - try to maintain the current position
             {
                 robot.motorBottomArm.setPower((robot.armHold - robot.motorBottomArm.getCurrentPosition()) / robot.slopeVal);// Note depending on encoder/motor values it may be necessary to reverse sign for motor power by making neg -slopeVal
 
@@ -125,9 +127,9 @@ public class teleOp8Bit extends LinearOpMode
                 // attempt to drive the motor back to be equal with holdPosition.
                 // By adjusting slopeVal you can achieved perfect hold power
 
-            } else  {
-                robot.motorBottomArm.setPower((robot.armHold - robot.motorBottomArm.getCurrentPosition()) / 800.0);// Note depending on encoder/motor values it may be necessary to reverse sign for motor power by making neg -slopeVal
             }
+
+
 
 
             if(gamepad2.a)//alltered claw opening for the test claw
@@ -184,10 +186,19 @@ public class teleOp8Bit extends LinearOpMode
                 robot.servoP.setPosition(.5);
             }
 
-            if(gamepad1.y)//drone
+            if(gamepad2.left_bumper && opModeIsActive())//drone
             {
-                robot.servoD.setPosition(.9);
+                robot.motorDrone.setPower(1);
+                if(gamepad2.x)
+                {
+                    robot.servoD.setPosition(.9);
+                }
+                //robot.servoD.setPosition(.9);
+            } else
+            {
+                robot.motorDrone.setPower(0);
             }
+
             if(gamepad1.x)
             {
                 robot.servoD.setPosition(.1);

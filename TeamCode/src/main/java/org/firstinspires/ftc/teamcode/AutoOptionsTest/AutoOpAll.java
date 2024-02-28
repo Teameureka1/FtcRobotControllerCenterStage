@@ -223,6 +223,7 @@ public class AutoOpAll extends LinearOpMode {
          ***********************************************/
          if(allianceColor.equals("red"))
          {
+             CloseClaw();
              if(park.equals("straight park"))//the robot goes straight to the backstage and parks
              {
                  if(endPos.equals("right"))
@@ -285,6 +286,7 @@ public class AutoOpAll extends LinearOpMode {
          }
         else if(allianceColor.equals("blue"))
         {
+            CloseClaw();
             if(park.equals("straight park"))//The robot goes straight to the backstage and parks
             {
                 if(endPos.equals("right"))

@@ -41,7 +41,7 @@ public class HardwareSetupHolonomic
     static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
     public static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_INCHES * 3.1415);
-    public double  slopeVal  = 1200.0;
+    public double  slopeVal  = 1000.0;
     //Create and set default servo positions & MOTOR STOP variables.
     //Possible servo values: 0.0 - 1.0  For CRServo 0.5=stop greater or less than will spin in that direction
     public final static double OPEN = 0.5;//original servo 0.8
@@ -102,6 +102,7 @@ public class HardwareSetupHolonomic
     public DcMotor leftEncoder = null;
     public DcMotor rightEncoder = null;
     public DcMotor middleEncoder = null;
+    public DcMotor motorDrone = null;
 
     /* local OpMode members. */
     HardwareMap hwMap        = null;
@@ -142,6 +143,7 @@ public class HardwareSetupHolonomic
 
         motorBottomArm = hwMap.get(DcMotor.class, "armMotor");
         motorTopArm = hwMap.get(DcMotor.class, "topArm");
+        motorDrone = hwMap.get(DcMotor.class, "Rpod");
 
         // Set the drive motor directions:
         motorFrontLeft.setDirection(DcMotor.Direction.FORWARD);
@@ -204,6 +206,7 @@ public class HardwareSetupHolonomic
 
         leftEncoder.setDirection(DcMotorSimple.Direction.FORWARD);
         rightEncoder.setDirection(DcMotorSimple.Direction.REVERSE);
+        motorDrone.setDirection(DcMotorSimple.Direction.FORWARD);
 
         leftEncoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightEncoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
