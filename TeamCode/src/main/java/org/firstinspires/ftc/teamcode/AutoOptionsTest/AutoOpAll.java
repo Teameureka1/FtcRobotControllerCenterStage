@@ -372,12 +372,21 @@ public class AutoOpAll extends LinearOpMode {
     //region blue methods
     private void blueStraightParkFront()//delivers purple then parks
     {
+        //Print Telemetry
         telemetry.addLine("blueStraightParkFront");
         telemetry.update();
 
-        robot.TweetyBird.straightLineTo(0,20,0);
-       // robot.TweetyBird.straightLineTo(0,20,0);
-        //robot.TweetyBird.straightLineTo(0,30,0);
+        //Moving forward then turning
+        robot.TweetyBird.straightLineTo(0,12,0);
+        robot.TweetyBird.straightLineTo(5,50,-95);
+
+        //Wait until completed
+        robot.TweetyBird.waitWhileBusy();
+        robot.TweetyBird.waitWhileBusy();
+        robot.TweetyBird.waitWhileBusy();
+
+        //Heading to backdrop
+        robot.TweetyBird.straightLineTo(-95,43,-95);
     }
     private void blueStraightParkBack()//delivers purple then parks
     {

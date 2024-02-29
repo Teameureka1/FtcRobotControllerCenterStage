@@ -236,11 +236,11 @@ public class HardwareSetupHolonomic
                 .flipRightEncoder(true)
                 .flipMiddleEncoder(false)
 
-                .setSideEncoderDistance(14+(3.0/8.0))
-                .setMiddleEncoderOffset(6)
+                .setSideEncoderDistance(14)
+                .setMiddleEncoderOffset(5+(3.0/4.0))
 
                 .setTicksPerEncoderRotation(2000)
-                .setEncoderWheelRadius(1)
+                .setEncoderWheelRadius(0.944882)
 
                 //Other Config
                 .setMinSpeed(0.25)
