@@ -235,7 +235,7 @@ public class AutoOpAll extends LinearOpMode {
         /***********************************************
          ************Autonomous Code Bellow***************
          ***********************************************/
-         if(allianceColor.equals("red"))
+         if(allianceColor.getValue().equals("red"))
          {
              if(park.getValue().equals("straight park"))//The robot goes straight to the backstage and parks
              {
