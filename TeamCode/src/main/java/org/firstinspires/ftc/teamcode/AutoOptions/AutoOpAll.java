@@ -230,6 +230,7 @@ public class AutoOpAll extends LinearOpMode {
         telemetry.update();*/
 
         sleep(waitStart.getValue()*1000);
+        pushDown();
 
        // blueStraightParkFront();
         /***********************************************
@@ -370,28 +371,132 @@ public class AutoOpAll extends LinearOpMode {
     }
     //robot.TweetyBird.straightLineTo(0,10,0);//Left/right,forward/backward,spin
     //region blue methods
-    private void blueStraightParkFront()//delivers purple then parks
+    private void blueStraightParkFront() throws InterruptedException //delivers purple then parks
     {
         //Print Telemetry
         telemetry.addLine("blueStraightParkFront");
         telemetry.update();
 
-        //Moving forward then turning
-        robot.TweetyBird.straightLineTo(0,12,0);
-        robot.TweetyBird.straightLineTo(5,50,-95);
+        List<Recognition> currentRecognitions = tfod.getRecognitions();
+        telemetry.addData("# Objects Detected", currentRecognitions.size());
+        for (Recognition recognition : currentRecognitions) {
 
-        //Wait until completed
-        robot.TweetyBird.waitWhileBusy();
-        robot.TweetyBird.waitWhileBusy();
-        robot.TweetyBird.waitWhileBusy();
+            x = (recognition.getLeft() + recognition.getRight()) / 2;
+            y = (recognition.getTop() + recognition.getBottom()) / 2;
+            if(x>320)//right prop randomization
+            {
+                hatPos = "right";
+                armMove(-.8, -200);
+                armHold();
+                robot.TweetyBird.straightLineTo(5,30,45);
+                robot.TweetyBird.waitWhileBusy();
+                robot.TweetyBird.waitWhileBusy();
+                robot.TweetyBird.waitWhileBusy();
+                pushUp();
 
-        //Heading to backdrop
-        robot.TweetyBird.straightLineTo(-95,43,-95);
+                robot.TweetyBird.straightLineTo(5,20,45);
+                robot.TweetyBird.waitWhileBusy();
+                robot.TweetyBird.waitWhileBusy();
+                robot.TweetyBird.waitWhileBusy();
+                robot.TweetyBird.straightLineTo(0,20,0);
+                robot.TweetyBird.waitWhileBusy();
+                robot.TweetyBird.waitWhileBusy();
+                robot.TweetyBird.waitWhileBusy();
+                robot.TweetyBird.straightLineTo(2,48,0);
+                robot.TweetyBird.straightLineTo(2,48,-95);
+                robot.TweetyBird.straightLineTo(-50,48,-95);
+                robot.TweetyBird.waitWhileBusy();
+                robot.TweetyBird.waitWhileBusy();
+                robot.TweetyBird.waitWhileBusy();
+                robot.TweetyBird.straightLineTo(-90, 40,-95);
+                robot.TweetyBird.waitWhileBusy();
+                robot.TweetyBird.waitWhileBusy();
+                robot.TweetyBird.waitWhileBusy();
+                OpenClaw();
+
+
+                //purple pixel is delivered
+               // robot.TweetyBird.straightLineTo(5,40,45);
+
+
+            } else if (x<=320)//center prop randomization
+            {
+                hatPos = "center";
+                armMove(-.8,-200);
+                armHold();
+                robot.TweetyBird.straightLineTo(0,30,0);
+                robot.TweetyBird.waitWhileBusy();
+                robot.TweetyBird.waitWhileBusy();
+                robot.TweetyBird.waitWhileBusy();
+                pushUp();
+                robot.TweetyBird.straightLineTo(0,48,-90);
+                robot.TweetyBird.straightLineTo(-60,48,-95);
+
+            }
+        }
+        if(hatPos.equals(""))
+        {
+            armMove(-.8,-200);
+            armHold();
+            hatPos = "left";
+            robot.TweetyBird.straightLineTo(0,30,-45);
+            robot.TweetyBird.waitWhileBusy();
+            robot.TweetyBird.waitWhileBusy();
+            robot.TweetyBird.waitWhileBusy();
+            pushUp();
+            robot.TweetyBird.straightLineTo(0,25,0);
+            robot.TweetyBird.waitWhileBusy();
+            robot.TweetyBird.waitWhileBusy();
+            robot.TweetyBird.waitWhileBusy();
+            robot.TweetyBird.straightLineTo(0,48,-90);
+            robot.TweetyBird.straightLineTo(-70,48,-95);
+        }
     }
-    private void blueStraightParkBack()//delivers purple then parks
+    private void blueStraightParkBack() throws InterruptedException//delivers purple then parks
     {
         telemetry.addLine("blueStraightParkBack");
         telemetry.update();
+
+        List<Recognition> currentRecognitions = tfod.getRecognitions();
+        telemetry.addData("# Objects Detected", currentRecognitions.size());
+        for (Recognition recognition : currentRecognitions) {
+
+            x = (recognition.getLeft() + recognition.getRight()) / 2;
+            y = (recognition.getTop() + recognition.getBottom()) / 2;
+            if(x>320)//center prop randomization
+            {
+                hatPos = "center";
+                armMove(-.8,-200);
+                armHold();
+                robot.TweetyBird.straightLineTo(0,30,0);
+                robot.TweetyBird.waitWhileBusy();
+                robot.TweetyBird.waitWhileBusy();
+                robot.TweetyBird.waitWhileBusy();
+                pushUp();
+
+            } else if (x<=320)//left prop randomization
+            {
+                armMove(-.8,-200);
+                armHold();
+                hatPos = "left";
+                robot.TweetyBird.straightLineTo(0,30,-45);
+                robot.TweetyBird.waitWhileBusy();
+                robot.TweetyBird.waitWhileBusy();
+                robot.TweetyBird.waitWhileBusy();
+                pushUp();
+            }
+        }
+        if(hatPos.equals(""))//right
+        {
+            hatPos.equals("right");
+            armMove(-.8, -200);
+            armHold();
+            robot.TweetyBird.straightLineTo(5,30,45);
+            robot.TweetyBird.waitWhileBusy();
+            robot.TweetyBird.waitWhileBusy();
+            robot.TweetyBird.waitWhileBusy();
+            pushUp();
+        }
     }
     private void blueFrontRight()
     {
