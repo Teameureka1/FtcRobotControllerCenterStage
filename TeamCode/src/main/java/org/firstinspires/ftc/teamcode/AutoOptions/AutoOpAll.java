@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.AutoOptionsTest;
+package org.firstinspires.ftc.teamcode.AutoOptions;
 
 /* Copyright (c) 2019 FIRST. All rights reserved.
  *
@@ -40,7 +40,7 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 
 //these imports are not used. They were part of auto gamepad selection for Freight Frenzy
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
-import org.firstinspires.ftc.teamcode.HardwareSetupHolonomic;
+import org.firstinspires.ftc.teamcode.HardwareSetup;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 
@@ -60,7 +60,7 @@ import java.util.List;
 //@Disabled
 public class AutoOpAll extends LinearOpMode {
 
-    HardwareSetupHolonomic robot = new HardwareSetupHolonomic();
+    HardwareSetup robot = new HardwareSetup();
     //region stuff
 
     private static final String TFOD_MODEL_ASSET = "Combined.tflite";

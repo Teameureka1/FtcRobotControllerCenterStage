@@ -35,7 +35,7 @@ public class AutoBlueLeft extends LinearOpMode
 {
     /* Define Hardware setup */
     // assumes left motors are reversed
-    HardwareSetupHolonomic robot = new HardwareSetupHolonomic();
+    HardwareSetup robot = new HardwareSetup();
 
     private static final boolean USE_WEBCAM = true;
 

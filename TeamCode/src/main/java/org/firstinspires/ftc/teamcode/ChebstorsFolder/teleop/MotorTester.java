@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.teamcode.HardwareSetupHolonomic;
+import org.firstinspires.ftc.teamcode.HardwareSetup;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ public class MotorTester extends LinearOpMode {
     /**
      * HardwareMap Reference
      */
-    private final HardwareSetupHolonomic robot = new HardwareSetupHolonomic();
+    private final HardwareSetup robot = new HardwareSetup();
 
     /**
      * Opmode Start

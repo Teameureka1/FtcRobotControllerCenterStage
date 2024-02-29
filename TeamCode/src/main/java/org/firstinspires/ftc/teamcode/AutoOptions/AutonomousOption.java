@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.OldCodeAuto;
+package org.firstinspires.ftc.teamcode.AutoOptions;
 
 /**
  * Created by Fusion on 10/30/2017.
@@ -14,4 +14,7 @@ public abstract class AutonomousOption {
     public abstract void previousValue();
 	
 	abstract String getStrValue ();
+
+
+
 }

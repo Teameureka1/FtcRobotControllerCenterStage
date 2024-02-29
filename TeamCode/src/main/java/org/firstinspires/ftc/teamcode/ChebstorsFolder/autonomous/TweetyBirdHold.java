@@ -3,13 +3,13 @@ package org.firstinspires.ftc.teamcode.ChebstorsFolder.autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.HardwareSetupHolonomic;
+import org.firstinspires.ftc.teamcode.HardwareSetup;
 
 @Autonomous(name="TweetyBird Hold Position", group = "z")
 //@Disabled
 public class TweetyBirdHold extends LinearOpMode {
 
-    HardwareSetupHolonomic robot = new HardwareSetupHolonomic();
+    HardwareSetup robot = new HardwareSetup();
 
     @Override
     public void runOpMode() {

@@ -1,12 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
-import org.firstinspires.ftc.robotcore.internal.camera.delegating.DelegatingCaptureSequence;
 
 /**
  *
@@ -30,13 +26,13 @@ import org.firstinspires.ftc.robotcore.internal.camera.delegating.DelegatingCapt
 */
 @TeleOp(name = "8Bit drive", group = "comp")
 //@Disabled
-public class teleOp8Bit extends LinearOpMode
+public class Teleop extends LinearOpMode
 {
     // create timer
     private ElapsedTime runtime = new ElapsedTime();
 
     //  DON'T FORGET TO RENAME HARDWARE CONFIG FILE NAME HERE!!!!!!
-    HardwareSetupHolonomic robot = new HardwareSetupHolonomic();
+    HardwareSetup robot = new HardwareSetup();
 
     double FrontLeft = 0;
     double FrontRight = 0;
