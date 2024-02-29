@@ -213,8 +213,21 @@ public class AutoOpAll extends LinearOpMode {
         telemetry.addData(">", "Press Play to start op mode");
         telemetry.update();
         waitForStart();
+        telemetry.addData(">", "Robot Started!");
+        telemetry.update();
+
         runtime.reset();
         robot.TweetyBird.engage();
+
+        /* Quick Values Dump
+        //{allianceColor, startPos, park, cycle, endPos, waitStart};
+        telemetry.addData("Alliance Color",allianceColor.getValue());
+        telemetry.addData("Start Position",startPos.getValue());
+        telemetry.addData("Park",park.getValue());
+        telemetry.addData("Cycle",cycle.getValue());
+        telemetry.addData("End Position",endPos.getValue());
+        telemetry.addData("Start Delay",waitStart.getValue());
+        telemetry.update();*/
 
         sleep(waitStart.getValue()*1000);
 
@@ -359,65 +372,89 @@ public class AutoOpAll extends LinearOpMode {
     //region blue methods
     private void blueStraightParkFront()//delivers purple then parks
     {
+        telemetry.addLine("blueStraightParkFront");
+        telemetry.update();
+
         robot.TweetyBird.straightLineTo(0,20,0);
        // robot.TweetyBird.straightLineTo(0,20,0);
         //robot.TweetyBird.straightLineTo(0,30,0);
     }
     private void blueStraightParkBack()//delivers purple then parks
     {
-
+        telemetry.addLine("blueStraightParkBack");
+        telemetry.update();
     }
     private void blueFrontRight()
     {
-
+        telemetry.addLine("blueFrontRight");
+        telemetry.update();
     }
     private void blueFrontCenter()
     {
-
+        telemetry.addLine("blueFrontCenter");
+        telemetry.update();
     }
     private void blueFrontLeft()
     {
-
+        telemetry.addLine("blueFrontLeft");
+        telemetry.update();
     }
     private void blueBackCenter()
     {
-
+        telemetry.addLine("blueBackCenter");
+        telemetry.update();
     }
     private void blueBackLeft()
     {
-
+        telemetry.addLine("blueBackLeft");
+        telemetry.update();
     }
     private void blueBackRight()
     {
-
+        telemetry.addLine("blueBackRight");
+        telemetry.update();
     }
     //endregion blue methods
     //region red methods
     private void redStraightParkFront()
     {
-
+        telemetry.addLine("redStraightParkFront");
+        telemetry.update();
     }
     private void redStraightParkBack()
     {
-
+        telemetry.addLine("redStraightParkBack");
+        telemetry.update();
     }
     private void redFrontRight()
     {
-
+        telemetry.addLine("redFrontRight");
+        telemetry.update();
     }
     private void redFrontCenter()
-    {}
+    {
+        telemetry.addLine("redFrontCenter");
+        telemetry.update();
+    }
     private void redFrontLeft()
     {
-
+        telemetry.addLine("redFrontLeft");
+        telemetry.update();
     }
     private void redBackCenter()
-    {}
+    {
+        telemetry.addLine("redBackCenter");
+        telemetry.update();
+    }
     private void redBackLeft()
-    {}
+    {
+        telemetry.addLine("redBackLeft");
+        telemetry.update();
+    }
     private void redBackRight()
     {
-
+        telemetry.addLine("redBackRight");
+        telemetry.update();
     }
     //endregion
 
