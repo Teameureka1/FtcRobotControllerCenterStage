@@ -297,18 +297,18 @@ public class AutoOpAll extends LinearOpMode {
                  }
              }
          }
-        else if(allianceColor.equals("blue"))
+        else if(allianceColor.getValue().equals("blue"))
         {
-            if(park.equals("straight park"))//The robot goes straight to the backstage and parks
+            if(park.getValue().equals("straight park"))//The robot goes straight to the backstage and parks
             {
-                if(startPos.equals("front"))
+                if(startPos.getValue().equals("front"))
                 {
                     blueStraightParkFront();
-                } else if (startPos.equals("back"))
+                } else if (startPos.getValue().equals("back"))
                 {
                     blueStraightParkBack();
                 }
-            } else if (park.equals("normal")) //The robot does a normal run and delivers the pixels
+            } else if (park.getValue().equals("normal")) //The robot does a normal run and delivers the pixels
             {
 
                 List<Recognition> currentRecognitions = tfod.getRecognitions();
@@ -325,7 +325,7 @@ public class AutoOpAll extends LinearOpMode {
                 telemetry.addData("- Position", "%.0f / %.0f", x, y);
                 telemetry.addData("- Size", "%.0f x %.0f", recognition.getWidth(), recognition.getHeight());
                 telemetry.update();*/
-                    if(startPos.equals("front"))//Front auto position
+                    if(startPos.getValue().equals("front"))//Front auto position
                     {
                         if(x>320)//right prop randomization
                         {
@@ -337,7 +337,7 @@ public class AutoOpAll extends LinearOpMode {
                             blueFrontCenter();
                         }
                     }
-                    else if(startPos.equals("back"))//back auto position
+                    else if(startPos.getValue().equals("back"))//back auto position
                     {
                         if(x>320)//center prop randomization
                         {
@@ -350,11 +350,11 @@ public class AutoOpAll extends LinearOpMode {
                         }
                     }
                 }
-                if (startPos.equals("front") && hatPos.equals(""))//front position left prop randomization
+                if (startPos.getValue().equals("front") && hatPos.equals(""))//front position left prop randomization
                 {
                     blueFrontLeft();
                 }
-                else if (startPos.equals("back") && hatPos.equals(""))//back position right prop randomization
+                else if (startPos.getValue().equals("back") && hatPos.equals(""))//back position right prop randomization
                 {
                     blueBackRight();
                 }
