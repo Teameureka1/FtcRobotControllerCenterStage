@@ -237,17 +237,17 @@ public class AutoOpAll extends LinearOpMode {
          ***********************************************/
          if(allianceColor.equals("red"))
          {
-             if(park.equals("straight park"))//The robot goes straight to the backstage and parks
+             if(park.getValue().equals("straight park"))//The robot goes straight to the backstage and parks
              {
-                 if(startPos.equals("front"))
+                 if(startPos.getValue().equals("front"))
                  {
                      redStraightParkFront();
-                 } else if (startPos.equals("back"))
+                 } else if (startPos.getValue().equals("back"))
                  {
                      redStraightParkBack();
                  }
              }
-             else if(park.equals("normal"))//the robot does a normal autonomous run
+             else if(park.getValue().equals("normal"))//the robot does a normal autonomous run
              {
 
                  List<Recognition> currentRecognitions = tfod.getRecognitions();
@@ -259,7 +259,7 @@ public class AutoOpAll extends LinearOpMode {
                      x = (recognition.getLeft() + recognition.getRight()) / 2;
                      y = (recognition.getTop() + recognition.getBottom()) / 2;
 
-                     if(startPos.equals("front"))//The front autonomous position
+                     if(startPos.getValue().equals("front"))//The front autonomous position
                      {
                          if(x>320)//Prop is randomized to the right position
                          {
@@ -271,7 +271,7 @@ public class AutoOpAll extends LinearOpMode {
                              redFrontCenter();
                          }
                      }
-                     else if(startPos.equals("back"))//the back autonomous position
+                     else if(startPos.getValue().equals("back"))//the back autonomous position
                      {
                          if(x>320)//Prop is randomized to center
                          {
@@ -284,13 +284,13 @@ public class AutoOpAll extends LinearOpMode {
                          }
                      }
                  }
-                 if (startPos.equals("front") && hatPos.equals(""))//front autonomous position and prop is right position
+                 if (startPos.getValue().equals("front") && hatPos.equals(""))//front autonomous position and prop is right position
                  {
                      hatPos = "right";
                      redFrontLeft();
 
                  }
-                 else if (startPos.equals("back") && hatPos.equals(""))//back auto position, and prop is left position
+                 else if (startPos.getValue().equals("back") && hatPos.equals(""))//back auto position, and prop is left position
                  {
                      hatPos = "left";
                      redBackRight();
