@@ -429,8 +429,8 @@ public class AutoOpAll extends LinearOpMode {
                 robot.TweetyBird.waitWhileBusy();
                 robot.TweetyBird.waitWhileBusy();
                 pushUp();
-                robot.TweetyBird.straightLineTo(0,48,-90);
-                robot.TweetyBird.straightLineTo(-60,48,-95);
+                robot.TweetyBird.straightLineTo(0,48,0);
+                robot.TweetyBird.straightLineTo(-90,48,-95);
 
             }
         }
