@@ -251,7 +251,7 @@ public class HardwareSetup
 
                 .setCorrectionOverpowerDistance(5)
                 .setDistanceBuffer(1)
-                .setRotationBuffer(8)
+                .setRotationBuffer(5)
 
                 .build();
     }
