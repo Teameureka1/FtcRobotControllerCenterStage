@@ -1,6 +1,14 @@
 repositories {
     mavenCentral()
     google() // Needed for androidx
+
+    maven {
+        url = "https://maven.pkg.github.com/narlyx/TweetyBird"
+        credentials {
+            username = project.findProperty("gpr.user")
+            password = project.findProperty("gpr.key")
+        }
+    }
 }
 
 dependencies {
@@ -16,6 +24,8 @@ dependencies {
     implementation 'org.firstinspires.ftc:gameAssets-CenterStage:1.0.0'
     implementation 'org.tensorflow:tensorflow-lite-task-vision:0.4.3'
     runtimeOnly 'org.tensorflow:tensorflow-lite:2.12.0'
-    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    //implementation 'dev.narlyx.ftc:tweetybird:3.0.0' //if using github packages
+    implementation project(path: ':TweetyBird') //if using locally downloaded
 }
 

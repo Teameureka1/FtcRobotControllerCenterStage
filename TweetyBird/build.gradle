@@ -1,0 +1,69 @@
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:7.4.2'
+    }
+}
+
+apply plugin: 'com.android.library'
+apply plugin: 'maven-publish'
+
+android {
+    namespace 'dev.narlyx.ftc'
+    compileSdk 33
+
+    defaultConfig {
+        minSdk 24
+        targetSdk 33
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+repositories {
+    mavenCentral()
+    google() // Needed for androidx
+}
+
+dependencies {
+
+    implementation 'org.firstinspires.ftc:RobotCore:9.0.1'
+    implementation 'org.firstinspires.ftc:Hardware:9.0.1'
+
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = "https://maven.pkg.github.com/narlyx/TweetyBird"
+            credentials {
+                username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
+                password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
+            }
+        }
+    }
+    publications {
+        mavenJava(MavenPublication) {
+            groupId = 'dev.narlyx.ftc'
+            artifactId = 'tweetybird'
+            version = '3.0.0.1'
+            artifact("$buildDir/outputs/aar/TweetyBird-release.aar")
+        }
+    }
+}
