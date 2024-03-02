@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
@@ -75,6 +76,7 @@ public class Teleop extends LinearOpMode
             double gamepad1LeftY = -gamepad1.left_stick_y;   // drives spin left/right
             double gamepad1LeftX = gamepad1.left_stick_x;    // strafe direction (side to side)
             double gamepad1RightX = gamepad1.right_stick_x;  //drives forwards and backwards
+            boolean driftButton = gamepad1.left_bumper; //Lets the robot coast to a stop
 
             telemetry.addData("joyStick: ", gamepad2.left_stick_y);
             telemetry.addData("holdPos:", robot.armHold);
@@ -106,6 +108,22 @@ public class Teleop extends LinearOpMode
                 robot.motorBackLeft.setPower(BackLeft / 2);
                 robot.motorBackRight.setPower(BackRight / 2);
                // robot.armHold = robot.motorBottomArm.getCurrentPosition();
+            }
+
+            //Apply breaking power when releasing controls
+            if (gamepad1LeftY==0
+                && gamepad1LeftX==0
+                && gamepad1RightX==0
+                && !driftButton) {
+                robot.motorFrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                robot.motorFrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                robot.motorBackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                robot.motorBackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            } else {
+                robot.motorFrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+                robot.motorFrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+                robot.motorBackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+                robot.motorBackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
             }
 
             // write the clipped values from the formula to the motors
