@@ -464,7 +464,7 @@ public class AutoOpAll extends LinearOpMode {
 
             x = (recognition.getLeft() + recognition.getRight()) / 2;
             y = (recognition.getTop() + recognition.getBottom()) / 2;
-            if(x>320)//center prop randomization
+            if(x>320)
             {
                 CloseClaw();
                 hatPos.equals("right");
@@ -481,67 +481,138 @@ public class AutoOpAll extends LinearOpMode {
                 OpenClaw();
 
 
-            } else if (x<=320)//left prop randomization
+            } else if (x<=320)
             {
                 CloseClaw();
                 hatPos = "center";
-                //armMove(-.8,-200);
-                //armHold();
+                armMove(-.8,-200);
+                armHold();
                 robot.TweetyBird.speedLimit(.5);
                 robot.TweetyBird.straightLineTo(0,30,0);
                 goodWait();
                 pushUp();
-                robot.TweetyBird.straightLineTo(0,48,0);
+                robot.TweetyBird.straightLineTo(0,2,0);
                 goodWait();
-                pushDown();
+                robot.TweetyBird.speedLimit(.9);
+                robot.TweetyBird.straightLineTo(-45,2,0);
 
                 OpenClaw();
             }
         }
-        if(hatPos.equals(""))//right
+        if(hatPos.equals(""))
         {
+            hatPos = "left";
             CloseClaw();
             armMove(-.8,-200);
             armHold();
             robot.TweetyBird.speedLimit(.5);
-            hatPos = "left";
-            robot.TweetyBird.straightLineTo(0,30,-45);
+            robot.TweetyBird.straightLineTo(-5,30,-45);
             goodWait();
             pushUp();
-
-
+            robot.TweetyBird.straightLineTo(0,25,-45);
+            robot.TweetyBird.straightLineTo(0,25,0);
+            robot.TweetyBird.straightLineTo(0,3,0);
+            robot.TweetyBird.straightLineTo(-45,1,0);
+            goodWait();
             OpenClaw();
         }
     }
-    private void blueFrontRight()
-    {
+    private void blueFrontRight() throws InterruptedException {
         telemetry.addLine("blueFrontRight");
         telemetry.update();
+        CloseClaw();
+        hatPos = "right";
+        armMove(-.8, -200);
+        armHold();
+        robot.TweetyBird.speedLimit(.5);
+        robot.TweetyBird.straightLineTo(5,30,45);
+        goodWait();
+        pushUp();
+
+        robot.TweetyBird.straightLineTo(5,20,45);
+        goodWait();
+        robot.TweetyBird.straightLineTo(0,20,0);
+        goodWait();
+        robot.TweetyBird.straightLineTo(2,48,0);
+        robot.TweetyBird.straightLineTo(2,48,-95);
+        robot.TweetyBird.straightLineTo(-50,48,-95);
+        goodWait();
+        robot.TweetyBird.speedLimit(.9);
     }
-    private void blueFrontCenter()
-    {
+    private void blueFrontCenter() throws InterruptedException {
         telemetry.addLine("blueFrontCenter");
         telemetry.update();
+        CloseClaw();
+        hatPos = "center";
+        armMove(-.8,-200);
+        armHold();
+        robot.TweetyBird.speedLimit(0.5);
+        robot.TweetyBird.straightLineTo(0,30,0);
+        goodWait();
+        pushUp();
+        robot.TweetyBird.straightLineTo(0,48,0);
+        goodWait();
+        pushDown();
+        robot.TweetyBird.speedLimit(.9);
     }
     private void blueFrontLeft()
     {
         telemetry.addLine("blueFrontLeft");
         telemetry.update();
+        CloseClaw();
+        robot.TweetyBird.speedLimit(0.5);
+        armMove(-.8,-200);
+        armHold();
+        hatPos = "left";
+        robot.TweetyBird.straightLineTo(6,24,-45);
+        robot.TweetyBird.straightLineTo(-10,24,-45);
+        goodWait();
+        robot.TweetyBird.straightLineTo(0,14,-45);
+        robot.TweetyBird.straightLineTo(5,48,0);
+        robot.TweetyBird.straightLineTo(0,48,-92);
+        goodWait();
+        robot.TweetyBird.speedLimit(0.9);
+        robot.TweetyBird.straightLineTo(-90,45,-95);
+        OpenClaw();
     }
-    private void blueBackCenter()
-    {
+    private void blueBackCenter() throws InterruptedException {
         telemetry.addLine("blueBackCenter");
         telemetry.update();
+        CloseClaw();
+        hatPos = "center";
+        armMove(-.8,-200);
+        armHold();
+        robot.TweetyBird.speedLimit(.5);
+        robot.TweetyBird.straightLineTo(0,30,0);
+        goodWait();
+        pushUp();
     }
-    private void blueBackLeft()
-    {
+    private void blueBackLeft() throws InterruptedException {
         telemetry.addLine("blueBackLeft");
         telemetry.update();
+        hatPos = "left";
+        CloseClaw();
+        armMove(-.8,-200);
+        armHold();
+        robot.TweetyBird.speedLimit(.5);
+        robot.TweetyBird.straightLineTo(-5,30,-45);
+        goodWait();
+        pushUp();
+        robot.TweetyBird.straightLineTo(0,25,-45);
     }
     private void blueBackRight()
     {
         telemetry.addLine("blueBackRight");
         telemetry.update();
+        CloseClaw();
+        hatPos.equals("right");
+        robot.TweetyBird.speedLimit(0.5);
+        armMove(-.8,-200);
+        armHold();
+        robot.TweetyBird.straightLineTo(-6,24,45);
+        robot.TweetyBird.straightLineTo(9,24,50);
+        goodWait();
+        robot.TweetyBird.straightLineTo(0,15,45);
     }
     private void goodWait()
     {
