@@ -247,11 +247,11 @@ public class HardwareSetup
                 .setMaxSpeed(0.8)
                 .setStartSpeed(0.4)
                 .setSpeedModifier(0.04)
-                .setStopForceSpeed(0.3)
+                .setStopForceSpeed(0.25)
 
                 .setCorrectionOverpowerDistance(5)
                 .setDistanceBuffer(1)
-                .setRotationBuffer(8)
+                .setRotationBuffer(5)
 
                 .build();
     }
