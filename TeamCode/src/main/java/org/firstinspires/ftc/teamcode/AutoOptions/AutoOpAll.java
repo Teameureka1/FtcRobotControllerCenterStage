@@ -385,9 +385,11 @@ public class AutoOpAll extends LinearOpMode {
             y = (recognition.getTop() + recognition.getBottom()) / 2;
             if(x>320)//right prop randomization
             {
+                CloseClaw();
                 hatPos = "right";
                 armMove(-.8, -200);
                 armHold();
+                robot.TweetyBird.speedLimit(.5);
                 robot.TweetyBird.straightLineTo(5,30,45);
                 goodWait();
                 pushUp();
@@ -400,6 +402,7 @@ public class AutoOpAll extends LinearOpMode {
                 robot.TweetyBird.straightLineTo(2,48,-95);
                 robot.TweetyBird.straightLineTo(-50,48,-95);
                 goodWait();
+                robot.TweetyBird.speedLimit(.9);
                 robot.TweetyBird.straightLineTo(-90, 40,-95);
                  goodWait();
                 OpenClaw();
@@ -411,22 +414,27 @@ public class AutoOpAll extends LinearOpMode {
 
             } else if (x<=320)//center prop randomization
             {
+                CloseClaw();
                 hatPos = "center";
                 armMove(-.8,-200);
                 armHold();
+                robot.TweetyBird.speedLimit(0.5);
                 robot.TweetyBird.straightLineTo(0,30,0);
                 goodWait();
                 pushUp();
                 robot.TweetyBird.straightLineTo(0,48,0);
                goodWait();
                 pushDown();
+                robot.TweetyBird.speedLimit(.9);
                 robot.TweetyBird.straightLineTo(-90,45,-95);
-
+                OpenClaw();
 
             }
         }
         if(hatPos.equals(""))
         {
+            CloseClaw();
+            robot.TweetyBird.speedLimit(0.5);
             armMove(-.8,-200);
             armHold();
             hatPos = "left";
@@ -436,8 +444,10 @@ public class AutoOpAll extends LinearOpMode {
             robot.TweetyBird.straightLineTo(0,14,-45);
             robot.TweetyBird.straightLineTo(5,48,0);
             robot.TweetyBird.straightLineTo(0,48,-92);
-            robot.TweetyBird.straightLineTo(70,48,-95);
-
+            goodWait();
+            robot.TweetyBird.speedLimit(0.9);
+            robot.TweetyBird.straightLineTo(-90,45,-95);
+            OpenClaw();
 
 
 
@@ -456,9 +466,28 @@ public class AutoOpAll extends LinearOpMode {
             y = (recognition.getTop() + recognition.getBottom()) / 2;
             if(x>320)//center prop randomization
             {
-                hatPos = "center";
+                CloseClaw();
+                hatPos.equals("right");
+                robot.TweetyBird.speedLimit(0.5);
                 armMove(-.8,-200);
                 armHold();
+                robot.TweetyBird.straightLineTo(-6,24,45);
+                robot.TweetyBird.straightLineTo(9,24,50);
+                goodWait();
+                robot.TweetyBird.straightLineTo(0,15,45);
+                robot.TweetyBird.straightLineTo(0,1,0);
+                goodWait();
+                robot.TweetyBird.straightLineTo(-50,2,0);
+                OpenClaw();
+
+
+            } else if (x<=320)//left prop randomization
+            {
+                CloseClaw();
+                hatPos = "center";
+                //armMove(-.8,-200);
+                //armHold();
+                robot.TweetyBird.speedLimit(.5);
                 robot.TweetyBird.straightLineTo(0,30,0);
                 goodWait();
                 pushUp();
@@ -466,24 +495,22 @@ public class AutoOpAll extends LinearOpMode {
                 goodWait();
                 pushDown();
 
-            } else if (x<=320)//left prop randomization
-            {
-                armMove(-.8,-200);
-                armHold();
-                hatPos = "left";
-                robot.TweetyBird.straightLineTo(0,30,-45);
-               goodWait();
-                pushUp();
+                OpenClaw();
             }
         }
         if(hatPos.equals(""))//right
         {
-            hatPos.equals("right");
-            armMove(-.8, -200);
+            CloseClaw();
+            armMove(-.8,-200);
             armHold();
-            robot.TweetyBird.straightLineTo(5,30,45);
-           goodWait();
+            robot.TweetyBird.speedLimit(.5);
+            hatPos = "left";
+            robot.TweetyBird.straightLineTo(0,30,-45);
+            goodWait();
             pushUp();
+
+
+            OpenClaw();
         }
     }
     private void blueFrontRight()
