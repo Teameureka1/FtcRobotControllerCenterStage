@@ -389,29 +389,19 @@ public class AutoOpAll extends LinearOpMode {
                 armMove(-.8, -200);
                 armHold();
                 robot.TweetyBird.straightLineTo(5,30,45);
-                robot.TweetyBird.waitWhileBusy();
-                robot.TweetyBird.waitWhileBusy();
-                robot.TweetyBird.waitWhileBusy();
+                goodWait();
                 pushUp();
 
                 robot.TweetyBird.straightLineTo(5,20,45);
-                robot.TweetyBird.waitWhileBusy();
-                robot.TweetyBird.waitWhileBusy();
-                robot.TweetyBird.waitWhileBusy();
+                goodWait();
                 robot.TweetyBird.straightLineTo(0,20,0);
-                robot.TweetyBird.waitWhileBusy();
-                robot.TweetyBird.waitWhileBusy();
-                robot.TweetyBird.waitWhileBusy();
+                goodWait();
                 robot.TweetyBird.straightLineTo(2,48,0);
                 robot.TweetyBird.straightLineTo(2,48,-95);
                 robot.TweetyBird.straightLineTo(-50,48,-95);
-                robot.TweetyBird.waitWhileBusy();
-                robot.TweetyBird.waitWhileBusy();
-                robot.TweetyBird.waitWhileBusy();
+                goodWait();
                 robot.TweetyBird.straightLineTo(-90, 40,-95);
-                robot.TweetyBird.waitWhileBusy();
-                robot.TweetyBird.waitWhileBusy();
-                robot.TweetyBird.waitWhileBusy();
+                 goodWait();
                 OpenClaw();
 
 
@@ -425,12 +415,13 @@ public class AutoOpAll extends LinearOpMode {
                 armMove(-.8,-200);
                 armHold();
                 robot.TweetyBird.straightLineTo(0,30,0);
-                robot.TweetyBird.waitWhileBusy();
-                robot.TweetyBird.waitWhileBusy();
-                robot.TweetyBird.waitWhileBusy();
+                goodWait();
                 pushUp();
                 robot.TweetyBird.straightLineTo(0,48,0);
-                robot.TweetyBird.straightLineTo(-90,48,-95);
+               goodWait();
+                pushDown();
+                robot.TweetyBird.straightLineTo(-90,45,-95);
+
 
             }
         }
@@ -439,17 +430,17 @@ public class AutoOpAll extends LinearOpMode {
             armMove(-.8,-200);
             armHold();
             hatPos = "left";
-            robot.TweetyBird.straightLineTo(0,30,-45);
-            robot.TweetyBird.waitWhileBusy();
-            robot.TweetyBird.waitWhileBusy();
-            robot.TweetyBird.waitWhileBusy();
-            pushUp();
-            robot.TweetyBird.straightLineTo(0,25,0);
-            robot.TweetyBird.waitWhileBusy();
-            robot.TweetyBird.waitWhileBusy();
-            robot.TweetyBird.waitWhileBusy();
-            robot.TweetyBird.straightLineTo(0,48,-90);
-            robot.TweetyBird.straightLineTo(-70,48,-95);
+           robot.TweetyBird.straightLineTo(6,24,-45);
+           robot.TweetyBird.straightLineTo(-10,24,-45);
+           goodWait();
+            robot.TweetyBird.straightLineTo(0,14,-45);
+            robot.TweetyBird.straightLineTo(5,48,0);
+            robot.TweetyBird.straightLineTo(0,48,-92);
+            robot.TweetyBird.straightLineTo(70,48,-95);
+
+
+
+
         }
     }
     private void blueStraightParkBack() throws InterruptedException//delivers purple then parks
@@ -469,10 +460,11 @@ public class AutoOpAll extends LinearOpMode {
                 armMove(-.8,-200);
                 armHold();
                 robot.TweetyBird.straightLineTo(0,30,0);
-                robot.TweetyBird.waitWhileBusy();
-                robot.TweetyBird.waitWhileBusy();
-                robot.TweetyBird.waitWhileBusy();
+                goodWait();
                 pushUp();
+                robot.TweetyBird.straightLineTo(0,48,0);
+                goodWait();
+                pushDown();
 
             } else if (x<=320)//left prop randomization
             {
@@ -480,9 +472,7 @@ public class AutoOpAll extends LinearOpMode {
                 armHold();
                 hatPos = "left";
                 robot.TweetyBird.straightLineTo(0,30,-45);
-                robot.TweetyBird.waitWhileBusy();
-                robot.TweetyBird.waitWhileBusy();
-                robot.TweetyBird.waitWhileBusy();
+               goodWait();
                 pushUp();
             }
         }
@@ -492,9 +482,7 @@ public class AutoOpAll extends LinearOpMode {
             armMove(-.8, -200);
             armHold();
             robot.TweetyBird.straightLineTo(5,30,45);
-            robot.TweetyBird.waitWhileBusy();
-            robot.TweetyBird.waitWhileBusy();
-            robot.TweetyBird.waitWhileBusy();
+           goodWait();
             pushUp();
         }
     }
@@ -528,6 +516,13 @@ public class AutoOpAll extends LinearOpMode {
         telemetry.addLine("blueBackRight");
         telemetry.update();
     }
+    private void goodWait()
+    {
+        robot.TweetyBird.waitWhileBusy();
+        robot.TweetyBird.waitWhileBusy();
+        robot.TweetyBird.waitWhileBusy();
+    }
+
     //endregion blue methods
     //region red methods
     private void redStraightParkFront()
