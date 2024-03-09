@@ -112,7 +112,7 @@ public class AutoOpAll extends LinearOpMode {
     AutonomousTextOption    startPos        = new AutonomousTextOption("Start Position", "front", new String[] {"front", "back"});
     AutonomousTextOption    park    = new AutonomousTextOption("Go straight to park? ", "normal", new String[] {"straight park", "normal"});
     AutonomousBooleanOption cycle   = new AutonomousBooleanOption("Cycle Pixels ", false);
-    AutonomousTextOption    endPos  = new AutonomousTextOption("End Position", "Right", new String[] {"right","left"});
+    AutonomousTextOption    endPos  = new AutonomousTextOption("End Position", "right", new String[] {"right","left"});
     AutonomousIntOption     waitStart       = new AutonomousIntOption("Wait at Start", 0, 0, 20);
     //This is the order of our options and setting them all to their preset value.
     AutonomousOption[] autoOptions       = {allianceColor, startPos, park, cycle, endPos, waitStart};
@@ -403,9 +403,7 @@ public class AutoOpAll extends LinearOpMode {
                 robot.TweetyBird.straightLineTo(-50,48,-95);
                 goodWait();
                 robot.TweetyBird.speedLimit(.9);
-                robot.TweetyBird.straightLineTo(-90, 40,-95);
-                 goodWait();
-                OpenClaw();
+                movePark();
 
 
                 //purple pixel is delivered
@@ -426,9 +424,8 @@ public class AutoOpAll extends LinearOpMode {
                goodWait();
                 pushDown();
                 robot.TweetyBird.speedLimit(.9);
-                robot.TweetyBird.straightLineTo(-90,45,-95);
-                OpenClaw();
-
+                robot.TweetyBird.straightLineTo(-70,45,-95);
+                movePark();
             }
         }
         if(hatPos.equals(""))
@@ -446,10 +443,8 @@ public class AutoOpAll extends LinearOpMode {
             robot.TweetyBird.straightLineTo(0,48,-92);
             goodWait();
             robot.TweetyBird.speedLimit(0.9);
-            robot.TweetyBird.straightLineTo(-90,45,-95);
-            OpenClaw();
-
-
+            robot.TweetyBird.straightLineTo(-70,45,-95);
+            movePark();
 
         }
     }
@@ -623,15 +618,133 @@ public class AutoOpAll extends LinearOpMode {
 
     //endregion blue methods
     //region red methods
-    private void redStraightParkFront()
-    {
+    private void redStraightParkFront() throws InterruptedException {
+
         telemetry.addLine("redStraightParkFront");
         telemetry.update();
+        List<Recognition> currentRecognitions = tfod.getRecognitions();
+        telemetry.addData("# Objects Detected", currentRecognitions.size());
+
+        boolean detectedProp = false;
+
+        // Step through the list of recognitions and display info for each one.
+        for (Recognition recognition : currentRecognitions)
+        {
+            detectedProp = true;
+
+            x = (recognition.getLeft() + recognition.getRight()) / 2 ;
+            y = (recognition.getTop()  + recognition.getBottom()) / 2 ;
+
+            telemetry.addLine(String.valueOf(recognition.getConfidence()));
+            telemetry.addData(""," ");
+            telemetry.addData("Image", "%s (%.0f %% Conf.)", recognition.getLabel(), recognition.getConfidence() * 100);
+            telemetry.addData("- Position", "%.0f / %.0f", x, y);
+            telemetry.addData("- Size", "%.0f x %.0f", recognition.getWidth(), recognition.getHeight());
+            telemetry.update();
+
+            if(x>320)// assuming the robot is on the blue front position
+            {
+                hatPos = "right";
+                telemetry.addLine("right");
+                telemetry.update();
+                CloseClaw();
+                armMove(-.8,-200);
+                armHold();
+                robot.TweetyBird.speedLimit(.5);
+                robot.TweetyBird.straightLineTo(-5,25,0);
+                robot.TweetyBird.straightLineTo(5,25,45);
+                goodWait();
+                robot.TweetyBird.straightLineTo(-2,16,0);
+                robot.TweetyBird.straightLineTo(-2,48,0);
+                goodWait();
+                robot.TweetyBird.speedLimit(.9);
+                robot.TweetyBird.straightLineTo(-2,48,90);
+                robot.TweetyBird.straightLineTo(70,48,90);
+                movePark();
+
+            }
+            else if(x <= 320)
+            {
+                CloseClaw();
+                hatPos = "center";
+                telemetry.addLine("center");
+                telemetry.update();
+                robot.TweetyBird.speedLimit(.5);
+                robot.TweetyBird.straightLineTo(0,35,0);
+                goodWait();
+                pushUp();
+                robot.TweetyBird.straightLineTo(0,48,90);
+                robot.TweetyBird.speedLimit(.9);
+                robot.TweetyBird.straightLineTo(70,48,90);
+                movePark();
+            }
+
+        }
+        if(hatPos.equals(""))
+        {
+            telemetry.addLine("left");
+            telemetry.update();
+            CloseClaw();
+            armMove(-.8,-200);
+            armHold();
+            robot.TweetyBird.speedLimit(.5);
+            robot.TweetyBird.straightLineTo(-5,30,45);
+            robot.TweetyBird.straightLineTo(0,25,45);
+            goodWait();
+        }
     }
     private void redStraightParkBack()
     {
         telemetry.addLine("redStraightParkBack");
         telemetry.update();
+        List<Recognition> currentRecognitions = tfod.getRecognitions();
+        telemetry.addData("# Objects Detected", currentRecognitions.size());
+
+        boolean detectedProp = false;
+
+        // Step through the list of recognitions and display info for each one.
+        for (Recognition recognition : currentRecognitions)
+        {
+            detectedProp = true;
+
+            x = (recognition.getLeft() + recognition.getRight()) / 2 ;
+            y = (recognition.getTop()  + recognition.getBottom()) / 2 ;
+
+            telemetry.addLine(String.valueOf(recognition.getConfidence()));
+            telemetry.addData(""," ");
+            telemetry.addData("Image", "%s (%.0f %% Conf.)", recognition.getLabel(), recognition.getConfidence() * 100);
+            telemetry.addData("- Position", "%.0f / %.0f", x, y);
+            telemetry.addData("- Size", "%.0f x %.0f", recognition.getWidth(), recognition.getHeight());
+            telemetry.update();
+
+            if(x <= 320)// assuming the robot is on the blue front position
+            {
+                hatPos = "center";
+                telemetry.addLine("center");
+                telemetry.update();
+
+            }
+            else if(x > 320)
+            {
+                hatPos = "right";
+                telemetry.addLine("right");
+                telemetry.update();
+                CloseClaw();
+                armMove(-.8,-200);
+                armHold();
+                robot.TweetyBird.speedLimit(.5);
+                robot.TweetyBird.straightLineTo(-5,25,0);
+                robot.TweetyBird.straightLineTo(5,25,45);
+                goodWait();
+
+            }
+
+        }
+        if(hatPos.equals(""))
+        {
+            telemetry.addLine("left");
+            telemetry.update();
+        }
     }
     private void redFrontRight()
     {
@@ -664,6 +777,58 @@ public class AutoOpAll extends LinearOpMode {
         telemetry.update();
     }
     //endregion
+    private void movePark()
+    {
+        if(endPos.getValue().equals("right"))
+        {
+            robot.TweetyBird.straightLineTo(90,1,90);
+            goodWait();
+            OpenClaw();
+        } else if (endPos.getValue().equals("left"))
+        {
+            robot.TweetyBird.straightLineTo(90,48,90);
+            goodWait();
+            OpenClaw();
+        }
+    }
+
+    //for()
+    //{
+    //  if()
+    //  pos1
+    //  else
+    //  pos2
+    //}
+    //if
+    //pos3
+
+    // P1(123)    P2(456)
+    //
+    // P3(654)    P4(321)
+    //
+    private void blueFP1() throws InterruptedException
+    {
+        CloseClaw();
+        hatPos = "right";
+        armMove(-.8, -200);
+        armHold();
+        robot.TweetyBird.speedLimit(.5);
+        robot.TweetyBird.straightLineTo(5,30,45);
+        goodWait();
+        pushUp();
+
+        robot.TweetyBird.straightLineTo(5,20,45);
+        goodWait();
+        robot.TweetyBird.straightLineTo(0,20,0);
+        goodWait();
+        robot.TweetyBird.straightLineTo(2,48,0);
+        robot.TweetyBird.straightLineTo(2,48,-95);
+        robot.TweetyBird.straightLineTo(-50,48,-95);
+        goodWait();
+        robot.TweetyBird.speedLimit(.9);
+        movePark();
+    }
+
 
     //region robot methods
     public void extendArm(double power)
