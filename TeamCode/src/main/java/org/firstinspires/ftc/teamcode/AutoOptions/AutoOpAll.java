@@ -385,67 +385,18 @@ public class AutoOpAll extends LinearOpMode {
             y = (recognition.getTop() + recognition.getBottom()) / 2;
             if(x>320)//right prop randomization
             {
-                CloseClaw();
-                hatPos = "right";
-                armMove(-.8, -200);
-                armHold();
-                robot.TweetyBird.speedLimit(.5);
-                robot.TweetyBird.straightLineTo(5,30,45);
-                goodWait();
-                pushUp();
-
-                robot.TweetyBird.straightLineTo(5,20,45);
-                goodWait();
-                robot.TweetyBird.straightLineTo(0,20,0);
-                goodWait();
-                robot.TweetyBird.straightLineTo(2,48,0);
-                robot.TweetyBird.straightLineTo(2,48,-95);
-                robot.TweetyBird.straightLineTo(-50,48,-95);
-                goodWait();
-                robot.TweetyBird.speedLimit(.9);
-                movePark();
-
-
+                RP1();
                 //purple pixel is delivered
                // robot.TweetyBird.straightLineTo(5,40,45);
 
-
             } else if (x<=320)//center prop randomization
             {
-                CloseClaw();
-                hatPos = "center";
-                armMove(-.8,-200);
-                armHold();
-                robot.TweetyBird.speedLimit(0.5);
-                robot.TweetyBird.straightLineTo(0,30,0);
-                goodWait();
-                pushUp();
-                robot.TweetyBird.straightLineTo(0,48,0);
-               goodWait();
-                pushDown();
-                robot.TweetyBird.speedLimit(.9);
-                robot.TweetyBird.straightLineTo(-70,45,-95);
-                movePark();
+                RPCenter();
             }
         }
         if(hatPos.equals(""))
         {
-            CloseClaw();
-            robot.TweetyBird.speedLimit(0.5);
-            armMove(-.8,-200);
-            armHold();
-            hatPos = "left";
-           robot.TweetyBird.straightLineTo(6,24,-45);
-           robot.TweetyBird.straightLineTo(-10,24,-45);
-           goodWait();
-            robot.TweetyBird.straightLineTo(0,14,-45);
-            robot.TweetyBird.straightLineTo(5,48,0);
-            robot.TweetyBird.straightLineTo(0,48,-92);
-            goodWait();
-            robot.TweetyBird.speedLimit(0.9);
-            robot.TweetyBird.straightLineTo(-70,45,-95);
-            movePark();
-
+            RP3();
         }
     }
     private void blueStraightParkBack() throws InterruptedException//delivers purple then parks
@@ -644,53 +595,18 @@ public class AutoOpAll extends LinearOpMode {
 
             if(x>320)// assuming the robot is on the blue front position
             {
-                hatPos = "right";
-                telemetry.addLine("right");
-                telemetry.update();
-                CloseClaw();
-                armMove(-.8,-200);
-                armHold();
-                robot.TweetyBird.speedLimit(.5);
-                robot.TweetyBird.straightLineTo(-5,25,0);
-                robot.TweetyBird.straightLineTo(5,25,45);
-                goodWait();
-                robot.TweetyBird.straightLineTo(-2,16,0);
-                robot.TweetyBird.straightLineTo(-2,48,0);
-                goodWait();
-                robot.TweetyBird.speedLimit(.9);
-                robot.TweetyBird.straightLineTo(-2,48,90);
-                robot.TweetyBird.straightLineTo(70,48,90);
-                movePark();
+                LP1();
 
             }
             else if(x <= 320)
             {
-                CloseClaw();
-                hatPos = "center";
-                telemetry.addLine("center");
-                telemetry.update();
-                robot.TweetyBird.speedLimit(.5);
-                robot.TweetyBird.straightLineTo(0,35,0);
-                goodWait();
-                pushUp();
-                robot.TweetyBird.straightLineTo(0,48,90);
-                robot.TweetyBird.speedLimit(.9);
-                robot.TweetyBird.straightLineTo(70,48,90);
-                movePark();
+                LP2();
             }
 
         }
         if(hatPos.equals(""))
         {
-            telemetry.addLine("left");
-            telemetry.update();
-            CloseClaw();
-            armMove(-.8,-200);
-            armHold();
-            robot.TweetyBird.speedLimit(.5);
-            robot.TweetyBird.straightLineTo(-5,30,45);
-            robot.TweetyBird.straightLineTo(0,25,45);
-            goodWait();
+           LP3();
         }
     }
     private void redStraightParkBack()
@@ -805,8 +721,10 @@ public class AutoOpAll extends LinearOpMode {
     // P1(123)    P2(456)
     //
     // P3(654)    P4(321)
-    //
-    private void blueFP1() throws InterruptedException
+    //------------------
+    //  _____________
+    //_____________
+    private void RP1() throws InterruptedException//p3,p2//right
     {
         CloseClaw();
         hatPos = "right";
@@ -828,8 +746,89 @@ public class AutoOpAll extends LinearOpMode {
         robot.TweetyBird.speedLimit(.9);
         movePark();
     }
+    private void RPCenter() throws InterruptedException//p3,p2//center
+    {
+        CloseClaw();
+        hatPos = "center";
+        armMove(-.8,-200);
+        armHold();
+        robot.TweetyBird.speedLimit(0.5);
+        robot.TweetyBird.straightLineTo(0,30,0);
+        goodWait();
+        pushUp();
+        robot.TweetyBird.straightLineTo(0,48,0);
+        goodWait();
+        pushDown();
+        robot.TweetyBird.speedLimit(.9);
+        robot.TweetyBird.straightLineTo(-70,45,-95);
+        movePark();
+    }
+    private void RP3() throws InterruptedException//p3,p2//left
+    {
+        CloseClaw();
+        robot.TweetyBird.speedLimit(0.5);
+        armMove(-.8,-200);
+        armHold();
+        hatPos = "left";
+        robot.TweetyBird.straightLineTo(6,24,-45);
+        robot.TweetyBird.straightLineTo(-10,24,-45);
+        goodWait();
+        robot.TweetyBird.straightLineTo(0,14,-45);
+        robot.TweetyBird.straightLineTo(5,48,0);
+        robot.TweetyBird.straightLineTo(0,48,-92);
+        goodWait();
+        robot.TweetyBird.speedLimit(0.9);
+        robot.TweetyBird.straightLineTo(-70,45,-95);
+        movePark();
+    }
 
-
+    private void LP1() throws InterruptedException//p1,p4////right
+    {
+        hatPos = "right";
+        telemetry.addLine("right");
+        telemetry.update();
+        CloseClaw();
+        armMove(-.8,-200);
+        armHold();
+        robot.TweetyBird.speedLimit(.5);
+        robot.TweetyBird.straightLineTo(-5,25,0);
+        robot.TweetyBird.straightLineTo(5,25,45);
+        goodWait();
+        robot.TweetyBird.straightLineTo(-2,16,0);
+        robot.TweetyBird.straightLineTo(-2,48,0);
+        goodWait();
+        robot.TweetyBird.speedLimit(.9);
+        robot.TweetyBird.straightLineTo(-2,48,90);
+        robot.TweetyBird.straightLineTo(70,48,90);
+        movePark();
+    }
+    private void LP2() throws InterruptedException//p1,p4//center
+    {
+        CloseClaw();
+        hatPos = "center";
+        telemetry.addLine("center");
+        telemetry.update();
+        robot.TweetyBird.speedLimit(.5);
+        robot.TweetyBird.straightLineTo(0,35,0);
+        goodWait();
+        pushUp();
+        robot.TweetyBird.straightLineTo(0,48,90);
+        robot.TweetyBird.speedLimit(.9);
+        robot.TweetyBird.straightLineTo(70,48,90);
+        movePark();
+    }
+    private void LP3() throws InterruptedException//p1,p4//left
+    {
+        telemetry.addLine("left");
+        telemetry.update();
+        CloseClaw();
+        armMove(-.8,-200);
+        armHold();
+        robot.TweetyBird.speedLimit(.5);
+        robot.TweetyBird.straightLineTo(-5,30,45);
+        robot.TweetyBird.straightLineTo(0,25,45);
+        goodWait();
+    }
     //region robot methods
     public void extendArm(double power)
     {
