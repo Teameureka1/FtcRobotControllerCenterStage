@@ -386,17 +386,28 @@ public class AutoOpAll extends LinearOpMode {
             if(x>320)//right prop randomization
             {
                 RP1();
+                robot.TweetyBird.straightLineTo(-50,48,-95);
+                goodWait();
+                robot.TweetyBird.speedLimit(.9);
+                moveParkF();
                 //purple pixel is delivered
                // robot.TweetyBird.straightLineTo(5,40,45);
 
             } else if (x<=320)//center prop randomization
             {
                 RPCenter();
+                pushDown();
+                robot.TweetyBird.speedLimit(.9);
+                robot.TweetyBird.straightLineTo(-70,45,-95);
+                moveParkF();
             }
         }
         if(hatPos.equals(""))
         {
             RP3();
+            robot.TweetyBird.speedLimit(0.9);
+            robot.TweetyBird.straightLineTo(-70,45,-95);
+            moveParkF();
         }
     }
     private void blueStraightParkBack() throws InterruptedException//delivers purple then parks
@@ -693,10 +704,16 @@ public class AutoOpAll extends LinearOpMode {
         telemetry.update();
     }
     //endregion
-    private void movePark()
+    private void moveParkF()
     {
+        if(allianceColor.getValue().equals("red"))
+        {
+            robot.TweetyBird.flipInput(true);
+        }
+
         if(endPos.getValue().equals("right"))
         {
+
             robot.TweetyBird.straightLineTo(90,1,90);
             goodWait();
             OpenClaw();
@@ -706,6 +723,12 @@ public class AutoOpAll extends LinearOpMode {
             goodWait();
             OpenClaw();
         }
+        robot.TweetyBird.flipInput(false);
+    }
+
+    private void moveparkB()
+    {
+
     }
 
     //for()
@@ -724,6 +747,15 @@ public class AutoOpAll extends LinearOpMode {
     //------------------
     //  _____________
     //_____________
+    //L/R P #
+    //Front/Back Yellow
+
+    //ex: RF
+    //  Lp#()
+    //  Front Yellow Pixel(reverse)
+
+    //0,20,0
+
     private void RP1() throws InterruptedException//p3,p2//right
     {
         CloseClaw();
@@ -739,12 +771,10 @@ public class AutoOpAll extends LinearOpMode {
         goodWait();
         robot.TweetyBird.straightLineTo(0,20,0);
         goodWait();
-        robot.TweetyBird.straightLineTo(2,48,0);
-        robot.TweetyBird.straightLineTo(2,48,-95);
-        robot.TweetyBird.straightLineTo(-50,48,-95);
-        goodWait();
-        robot.TweetyBird.speedLimit(.9);
-        movePark();
+        if(startPos.getValue().equals("front")) {
+            robot.TweetyBird.straightLineTo(2, 48, 0);
+            robot.TweetyBird.straightLineTo(0, 48, -95);
+        }
     }
     private void RPCenter() throws InterruptedException//p3,p2//center
     {
@@ -758,10 +788,7 @@ public class AutoOpAll extends LinearOpMode {
         pushUp();
         robot.TweetyBird.straightLineTo(0,48,0);
         goodWait();
-        pushDown();
-        robot.TweetyBird.speedLimit(.9);
-        robot.TweetyBird.straightLineTo(-70,45,-95);
-        movePark();
+
     }
     private void RP3() throws InterruptedException//p3,p2//left
     {
@@ -774,14 +801,20 @@ public class AutoOpAll extends LinearOpMode {
         robot.TweetyBird.straightLineTo(-10,24,-45);
         goodWait();
         robot.TweetyBird.straightLineTo(0,14,-45);
-        robot.TweetyBird.straightLineTo(5,48,0);
-        robot.TweetyBird.straightLineTo(0,48,-92);
-        goodWait();
-        robot.TweetyBird.speedLimit(0.9);
-        robot.TweetyBird.straightLineTo(-70,45,-95);
-        movePark();
+        robot.TweetyBird.straightLineTo(5,20,0);
+        if(startPos.getValue().equals("front")) {
+            robot.TweetyBird.straightLineTo(0, 48, -95);
+            goodWait();
+        }
+
     }
 
+    private void LP2() throws InterruptedException//p1,p4//center
+    {
+        robot.TweetyBird.flipInput(true);
+        RPCenter();
+        robot.TweetyBird.flipInput(false);
+    }
     private void LP1() throws InterruptedException//p1,p4////right
     {
         hatPos = "right";
@@ -800,23 +833,9 @@ public class AutoOpAll extends LinearOpMode {
         robot.TweetyBird.speedLimit(.9);
         robot.TweetyBird.straightLineTo(-2,48,90);
         robot.TweetyBird.straightLineTo(70,48,90);
-        movePark();
+        moveParkF();
     }
-    private void LP2() throws InterruptedException//p1,p4//center
-    {
-        CloseClaw();
-        hatPos = "center";
-        telemetry.addLine("center");
-        telemetry.update();
-        robot.TweetyBird.speedLimit(.5);
-        robot.TweetyBird.straightLineTo(0,35,0);
-        goodWait();
-        pushUp();
-        robot.TweetyBird.straightLineTo(0,48,90);
-        robot.TweetyBird.speedLimit(.9);
-        robot.TweetyBird.straightLineTo(70,48,90);
-        movePark();
-    }
+
     private void LP3() throws InterruptedException//p1,p4//left
     {
         telemetry.addLine("left");
