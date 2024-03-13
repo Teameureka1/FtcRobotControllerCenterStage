@@ -61,7 +61,7 @@ public class MainAuto extends LinearOpMode {
         // Defining telemetry options
         String[] startPositionOptions = { "Blue Long", "Blue Short", "Red Long", "Red Short" };
         String[] autoStyleOptions = { "Cycle", "Backdrop", "Backstage", "Only-Spike" };
-        String[] parkOptions = { "Font", "Back" };
+        String[] parkOptions = { "Corner", "Center" };
 
         // Asking
         String startPosSelect = startPositionOptions[0];
@@ -122,6 +122,9 @@ public class MainAuto extends LinearOpMode {
         // Wait for Start
         waitForStart();
 
+        // Starting Tweetybird
+        robot.TweetyBird.engage();
+
         /**
          * Prop Placement
          */
@@ -140,7 +143,7 @@ public class MainAuto extends LinearOpMode {
          * Main Action
          */
         // Flipping input if needed
-        if (currentColor == positions.BLUE) {
+        if (currentColor == positions.RED) {
             robot.TweetyBird.flipInput(true);
         }
 
