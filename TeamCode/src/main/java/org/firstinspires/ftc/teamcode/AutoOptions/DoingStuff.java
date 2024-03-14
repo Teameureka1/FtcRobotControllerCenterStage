@@ -36,9 +36,12 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.teamcode.HardwareSetup;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
+
+import java.util.List;
 
 /**
  * This 2020-2021 OpMode illustrates the basics of using the TensorFlow Object Detection API to
@@ -52,7 +55,7 @@ import org.firstinspires.ftc.vision.tfod.TfodProcessor;
  */
 @Autonomous(name = "MainAutoStuffyStuff", group = "Auto")
 //@Disabled
-public class doingStuff extends LinearOpMode {
+public class DoingStuff extends LinearOpMode {
 
     HardwareSetup robot = new HardwareSetup();
     //region stuff
@@ -103,7 +106,7 @@ public class doingStuff extends LinearOpMode {
 
     // For each auto option the parameters are essentially 1- the label to show on the driver station, 2 - starting value, 3 - the possible values
     AutonomousTextOption    allianceColor   = new AutonomousTextOption("Alliance Color", "blue", new String[] {"red", "blue"});
-    AutonomousTextOption    startPos        = new AutonomousTextOption("Start Position", "left", new String[] {"right", "left"});
+    AutonomousTextOption    startPos        = new AutonomousTextOption("Start Position", "front", new String[] {"front", "back"});
     AutonomousTextOption    park    = new AutonomousTextOption("Go straight to park? ", "normal", new String[] {"straight park", "normal"});
     AutonomousBooleanOption cycle   = new AutonomousBooleanOption("Cycle Pixels ", false);
     AutonomousTextOption    endPos  = new AutonomousTextOption("End Position", "right", new String[] {"right","left"});
@@ -231,7 +234,7 @@ public class doingStuff extends LinearOpMode {
         /***********************************************
          ************Autonomous Code Bellow***************
          ***********************************************/
-
+        AutoPositions();
 
         /***********************************************
          ************Autonomous Code Above***************
@@ -252,36 +255,100 @@ public class doingStuff extends LinearOpMode {
 
     //endregion blue methods
 
-    private void AutoPositions()
-    {
-        if(allianceColor.getValue().equals("red"))
-        {
-            robot.TweetyBird.flipInput(true);
-        }
+    private void AutoPositions() throws InterruptedException {
 
-        if(startPos.getValue().equals("right"))
-        {
+            robot.TweetyBird.speedLimit(.5);
+            telemetry.addLine("redStraightParkBack");
+            telemetry.update();
+            List<Recognition> currentRecognitions = tfod.getRecognitions();
+            telemetry.addData("# Objects Detected", currentRecognitions.size());
+
+            boolean detectedProp = false;
+
+            // Step through the list of recognitions and display info for each one.
+            for (Recognition recognition : currentRecognitions)
+            {
+                detectedProp = true;
+
+                x = (recognition.getLeft() + recognition.getRight()) / 2 ;
+                y = (recognition.getTop()  + recognition.getBottom()) / 2 ;
+
+                telemetry.addLine(String.valueOf(recognition.getConfidence()));
+                telemetry.addData(""," ");
+                telemetry.addData("Image", "%s (%.0f %% Conf.)", recognition.getLabel(), recognition.getConfidence() * 100);
+                telemetry.addData("- Position", "%.0f / %.0f", x, y);
+                telemetry.addData("- Size", "%.0f x %.0f", recognition.getWidth(), recognition.getHeight());
+                telemetry.update();
+
+                if(x <= 320)// assuming the robot is on the blue front position
+                {
+                    hatPos = "center";
+                    telemetry.addLine("center");
+                    telemetry.update();
+                    robot.TweetyBird.straightLineTo(2,40,179);
+                    goodWait();
+                    armMove(-.8, -200);
+                    armHold();
+                    pushUp();
+                }
+                else if(x > 320)
+                {
+                    hatPos = "right";
+                    robot.TweetyBird.straightLineTo(2, 30, -90);
+                    goodWait();
+                    robot.TweetyBird.straightLineTo(15,30,-90);
+                    goodWait();
+                    pushUp();
+                }
+
+            }
+            if(hatPos.equals(""))
+            {
+                telemetry.addLine("left");
+                telemetry.update();
+                robot.TweetyBird.straightLineTo(2, 30, 90);
+                goodWait();
+                robot.TweetyBird.straightLineTo(-2,30,90);
+                goodWait();
+                pushUp();
+            }
+            if(allianceColor.getValue().equals("red"))
+            {
+                robot.TweetyBird.flipInput(true);
+            }
             //deliver purple
+            if(startPos.getValue().equals("front"))
+            {
+
+            }
+            else
+            {
+
+            }
             //Check to see if red or blue
             //if red unFlip input
             //if blue go from front, if red go from back
             //deliver the yellow pixel
             //cycle
         }
-        else//left
-        {
-            //deliver purple
-            //Check to see if red or blue
-            //if red unFlip input
-            //if blue go from back, if red go from front
-            //deliver the yellow pixel
-            //cycle
-        }
+
+    private void FDeliver()
+    {
+
     }
 
+    private void BackDeliver()
+    {
 
+    }
 
-
+    private void redA()
+    {
+        if(allianceColor.getValue().equals("red"))
+        {
+            robot.TweetyBird.flipInput(true);
+        }
+    }
 
 
 
