@@ -290,15 +290,18 @@ public class DoingStuff extends LinearOpMode {
                     armMove(-.8, -200);
                     armHold();
                     pushUp();
+                    robot.TweetyBird.straightLineTo(0,40,0);
                 }
                 else if(x > 320)
                 {
                     hatPos = "right";
                     robot.TweetyBird.straightLineTo(2, 30, -90);
                     goodWait();
-                    robot.TweetyBird.straightLineTo(15,30,-90);
+                    robot.TweetyBird.straightLineTo(13,30,-90);
                     goodWait();
                     pushUp();
+                    robot.TweetyBird.straightLineTo(2,30,-90);
+                    robot.TweetyBird.straightLineTo(0,40,0);
                 }
 
             }
@@ -311,15 +314,26 @@ public class DoingStuff extends LinearOpMode {
                 robot.TweetyBird.straightLineTo(-2,30,90);
                 goodWait();
                 pushUp();
+                robot.TweetyBird.straightLineTo(0,30,90);
+                goodWait();
+                robot.TweetyBird.straightLineTo(0,40,0);
             }
-            if(allianceColor.getValue().equals("red"))
-            {
-                robot.TweetyBird.flipInput(true);
-            }
+
             //deliver purple
             if(startPos.getValue().equals("front"))
             {
+                
+                if(hatPos.equals("right"))
+                {
 
+                } else if (hatPos.equals("center"))
+                {
+
+                }
+                else
+                {
+
+                }
             }
             else
             {
