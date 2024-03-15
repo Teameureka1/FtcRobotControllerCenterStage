@@ -311,35 +311,71 @@ public class DoingStuff extends LinearOpMode {
                 telemetry.update();
                 robot.TweetyBird.straightLineTo(2, 30, 90);
                 goodWait();
-                robot.TweetyBird.straightLineTo(-2,30,90);
+                robot.TweetyBird.straightLineTo(-15,30,90);
                 goodWait();
                 pushUp();
                 robot.TweetyBird.straightLineTo(0,30,90);
                 goodWait();
                 robot.TweetyBird.straightLineTo(0,40,0);
             }
-
             //deliver purple
+            if(allianceColor.getValue().equals("red"))
+            {
+                robot.TweetyBird.flipInput(true);
+            }
             if(startPos.getValue().equals("front"))
             {
-                
-                if(hatPos.equals("right"))
+                robot.TweetyBird.speedLimit(.8);
+                robot.TweetyBird.straightLineTo(0,48,0);
+                goodWait();
+                robot.TweetyBird.straightLineTo(-70,48,-90);
+                if(allianceColor.getValue().equals("red"))//red yellow
                 {
+                    robot.TweetyBird.flipInput(false);
+                    if(hatPos.equals("right"))
+                    {
 
-                } else if (hatPos.equals("center"))
+                    } else if (hatPos.equals("center"))
+                    {
+
+                    }
+                    else
+                    {
+
+                    }
+                }
+                else//blue yellow
                 {
 
                 }
-                else
-                {
-
-                }
-            }
-            else
+            } else if (startPos.getValue().equals("back"))
             {
+                robot.TweetyBird.straightLineTo(0,30,-90);
+                goodWait();
+                robot.TweetyBird.straightLineTo(-30,30,-90);
+                if(allianceColor.getValue().equals("red"))//red yellow
+                {
+                    robot.TweetyBird.flipInput(false);
+                    if(hatPos.equals("right"))
+                    {
 
+                    } else if (hatPos.equals("center"))
+                    {
+
+                    }
+                    else
+                    {
+
+                    }
+                }
+                else//blue yellow
+                {
+
+                }
             }
-            //Check to see if red or blue
+
+
+        //Check to see if red or blue
             //if red unFlip input
             //if blue go from front, if red go from back
             //deliver the yellow pixel
