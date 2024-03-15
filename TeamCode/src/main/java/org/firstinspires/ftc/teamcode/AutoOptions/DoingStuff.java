@@ -285,7 +285,7 @@ public class DoingStuff extends LinearOpMode {
                     hatPos = "center";
                     telemetry.addLine("center");
                     telemetry.update();
-                    robot.TweetyBird.straightLineTo(2,40,179);
+                    robot.TweetyBird.straightLineTo(0,40,179);
                     goodWait();
                     armMove(-.8, -200);
                     armHold();
@@ -295,13 +295,19 @@ public class DoingStuff extends LinearOpMode {
                 else if(x > 320)
                 {
                     hatPos = "right";
-                    robot.TweetyBird.straightLineTo(2, 30, -90);
+                    robot.TweetyBird.straightLineTo(0, 30, 0);
                     goodWait();
-                    robot.TweetyBird.straightLineTo(13,30,-90);
+                    robot.TweetyBird.straightLineTo(0,26,-90);
+                    goodWait();
+                    robot.TweetyBird.straightLineTo(15,26,-90);
                     goodWait();
                     pushUp();
-                    robot.TweetyBird.straightLineTo(2,30,-90);
+                    robot.TweetyBird.straightLineTo(0,26,-90);
+                    goodWait();
+                    robot.TweetyBird.straightLineTo(0,40,-90);
+                    goodWait();
                     robot.TweetyBird.straightLineTo(0,40,0);
+
                 }
 
             }
@@ -309,12 +315,16 @@ public class DoingStuff extends LinearOpMode {
             {
                 telemetry.addLine("left");
                 telemetry.update();
-                robot.TweetyBird.straightLineTo(2, 30, 90);
+                robot.TweetyBird.straightLineTo(0, 30, 0);
                 goodWait();
-                robot.TweetyBird.straightLineTo(-15,30,90);
+                robot.TweetyBird.straightLineTo(0,29,90);
+                goodWait();
+                robot.TweetyBird.straightLineTo(-15,29,90);
                 goodWait();
                 pushUp();
-                robot.TweetyBird.straightLineTo(0,30,90);
+                robot.TweetyBird.straightLineTo(0,29,90);
+                goodWait();
+                robot.TweetyBird.straightLineTo(0,40,90);
                 goodWait();
                 robot.TweetyBird.straightLineTo(0,40,0);
             }
@@ -339,23 +349,45 @@ public class DoingStuff extends LinearOpMode {
                     {
 
                     }
-                    else
+                    else//left
                     {
 
                     }
                 }
                 else//blue yellow
                 {
+                    if(hatPos.equals("right"))
+                    {
 
+                    } else if (hatPos.equals("center"))
+                    {
+
+                    }
+                    else//left
+                    {
+
+                    }
                 }
             } else if (startPos.getValue().equals("back"))
             {
-                robot.TweetyBird.straightLineTo(0,30,-90);
-                goodWait();
-                robot.TweetyBird.straightLineTo(-30,30,-90);
+
                 if(allianceColor.getValue().equals("red"))//red yellow
                 {
                     robot.TweetyBird.flipInput(false);
+                    if(hatPos.equals("right"))
+                    {
+
+                    } else if (hatPos.equals("center"))
+                    {
+
+                    }
+                    else//left
+                    {
+
+                    }
+                }
+                else//blue yellow
+                {
                     if(hatPos.equals("right"))
                     {
 
@@ -368,10 +400,6 @@ public class DoingStuff extends LinearOpMode {
 
                     }
                 }
-                else//blue yellow
-                {
-
-                }
             }
 
 
@@ -381,26 +409,6 @@ public class DoingStuff extends LinearOpMode {
             //deliver the yellow pixel
             //cycle
         }
-
-    private void FDeliver()
-    {
-
-    }
-
-    private void BackDeliver()
-    {
-
-    }
-
-    private void redA()
-    {
-        if(allianceColor.getValue().equals("red"))
-        {
-            robot.TweetyBird.flipInput(true);
-        }
-    }
-
-
 
     //region robot methods
     public void extendArm(double power)
