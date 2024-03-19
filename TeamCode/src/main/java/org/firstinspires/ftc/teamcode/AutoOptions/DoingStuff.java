@@ -257,7 +257,8 @@ public class DoingStuff extends LinearOpMode {
 
     private void AutoPositions() throws InterruptedException {
 
-            robot.TweetyBird.speedLimit(.5);
+            robot.TweetyBird.speedLimit(.4);
+            CloseClaw();
             telemetry.addLine("redStraightParkBack");
             telemetry.update();
             List<Recognition> currentRecognitions = tfod.getRecognitions();
@@ -291,6 +292,7 @@ public class DoingStuff extends LinearOpMode {
                     armHold();
                     pushUp();
                     robot.TweetyBird.straightLineTo(0,40,0);
+                    goodWait();
                 }
                 else if(x > 320)
                 {
@@ -307,6 +309,7 @@ public class DoingStuff extends LinearOpMode {
                     robot.TweetyBird.straightLineTo(0,40,-90);
                     goodWait();
                     robot.TweetyBird.straightLineTo(0,40,0);
+                    goodWait();
 
                 }
 
@@ -315,7 +318,7 @@ public class DoingStuff extends LinearOpMode {
             {
                 telemetry.addLine("left");
                 telemetry.update();
-                robot.TweetyBird.straightLineTo(0, 30, 0);
+                robot.TweetyBird.straightLineTo(0, 29, 0);
                 goodWait();
                 robot.TweetyBird.straightLineTo(0,29,90);
                 goodWait();
@@ -324,15 +327,13 @@ public class DoingStuff extends LinearOpMode {
                 pushUp();
                 robot.TweetyBird.straightLineTo(0,29,90);
                 goodWait();
-                robot.TweetyBird.straightLineTo(0,40,90);
+                robot.TweetyBird.straightLineTo(0,40,0);
                 goodWait();
                 robot.TweetyBird.straightLineTo(0,40,0);
+                goodWait();
             }
-            //deliver purple
-            if(allianceColor.getValue().equals("red"))
-            {
-                robot.TweetyBird.flipInput(true);
-            }
+            //deliver purple ^
+
             if(startPos.getValue().equals("front"))
             {
                 robot.TweetyBird.speedLimit(.8);
@@ -341,7 +342,7 @@ public class DoingStuff extends LinearOpMode {
                 robot.TweetyBird.straightLineTo(-70,48,-90);
                 if(allianceColor.getValue().equals("red"))//red yellow
                 {
-                    robot.TweetyBird.flipInput(false);
+
                     if(hatPos.equals("right"))
                     {
 
@@ -371,19 +372,38 @@ public class DoingStuff extends LinearOpMode {
             } else if (startPos.getValue().equals("back"))
             {
 
-                if(allianceColor.getValue().equals("red"))//red yellow
+                if(allianceColor.getValue().equals("red"))//red yellow//(0,40,0)
                 {
-                    robot.TweetyBird.flipInput(false);
                     if(hatPos.equals("right"))
                     {
+                        robot.TweetyBird.straightLineTo(0,15,0);
+                        goodWait();
+                        robot.TweetyBird.straightLineTo(30,15,0);
+                        goodWait();
+                        armMove(-.8,-500);
+                        armHold();
+                        robot.TweetyBird.straightLineTo(30,20,90);
+                        goodWait();
+                        armMove(-.8,-500);
+                        robot.TweetyBird.straightLineTo(40,20,90);
+                        extendArm(.8);
+                        armMove(-3,100);
+                        OpenClaw();
+                        armMove(-.8,-200);
+                        armHold();
+                        extendArm(-.8);
+                        robot.TweetyBird.straightLineTo(30,20,90);
+                        robot.TweetyBird.straightLineTo(2,20,-90);
 
                     } else if (hatPos.equals("center"))
                     {
-
+                        robot.TweetyBird.straightLineTo(0,20,0);
+                        robot.TweetyBird.straightLineTo(30,20,0);
                     }
                     else//left
                     {
-
+                        robot.TweetyBird.straightLineTo(0,20,0);
+                        robot.TweetyBird.straightLineTo(30,20,0);
                     }
                 }
                 else//blue yellow
