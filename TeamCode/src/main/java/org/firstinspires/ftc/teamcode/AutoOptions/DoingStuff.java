@@ -34,6 +34,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcontroller.external.samples.RobotAutoDriveByTime_Linear;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
@@ -369,32 +370,74 @@ public class DoingStuff extends LinearOpMode {
                 robot.TweetyBird.straightLineTo(70,40,90);
                 armMove(-.8,-500);
                 armHold();
+                robot.TweetyBird.flipInput(false);
+
                 //in front of backdrop
-                if(allianceColor.getValue().equals("red"))//red yellow
+                if(allianceColor.getValue().equals("red"))//red in backstage(deliver yellow now)
                 {
 
                 }
-                else//blue yellow
+                else//blue in backstage(deliver yellow now)
                 {
 
                 }
 
             }
             robot.TweetyBird.flipInput(false);
-            if(startPos.getValue().equals("back"))//back
+            if(startPos.getValue().equals("back"))//allready delivered purple now deliver yellow
             {
                 if(allianceColor.getValue().equals("red"))
                 {
-
+                    if(hatPos.equals("right"))
+                    {
+                        robot.TweetyBird.straightLineTo(10,17,0);
+                        robot.TweetyBird.straightLineTo(30,17,90);
+                        goodWait();
+                        armMove(-.8,-700);
+                        armHold();
+                        extendArm(.5);
+                        robot.TweetyBird.straightLineTo(35,17,90);
+                    }
+                    else if (hatPos.equals("center"))
+                    {
+                        robot.TweetyBird.straightLineTo(30,25,90);
+                        goodWait();
+                        armMove(-.8,-700);
+                        armHold();
+                        extendArm(.5);
+                        robot.TweetyBird.straightLineTo(40,25,90);
+                    }
+                    else
+                    {
+                        robot.TweetyBird.straightLineTo(5,20,0);
+                        robot.TweetyBird.straightLineTo(35,33,90);
+                        goodWait();
+                        armMove(-.8,-700);
+                        armHold();
+                        extendArm(.5);
+                        robot.TweetyBird.straightLineTo(40,33,90);
+                    }
                 }
-                else
+                else//deliver blue yellow
                 {
+                    if(hatPos.equals("right"))
+                    {
 
+                    }
+                    else if (hatPos.equals("center"))
+                    {
+
+                    }
+                    else
+                    {
+
+                    }
                 }
             }
             //seperate by red and blue
             //seperate by right/left/center
             //deliver yellow
+
 
 
         }
