@@ -266,6 +266,10 @@ public class DoingStuff extends LinearOpMode {
 
             boolean detectedProp = false;
 
+            if(allianceColor.getValue().equals("blue"))
+            {
+                robot.TweetyBird.flipInput(true);
+            }
             // Step through the list of recognitions and display info for each one.
             for (Recognition recognition : currentRecognitions)
             {
@@ -281,35 +285,44 @@ public class DoingStuff extends LinearOpMode {
                 telemetry.addData("- Size", "%.0f x %.0f", recognition.getWidth(), recognition.getHeight());
                 telemetry.update();
 
+
                 if(x <= 320)// assuming the robot is on the blue front position
                 {
                     hatPos = "center";
                     telemetry.addLine("center");
                     telemetry.update();
-                    robot.TweetyBird.straightLineTo(0,40,179);
+                    robot.TweetyBird.straightLineTo(0,30,0);
                     goodWait();
                     armMove(-.8, -200);
                     armHold();
                     pushUp();
-                    robot.TweetyBird.straightLineTo(0,40,0);
+                    robot.TweetyBird.straightLineTo(0,25,0);
                     goodWait();
                 }
                 else if(x > 320)
                 {
                     hatPos = "right";
-                    robot.TweetyBird.straightLineTo(0, 30, 0);
-                    goodWait();
-                    robot.TweetyBird.straightLineTo(0,26,-90);
-                    goodWait();
-                    robot.TweetyBird.straightLineTo(15,26,-90);
-                    goodWait();
-                    pushUp();
-                    robot.TweetyBird.straightLineTo(0,26,-90);
-                    goodWait();
-                    robot.TweetyBird.straightLineTo(0,40,-90);
-                    goodWait();
-                    robot.TweetyBird.straightLineTo(0,40,0);
-                    goodWait();
+                    if(allianceColor.getValue().equals("red") && startPos.getValue().equals("back") || allianceColor.getValue().equals("blue") && startPos.getValue().equals("front"))
+                    {
+                        //no truss
+                        robot.TweetyBird.straightLineTo(10,19,0);
+                        goodWait();
+                        //release purple
+                    }
+                    else
+                    {
+                        //with truss
+                        robot.TweetyBird.straightLineTo(-5,25,90);
+                        goodWait();
+                        robot.TweetyBird.straightLineTo(10,25,90);
+                        //release purple
+                        goodWait();
+                        robot.TweetyBird.straightLineTo(-5,25,90);
+                        goodWait();
+                        robot.TweetyBird.straightLineTo(-5,25,0);
+                        goodWait();
+
+                    }
 
                 }
 
@@ -318,116 +331,72 @@ public class DoingStuff extends LinearOpMode {
             {
                 telemetry.addLine("left");
                 telemetry.update();
-                robot.TweetyBird.straightLineTo(0, 29, 0);
-                goodWait();
-                robot.TweetyBird.straightLineTo(0,29,90);
-                goodWait();
-                robot.TweetyBird.straightLineTo(-15,29,90);
-                goodWait();
-                pushUp();
-                robot.TweetyBird.straightLineTo(0,29,90);
-                goodWait();
-                robot.TweetyBird.straightLineTo(0,40,0);
-                goodWait();
-                robot.TweetyBird.straightLineTo(0,40,0);
-                goodWait();
-            }
-            //deliver purple ^
 
+                if(allianceColor.getValue().equals("red") && startPos.getValue().equals("back") || allianceColor.getValue().equals("blue") && startPos.getValue().equals("front"))
+                {
+                    //with truss
+                    robot.TweetyBird.straightLineTo(5,25,-90);
+                    goodWait();
+                    robot.TweetyBird.straightLineTo(-10,25,-90);
+                    goodWait();
+                    //release purple
+                    robot.TweetyBird.straightLineTo(5,25,-90);
+                    goodWait();
+                    robot.TweetyBird.straightLineTo(5,25,0);
+                    goodWait();
+                }
+                else
+                {
+                    //no truss
+                    robot.TweetyBird.straightLineTo(-10,19,0);
+                    goodWait();
+                    //release purple
+
+                }
+               // robot.TweetyBird.straightLineTo();
+            }
+
+
+            //sperate by front and back
             if(startPos.getValue().equals("front"))
             {
-                robot.TweetyBird.speedLimit(.8);
                 robot.TweetyBird.straightLineTo(0,48,0);
                 goodWait();
-                robot.TweetyBird.straightLineTo(-70,48,-90);
+                robot.TweetyBird.straightLineTo(0,48,90);
+                goodWait();
+                robot.TweetyBird.straightLineTo(70,48,95);
+                goodWait();
+                robot.TweetyBird.straightLineTo(70,40,90);
+                armMove(-.8,-500);
+                armHold();
+                //in front of backdrop
                 if(allianceColor.getValue().equals("red"))//red yellow
                 {
 
-                    if(hatPos.equals("right"))
-                    {
-
-                    } else if (hatPos.equals("center"))
-                    {
-
-                    }
-                    else//left
-                    {
-
-                    }
                 }
                 else//blue yellow
                 {
-                    if(hatPos.equals("right"))
-                    {
 
-                    } else if (hatPos.equals("center"))
-                    {
-
-                    }
-                    else//left
-                    {
-
-                    }
                 }
-            } else if (startPos.getValue().equals("back"))
+
+            }
+            robot.TweetyBird.flipInput(false);
+            if(startPos.getValue().equals("back"))//back
             {
-
-                if(allianceColor.getValue().equals("red"))//red yellow//(0,40,0)
+                if(allianceColor.getValue().equals("red"))
                 {
-                    if(hatPos.equals("right"))
-                    {
-                        robot.TweetyBird.straightLineTo(0,15,0);
-                        goodWait();
-                        robot.TweetyBird.straightLineTo(30,15,0);
-                        goodWait();
-                        armMove(-.8,-500);
-                        armHold();
-                        robot.TweetyBird.straightLineTo(30,20,90);
-                        goodWait();
-                        armMove(-.8,-500);
-                        robot.TweetyBird.straightLineTo(40,20,90);
-                        extendArm(.8);
-                        armMove(-3,100);
-                        OpenClaw();
-                        armMove(-.8,-200);
-                        armHold();
-                        extendArm(-.8);
-                        robot.TweetyBird.straightLineTo(30,20,90);
-                        robot.TweetyBird.straightLineTo(2,20,-90);
 
-                    } else if (hatPos.equals("center"))
-                    {
-                        robot.TweetyBird.straightLineTo(0,20,0);
-                        robot.TweetyBird.straightLineTo(30,20,0);
-                    }
-                    else//left
-                    {
-                        robot.TweetyBird.straightLineTo(0,20,0);
-                        robot.TweetyBird.straightLineTo(30,20,0);
-                    }
                 }
-                else//blue yellow
+                else
                 {
-                    if(hatPos.equals("right"))
-                    {
 
-                    } else if (hatPos.equals("center"))
-                    {
-
-                    }
-                    else
-                    {
-
-                    }
                 }
             }
+            //seperate by red and blue
+            //seperate by right/left/center
+            //deliver yellow
 
 
-        //Check to see if red or blue
-            //if red unFlip input
-            //if blue go from front, if red go from back
-            //deliver the yellow pixel
-            //cycle
         }
 
     //region robot methods
