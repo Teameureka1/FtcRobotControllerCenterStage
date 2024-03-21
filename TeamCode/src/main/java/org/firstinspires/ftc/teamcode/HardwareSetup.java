@@ -239,11 +239,11 @@ public class HardwareSetup
                 .flipRightEncoder(true)
                 .flipMiddleEncoder(false)
 
-                .setSideEncoderDistance(14)
-                .setMiddleEncoderOffset(5+(3.0/4.0))
+                .setSideEncoderDistance(14+(3.0/8.0))
+                .setMiddleEncoderOffset(5+(5.0/8.0))
 
                 .setTicksPerEncoderRotation(2000)
-                .setEncoderWheelRadius(0.944882)
+                .setEncoderWheelRadius(1.88976/2.0)
 
                 //Other Config
                 .setMinSpeed(0.25)
@@ -253,8 +253,8 @@ public class HardwareSetup
                 .setStopForceSpeed(0.25)
 
                 .setCorrectionOverpowerDistance(5)
-                .setDistanceBuffer(1)
-                .setRotationBuffer(5)
+                .setDistanceBuffer(1.5)
+                .setRotationBuffer(1)
 
                 .build();
     }
