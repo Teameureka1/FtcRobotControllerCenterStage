@@ -191,6 +191,16 @@ public class Teleop extends LinearOpMode
                 robot.servoTallon.setPosition(.3);
             }*/
 
+            if(gamepad1.y)
+            {
+                robot.motorDrone.setPower(-.9);
+                sleep(1000);
+                robot.servoD.setPosition(.9);
+                sleep(1000);
+                robot.motorDrone.setPower(0);
+                robot.servoD.setPosition(.1);
+            }
+
             if(gamepad2.dpad_up)//broom
             {
                 robot.servoP.setPosition(1);

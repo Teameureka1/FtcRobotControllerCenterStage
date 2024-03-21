@@ -78,6 +78,8 @@ public class HardwareSetup
     public DcMotor motorBottomArm = null;
     public DcMotor motorTopArm = null;
 
+    public DcMotor motorDrone = null;
+
     //public  armMotorTop = null;
     public int armHold;
 
@@ -102,7 +104,6 @@ public class HardwareSetup
     public DcMotor leftEncoder = null;
     public DcMotor rightEncoder = null;
     public DcMotor middleEncoder = null;
-    public DcMotor motorDrone = null;
 
     /* local OpMode members. */
     HardwareMap hwMap        = null;
@@ -143,7 +144,8 @@ public class HardwareSetup
 
         motorBottomArm = hwMap.get(DcMotor.class, "armMotor");
         motorTopArm = hwMap.get(DcMotor.class, "topArm");
-        motorDrone = hwMap.get(DcMotor.class, "Rpod");
+        motorDrone = hwMap.get(DcMotor.class, "Lpod");
+
 
         // Set the drive motor directions:
         motorFrontLeft.setDirection(DcMotor.Direction.FORWARD);
@@ -163,6 +165,7 @@ public class HardwareSetup
 
         motorBottomArm.setPower(MOTOR_STOP);
 
+        motorDrone.setPower(MOTOR_STOP);
         motorTopArm.setPower(MOTOR_STOP);
         //endregion
 

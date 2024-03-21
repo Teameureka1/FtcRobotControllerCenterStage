@@ -292,12 +292,19 @@ public class DoingStuff extends LinearOpMode {
                     hatPos = "center";
                     telemetry.addLine("center");
                     telemetry.update();
-                    robot.TweetyBird.straightLineTo(0,30,0);
+                    robot.TweetyBird.straightLineTo(1,25,0);
                     goodWait();
-                    armMove(-.8, -200);
-                    armHold();
+                    robot.TweetyBird.straightLineTo(1,30,0);
+                    goodWait();
                     pushUp();
-                    robot.TweetyBird.straightLineTo(0,25,0);
+                    if(startPos.getValue().equals("back"))
+                    {
+                        robot.TweetyBird.straightLineTo(1,25,0);
+                    }
+                    else
+                    {
+                        robot.TweetyBird.straightLineTo(1,48,0);
+                    }
                     goodWait();
                 }
                 else if(x > 320)
@@ -375,9 +382,44 @@ public class DoingStuff extends LinearOpMode {
                 //in front of backdrop
                 if(allianceColor.getValue().equals("red"))//red in backstage(deliver yellow now)
                 {
-
+                    if(hatPos.equals("right"))
+                    {
+                        robot.TweetyBird.straightLineTo(85,17,90);
+                        armMove(-.8, -500);
+                        armHold();
+                        extendArm(.5);
+                        robot.TweetyBird.straightLineTo(87,17,90);
+                        goodWait();
+                        //release yellow
+                    }
+                    else if(hatPos.equals("center"))
+                    {
+                        robot.TweetyBird.straightLineTo(85,25,90);
+                        armMove(-.8, -500);
+                        armHold();
+                        extendArm(.5);
+                        robot.TweetyBird.straightLineTo(87,25,90);
+                        armMove(.3,100);
+                        //release yellow
+                    }
+                    else
+                    {
+                        robot.TweetyBird.straightLineTo(85,31,90);
+                        goodWait();
+                        armMove(-.8, -500);
+                        armHold();
+                        extendArm(.5);
+                        robot.TweetyBird.straightLineTo(87,31,90);
+                        goodWait();
+                        armMove(.3,100);
+                        //release yellow
+                    }
+                    armMove(-.8, -200);
+                    armHold();
+                    extendArm(-.5);
+                    robot.TweetyBird.straightLineTo(80,48,90);
                 }
-                else//blue in backstage(deliver yellow now)
+                else//blue Front in backstage(deliver yellow now)
                 {
 
                 }
@@ -418,7 +460,7 @@ public class DoingStuff extends LinearOpMode {
                         robot.TweetyBird.straightLineTo(40,33,90);
                     }
                 }
-                else//deliver blue yellow
+                else//deliver blue Back yellow
                 {
                     if(hatPos.equals("right"))
                     {
