@@ -257,6 +257,21 @@ public class Teleop extends LinearOpMode
                     }
                 }
             }
+            if ((!robot.MagIn.isPressed() || !robot.MagOut.isPressed()) && gamepad2.right_stick_y!=0) {
+                if (robot.motorTopArm.getMode()!= DcMotor.RunMode.RUN_WITHOUT_ENCODER) {
+                    robot.motorTopArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                }
+                telemetry.addData("ArmHold",false);
+            } else {
+                if (robot.motorTopArm.getMode()!= DcMotor.RunMode.RUN_TO_POSITION) {
+                    robot.motorTopArm.setTargetPosition(robot.motorTopArm.getCurrentPosition());
+                    robot.motorTopArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    robot.motorTopArm.setPower(1);
+                }
+                telemetry.addData("ArmHold",true);
+            }
+
+
 
             //endregions
             telemetry.update();
