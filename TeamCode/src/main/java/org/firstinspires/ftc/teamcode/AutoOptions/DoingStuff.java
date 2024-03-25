@@ -313,27 +313,28 @@ public class DoingStuff extends LinearOpMode {
                     if(allianceColor.getValue().equals("red") && startPos.getValue().equals("back") || allianceColor.getValue().equals("blue") && startPos.getValue().equals("front"))
                     {
                         //no truss
-                        robot.TweetyBird.straightLineTo(10,19,0);
+                        robot.TweetyBird.straightLineTo(-10,19,0);
                         goodWait();
+                        if(allianceColor.getValue().equals("blue"))
+                        {
+                            //back up and go around hat
+                        }
                         //release purple
                     }
                     else
                     {
                         //with truss
-                        robot.TweetyBird.straightLineTo(-5,25,90);
+                        robot.TweetyBird.straightLineTo(8,30,0);
                         goodWait();
-                        robot.TweetyBird.straightLineTo(10,25,90);
+                        robot.TweetyBird.straightLineTo(8,30,-90);
+                        goodWait();
+                        robot.TweetyBird.straightLineTo(-10,30,-90);
                         //release purple
                         goodWait();
-                        robot.TweetyBird.straightLineTo(-5,25,90);
+                        robot.TweetyBird.straightLineTo(5,30,-90);
                         goodWait();
-                        robot.TweetyBird.straightLineTo(-5,25,0);
-                        goodWait();
-
                     }
-
                 }
-
             }
             if(hatPos.equals(""))
             {
@@ -356,14 +357,13 @@ public class DoingStuff extends LinearOpMode {
                 else
                 {
                     //no truss
-                    robot.TweetyBird.straightLineTo(-10,19,0);
+                    robot.TweetyBird.straightLineTo(10,19,0);
                     goodWait();
                     //release purple
 
                 }
                // robot.TweetyBird.straightLineTo();
             }
-
 
             //sperate by front and back
             if(startPos.getValue().equals("front"))
@@ -421,6 +421,21 @@ public class DoingStuff extends LinearOpMode {
                 }
                 else//blue Front in backstage(deliver yellow now)
                 {
+                    if(hatPos.equals("right"))
+                    {
+                        robot.TweetyBird.straightLineTo(-70,35,-90);
+                        goodWait();
+                    }
+                    else if(hatPos.equals("left"))
+                    {
+                        robot.TweetyBird.straightLineTo(-70,30,-90);
+                        goodWait();
+                    }
+                    else
+                    {
+                        robot.TweetyBird.straightLineTo(-70,25,-90);
+                        goodWait();
+                    }
 
                 }
 
@@ -432,6 +447,8 @@ public class DoingStuff extends LinearOpMode {
                 {
                     if(hatPos.equals("right"))
                     {
+                        robot.TweetyBird.straightLineTo(5,30,90);
+                        goodWait();
                         robot.TweetyBird.straightLineTo(10,17,0);
                         robot.TweetyBird.straightLineTo(30,17,90);
                         goodWait();
@@ -464,15 +481,31 @@ public class DoingStuff extends LinearOpMode {
                 {
                     if(hatPos.equals("right"))
                     {
-
+                        robot.TweetyBird.straightLineTo(-35,30,-90);
+                        goodWait();
+                        armMove(-.8,-500);
+                        armHold();
+                        //release yellow
                     }
                     else if (hatPos.equals("center"))
                     {
-
+                        robot.TweetyBird.straightLineTo(0,25,0);
+                        goodWait();
+                        robot.TweetyBird.straightLineTo(35,25,90);
+                        goodWait();
+                        armMove(-.8,-500);
+                        armHold();
+                        //release yellow
                     }
                     else
                     {
-
+                        //10,19,0
+                        robot.TweetyBird.straightLineTo(-10,15,0);
+                        robot.TweetyBird.straightLineTo(-35,19,-90);
+                        goodWait();
+                        armMove(-.8,-500);
+                        armHold();
+                        //release yellow
                     }
                 }
             }
