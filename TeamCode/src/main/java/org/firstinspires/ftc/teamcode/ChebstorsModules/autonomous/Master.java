@@ -2,12 +2,10 @@ package org.firstinspires.ftc.teamcode.ChebstorsModules.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.HardwareSetup;
 import org.firstinspires.ftc.teamcode.ChebstorsModules.modules.TelemetrySelector;
-
-import java.util.List;
 
 @Autonomous(name = "Main Autonomous", group = "Auto2")
 public class Master extends LinearOpMode {
@@ -28,8 +26,7 @@ public class Master extends LinearOpMode {
 
     public enum autoStyles {
         CYCLE,
-        BACKSTAGE,
-        BACKDROP,
+        GENERAL,
         NULL
     }
 
@@ -45,10 +42,17 @@ public class Master extends LinearOpMode {
         RIGHT
     }
 
+    public enum placementPositions {
+        BACKDROP,
+        BACKSTAGE,
+        NULL
+    }
+
     // Variables
     positions currentColor;
     positions currentDistance;
     autoStyles autoStyle;
+    placementPositions pixelPlacement;
     parkPositions parkPosition;
 
     /**
@@ -67,8 +71,9 @@ public class Master extends LinearOpMode {
 
         // Defining telemetry options
         String[] startPositionOptions = { "Blue Long", "Blue Short", "Red Long", "Red Short" };
-        String[] autoStyleOptions = { "Cycle", "Backdrop", "Backstage", "Only-Spike" };
-        String[] parkOptions = { "Corner", "Center" };
+        String[] autoStyleOptions = { "Cycle", "General", "Only-Spike" };
+        String[] pixelPlacementOptions = { "Backdrop", "Backstage" };
+        String[] parkOptions = { "Center", "Corner" };
 
         // Asking
         String startPosSelect = startPositionOptions[0];
@@ -77,8 +82,13 @@ public class Master extends LinearOpMode {
         String autoStyleSelect = autoStyleOptions[0];
         autoStyleSelect = telemetrySelector.simpleSelector("What style of auto to run",autoStyleOptions);
 
+        String placementSelect = null;
+        if (autoStyleSelect!=autoStyleOptions[2]) {
+            placementSelect = telemetrySelector.simpleSelector("Where should the pixels be placed",pixelPlacementOptions);
+        }
+
         String parkSelect = null;
-        if (autoStyleSelect!=autoStyleOptions[3]) {
+        if (autoStyleSelect!=autoStyleOptions[2]) {
             parkSelect = telemetrySelector.simpleSelector("Where should the bot park",parkOptions);
         }
 
@@ -100,11 +110,19 @@ public class Master extends LinearOpMode {
         if (autoStyleSelect.equals(autoStyleOptions[0])) {
             autoStyle = autoStyles.CYCLE;
         } else if (autoStyleSelect.equals(autoStyleOptions[1])) {
-            autoStyle = autoStyles.BACKDROP;
+            autoStyle = autoStyles.GENERAL;
         } else if (autoStyleSelect.equals(autoStyleOptions[2])) {
-            autoStyle = autoStyles.BACKSTAGE;
-        } else if (autoStyleSelect.equals(autoStyleOptions[3])) {
             autoStyle = autoStyles.NULL;
+        }
+
+        if (placementSelect != null) {
+            if (placementSelect.equals(pixelPlacementOptions[0])) {
+                pixelPlacement = placementPositions.BACKDROP;
+            } else if (placementSelect.equals(pixelPlacementOptions[1])) {
+                pixelPlacement = placementPositions.BACKSTAGE;
+            }
+        } else {
+            pixelPlacement = placementPositions.NULL;
         }
 
         if (parkSelect != null) {
@@ -117,13 +135,9 @@ public class Master extends LinearOpMode {
             parkPosition = parkPositions.NULL;
         }
 
+
         //Telemetry
         telemetry.addLine("[*] Bot fully initialized and ready to start");
-        telemetry.addLine();
-        telemetry.addLine("[+] Selections memory dump");
-        telemetry.addData("Selected Side", "Color: " + currentColor + " Side: " + currentDistance);
-        telemetry.addData("Selected Style", autoStyle);
-        telemetry.addData("Selected Parking Position", parkPosition);
         telemetry.update();
 
         // Wait for Start
@@ -161,17 +175,11 @@ public class Master extends LinearOpMode {
             } else if (currentDistance == positions.SHORT) {
                 cycleShort();
             }
-        } else if (autoStyle == autoStyles.BACKSTAGE) {
+        } else if (autoStyle == autoStyles.GENERAL) {
             if (currentDistance == positions.LONG) {
-                backstageLong();
+                generalLong();
             } else if (currentDistance == positions.SHORT) {
-                backstageShort();
-            }
-        } else if (autoStyle == autoStyles.BACKDROP) {
-            if (currentDistance == positions.LONG) {
-                backdropLong();
-            } else if (currentDistance == positions.SHORT) {
-                backdropShort();
+                generalShort();
             }
         }
 
@@ -180,9 +188,9 @@ public class Master extends LinearOpMode {
          */
         // Methods
         if (parkPosition == parkPositions.FRONT) {
-            parkFront();
+            parkCenter();
         } else if (parkPosition == parkPositions.BACK) {
-            parkBack();
+            parkCorner();
         }
 
         // Kill everything after stop
@@ -215,6 +223,8 @@ public class Master extends LinearOpMode {
         } else if (position == propPosition.CENTER) { // Center
         } else { // Right
         }
+
+        robot.TweetyBird.straightLineTo(0,10,0); //TODO TEMP
     }
 
     private void placePropTrussRight() {
@@ -228,58 +238,34 @@ public class Master extends LinearOpMode {
         } else if (position == propPosition.CENTER) { // Center
         } else { // Right
         }
+
+        robot.TweetyBird.straightLineTo(0,10,0); //TODO TEMP
     }
 
     private void cycleLong() {
         telemetry.addLine("[*] Cycling (long)...");
         telemetry.update();
 
-
-        robot.TweetyBird.speedLimit(0.7);
-
         //Code here
-        robot.TweetyBird.straightLineTo(9,49,90);
+        ElapsedTime cycleTimer = new ElapsedTime();
+        cycleTimer.reset();
 
-        for (int i = 0; i<10; i++) {
-            // To
-            robot.TweetyBird.straightLineTo(20,49,90);
+        robot.TweetyBird.speedLimit(0.9);
 
-            robot.TweetyBird.waitWhileBusy();
-            robot.TweetyBird.waitWhileBusy();
-            robot.TweetyBird.waitWhileBusy();
+        while(opModeIsActive()) {
+            // Auto
+            generalLong();
 
-            robot.TweetyBird.straightLineTo(-30,52,-90);
-
-            robot.TweetyBird.straightLineTo(-50,52,-90);
-
-            robot.TweetyBird.straightLineTo(-72,52,-90);
-
-            robot.TweetyBird.waitWhileBusy();
-            robot.TweetyBird.waitWhileBusy();
-            robot.TweetyBird.waitWhileBusy();
-
-            robot.TweetyBird.straightLineTo(-80,28,-90);
-
-            robot.TweetyBird.waitWhileBusy();
-            robot.TweetyBird.waitWhileBusy();
-            robot.TweetyBird.waitWhileBusy();
-
-            // From
-
-            if (i<9) {
-                robot.TweetyBird.straightLineTo(-72,52,90);
-
-                robot.TweetyBird.waitWhileBusy();
-                robot.TweetyBird.waitWhileBusy();
-                robot.TweetyBird.waitWhileBusy();
-
-                robot.TweetyBird.straightLineTo(20,49,90);
-
-                robot.TweetyBird.waitWhileBusy();
-                robot.TweetyBird.waitWhileBusy();
-                robot.TweetyBird.waitWhileBusy();
+            // Catch
+            if (cycleTimer.seconds()>20) {
+                break;
             }
+
+            // Return
+            robot.TweetyBird.straightLineTo(-72,52,90);
         }
+
+        robot.TweetyBird.straightLineTo(-72,52,-90);
     }
 
     private void cycleShort() {
@@ -289,45 +275,123 @@ public class Master extends LinearOpMode {
         //Code here
     }
 
-    private void backdropLong() {
-        telemetry.addLine("[*] Placing on Backdrop (long)...");
+    private void generalLong() {
+        telemetry.addLine("[*] General Auto (long)...");
         telemetry.update();
 
         //Code here
+        robot.TweetyBird.speedLimit(0.9);
+
+        // Approach pixel stack
+        robot.TweetyBird.straightLineTo(20,49,90);
+
+        robot.TweetyBird.waitWhileBusy();
+        robot.TweetyBird.waitWhileBusy();
+        robot.TweetyBird.waitWhileBusy();
+
+        //TODO Grab Pixel
+
+        // Backup and turn around
+        robot.TweetyBird.straightLineTo(0,52,-90);
+
+        robot.TweetyBird.waitWhileBusy();
+        robot.TweetyBird.waitWhileBusy();
+        robot.TweetyBird.waitWhileBusy();
+
+        robot.TweetyBird.straightLineTo(-72,52,-90);
+
+        robot.TweetyBird.waitWhileBusy();
+        robot.TweetyBird.waitWhileBusy();
+        robot.TweetyBird.waitWhileBusy();
+
+        // Placing
+        placePixel();
     }
 
-    private void backdropShort() {
-        telemetry.addLine("[*] Placing on Backdrop (short)...");
+    private void generalShort() {
+        telemetry.addLine("[*] General Auto (short)...");
         telemetry.update();
 
         //Code here
+
+        // Placing
+        placePixel();
     }
 
-    private void backstageLong() {
-        telemetry.addLine("[*] Placing in Backstage (long)...");
-        telemetry.update();
-
-        //Code here
-    }
-
-    private void backstageShort() {
-        telemetry.addLine("[*] Placing in Backstage (short)...");
-        telemetry.update();
-
-        //Code here
-    }
-
-    private void parkFront() {
+    private void parkCenter() {
         telemetry.addLine("[*] Parking (front)...");
         telemetry.update();
 
         //Code here
+        double xDistance = currentDistance==positions.LONG?-85:-37;
+
+        robot.TweetyBird.straightLineTo(xDistance,52,0);
+
+        robot.TweetyBird.waitWhileBusy();
+        robot.TweetyBird.waitWhileBusy();
+        robot.TweetyBird.waitWhileBusy();
     }
 
-    private void parkBack() {
+    private void parkCorner() {
         telemetry.addLine("[*] Parking (back)...");
         telemetry.update();
 
         //Code here
+        double xDistance = currentDistance==positions.LONG?-85:-37;
+
+        robot.TweetyBird.straightLineTo(xDistance,5,0);
+
+        robot.TweetyBird.waitWhileBusy();
+        robot.TweetyBird.waitWhileBusy();
+        robot.TweetyBird.waitWhileBusy();
+    }
+
+    private void placePixel() {
+        //Code here
+
+        if (pixelPlacement==placementPositions.BACKDROP) {
+            double xDistance = currentDistance==positions.LONG?-80:-30;
+
+            // Go to center of backdrop
+            robot.TweetyBird.straightLineTo(xDistance,28,-90);
+
+            robot.TweetyBird.waitWhileBusy();
+            robot.TweetyBird.waitWhileBusy();
+            robot.TweetyBird.waitWhileBusy();
+
+            //TODO Drop Pixel
+        } else {
+            double xDistance = currentDistance==positions.LONG?-90:-50;
+
+            if (parkPosition==parkPositions.FRONT) {
+                robot.TweetyBird.straightLineTo(xDistance+10,52,-90);
+
+                robot.TweetyBird.waitWhileBusy();
+                robot.TweetyBird.waitWhileBusy();
+                robot.TweetyBird.waitWhileBusy();
+
+                robot.TweetyBird.straightLineTo(xDistance,52,-90);
+
+                robot.TweetyBird.waitWhileBusy();
+                robot.TweetyBird.waitWhileBusy();
+                robot.TweetyBird.waitWhileBusy();
+
+                //TODO Drop Pixel
+            } else {
+                robot.TweetyBird.straightLineTo(xDistance+10,5,-90);
+
+                robot.TweetyBird.waitWhileBusy();
+                robot.TweetyBird.waitWhileBusy();
+                robot.TweetyBird.waitWhileBusy();
+
+                robot.TweetyBird.straightLineTo(xDistance,5,-90);
+
+                robot.TweetyBird.waitWhileBusy();
+                robot.TweetyBird.waitWhileBusy();
+                robot.TweetyBird.waitWhileBusy();
+                //TODO Drop Pixel
+            }
+        }
+
     }
 }
