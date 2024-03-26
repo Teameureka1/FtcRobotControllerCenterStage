@@ -315,10 +315,6 @@ public class DoingStuff extends LinearOpMode {
                         //no truss
                         robot.TweetyBird.straightLineTo(-10,19,0);
                         goodWait();
-                        if(allianceColor.getValue().equals("blue"))
-                        {
-                            //back up and go around hat
-                        }
                         //release purple
                     }
                     else

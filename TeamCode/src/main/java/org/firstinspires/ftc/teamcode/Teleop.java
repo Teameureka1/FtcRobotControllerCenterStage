@@ -146,7 +146,29 @@ public class Teleop extends LinearOpMode
 
 
 
-            if(gamepad2.a)//alltered claw opening for the test claw
+             if(gamepad2.a)//open
+             {
+                 robot.servoHandR.setPosition(.8);
+                 robot.servoHandL.setPosition(.2);
+             }
+             else if(gamepad2.b)//closed
+             {
+                 robot.servoHandL.setPosition(.8);
+                 robot.servoHandR.setPosition(.5);
+             }
+             else if(gamepad2.y)//quick release
+             {
+                 robot.servoHandL.setPosition(.2);
+                 robot.servoHandR.setPosition(.5);
+                 sleep(200);
+                 robot.servoHandR.setPosition(.8);
+             }
+             else if (gamepad2.x)//partial open
+             {
+                 robot.servoHandL.setPosition(.2);
+             }
+
+            /*if(gamepad2.a)//alltered claw opening for the test claw
             {
                 robot.servoHandR.setPosition(robot.CLOSED);
                 robot.servoHandL.setPosition(robot.OPEN);
@@ -168,28 +190,8 @@ public class Teleop extends LinearOpMode
                 robot.servoHandR.setPosition(robot.CLOSED);
                 robot.servoHandL.setPosition(robot.OPEN);
 
-            }
-
-            //the original open close of the claw
-            /*if(gamepad2.a)
-            {
-                //The right servo is reversed
-                robot.servoHandR.setPosition(robot.CLOSED);
-                robot.servoHandL.setPosition(robot.OPEN);
-                robot.servoTallon.setPosition(.1);
-            }
-            else if (gamepad2.b)
-            {
-                robot.servoHandR.setPosition(robot.OPEN);
-                robot.servoHandL.setPosition(robot.CLOSED);
-                robot.servoTallon.setPosition(.1);
-            }
-            else if(gamepad2.y)
-            {
-                robot.servoHandR.setPosition(robot.CLOSED);
-                robot.servoHandL.setPosition(robot.OPEN);
-                robot.servoTallon.setPosition(.3);
             }*/
+
 
             if(gamepad1.y)
             {
