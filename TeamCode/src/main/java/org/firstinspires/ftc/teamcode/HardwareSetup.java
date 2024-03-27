@@ -183,7 +183,7 @@ public class HardwareSetup
         //open claw
         servoHandL.setPosition(.8);
         servoHandR.setPosition(.5);
-        servoTallon.setPosition(.1);
+        servoTallon.setPosition(.9);
         servoP.setPosition(.5);
         servoD.setPosition(.1);
         //endregion

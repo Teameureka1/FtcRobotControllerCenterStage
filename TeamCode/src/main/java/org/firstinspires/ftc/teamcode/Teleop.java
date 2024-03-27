@@ -148,23 +148,31 @@ public class Teleop extends LinearOpMode
 
              if(gamepad2.a)//open
              {
-                 robot.servoHandR.setPosition(.8);
-                 robot.servoHandL.setPosition(.2);
+                 robot.servoHandR.setPosition(.8);//upper/inner part
+                 robot.servoHandL.setPosition(.2);//outer/lower part
+                 sleep(200);
+                 robot.servoTallon.setPosition(.9);
              }
              else if(gamepad2.b)//closed
              {
                  robot.servoHandL.setPosition(.8);
                  robot.servoHandR.setPosition(.5);
+                 robot.servoTallon.setPosition(.9);
              }
              else if(gamepad2.y)//quick release
              {
                  robot.servoHandL.setPosition(.2);
                  robot.servoHandR.setPosition(.5);
+                 robot.servoTallon.setPosition(.6);
                  sleep(200);
                  robot.servoHandR.setPosition(.8);
+                 sleep(200);
+                 robot.servoTallon.setPosition(.9);
+
              }
              else if (gamepad2.x)//partial open
              {
+                 robot.servoTallon.setPosition(.6);
                  robot.servoHandL.setPosition(.2);
              }
 
