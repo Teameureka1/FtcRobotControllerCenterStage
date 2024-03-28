@@ -173,10 +173,11 @@ public class Teleop extends LinearOpMode
                  robot.servoHandL.setPosition(.2);
              }
 
-            /*if(gamepad2.a)//alltered claw opening for the test claw
+            if(gamepad2.a)//alltered claw opening for the test claw
             {
                 robot.servoHandR.setPosition(robot.CLOSED);
                 robot.servoHandL.setPosition(robot.OPEN);
+
                 robot.servoTallon.setPosition(.1);
 
             }
@@ -195,26 +196,6 @@ public class Teleop extends LinearOpMode
                 robot.servoHandR.setPosition(robot.CLOSED);
                 robot.servoHandL.setPosition(robot.OPEN);
 
-            }*/
-
-
-            if(gamepad1.y && gamepad1.dpad_up)
-            {
-                robot.motorDrone.setPower(-.9);
-                sleep(1000);
-                robot.servoD.setPosition(.9);
-                sleep(1000);
-                robot.motorDrone.setPower(0);
-                robot.servoD.setPosition(.1);
-            }
-
-            if(gamepad2.dpad_up)//broom
-            {
-                robot.servoP.setPosition(1);
-            }
-            if (gamepad2.dpad_down)
-            {
-                robot.servoP.setPosition(.5);
             }
 
             if(gamepad2.left_bumper && opModeIsActive())//drone

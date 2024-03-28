@@ -89,6 +89,8 @@ public class HardwareSetup
     public Servo servoHandR = null;
     public Servo servoHandL = null;
 
+    public Servo servoHandLB = null;
+
     public Servo servoP = null;
     public Servo servoD = null;
 
@@ -176,12 +178,14 @@ public class HardwareSetup
             //Add servo configuration
         servoHandR = hwMap.servo.get("servoHandR");
         servoHandL = hwMap.servo.get("servoHandL");
+        servoHandLB = hwMap.servo.get("servoHandLB");
         servoP = hwMap.servo.get("servoP");
         servoD = hwMap.servo.get("servoD");
         servoTallon = hwMap.servo.get("servoTallon");
 
         //open claw
         servoHandL.setPosition(.8);
+        servoHandLB.setPosition(.8);
         servoHandR.setPosition(.5);
         servoTallon.setPosition(.9);
         servoP.setPosition(.5);
