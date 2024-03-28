@@ -34,7 +34,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcontroller.external.samples.RobotAutoDriveByTime_Linear;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
@@ -54,9 +53,9 @@ import java.util.List;
  * IMPORTANT: In order to use this OpMode, you need to obtain your own Vuforia license key as
  * is explained below.
  */
-@Autonomous(name = "MainAutoStuffyStuff", group = "Auto")
+@Autonomous(name = "Autonomous", group = "Auto")
 //@Disabled
-public class DoingStuff extends LinearOpMode {
+public class AutonomousProgram extends LinearOpMode {
 
     HardwareSetup robot = new HardwareSetup();
     //region stuff

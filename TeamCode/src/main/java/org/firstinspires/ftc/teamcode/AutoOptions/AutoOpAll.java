@@ -30,6 +30,7 @@ package org.firstinspires.ftc.teamcode.AutoOptions;
  */
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -57,7 +58,7 @@ import java.util.List;
  * is explained below.
  */
 @Autonomous(name = "mainStuff", group = "Auto")
-//@Disabled
+@Disabled
 public class AutoOpAll extends LinearOpMode {
 
     HardwareSetup robot = new HardwareSetup();

@@ -143,9 +143,6 @@ public class Teleop extends LinearOpMode
 
             }
 
-
-
-
              if(gamepad2.a)//open
              {
                  robot.servoHandR.setPosition(.8);//upper/inner part
@@ -201,7 +198,7 @@ public class Teleop extends LinearOpMode
             }*/
 
 
-            if(gamepad1.y)
+            if(gamepad1.y && gamepad1.dpad_up)
             {
                 robot.motorDrone.setPower(-.9);
                 sleep(1000);
