@@ -145,58 +145,36 @@ public class Teleop extends LinearOpMode
 
              if(gamepad2.a)//open
              {
-                 robot.servoHandR.setPosition(.8);//upper/inner part
-                 robot.servoHandL.setPosition(.2);//outer/lower part
+                 robot.servoHandR.setPosition(.3);
+                 robot.servoHandL.setPosition(.6);
+                 robot.servoHandLB.setPosition(.43);
                  sleep(200);
-                 robot.servoTallon.setPosition(.9);
+                 robot.servoTallon.setPosition(.1);
              }
              else if(gamepad2.b)//closed
              {
-                 robot.servoHandL.setPosition(.8);
-                 robot.servoHandR.setPosition(.5);
-                 robot.servoTallon.setPosition(.9);
+                 robot.servoHandL.setPosition(.3);
+                 robot.servoHandR.setPosition(.6);
+                 robot.servoHandLB.setPosition(.43);
+                 robot.servoTallon.setPosition(.1);
              }
              else if(gamepad2.y)//quick release
              {
-                 robot.servoHandL.setPosition(.2);
-                 robot.servoHandR.setPosition(.5);
-                 robot.servoTallon.setPosition(.6);
+                 robot.servoHandL.setPosition(.3);
+                 robot.servoHandR.setPosition(.7);
+                 robot.servoTallon.setPosition(.3);
+                 robot.servoHandLB.setPosition(.6);
                  sleep(200);
-                 robot.servoHandR.setPosition(.8);
-                 sleep(200);
-                 robot.servoTallon.setPosition(.9);
-
+                 robot.servoHandL.setPosition(.6);
+                 robot.servoHandR.setPosition(.7);
+                 robot.servoHandLB.setPosition(.43);
              }
              else if (gamepad2.x)//partial open
              {
-                 robot.servoTallon.setPosition(.6);
-                 robot.servoHandL.setPosition(.2);
+                 robot.servoTallon.setPosition(.3);
+                 robot.servoHandLB.setPosition(.6);
              }
 
-            if(gamepad2.a)//alltered claw opening for the test claw
-            {
-                robot.servoHandR.setPosition(robot.CLOSED);
-                robot.servoHandL.setPosition(robot.OPEN);
-
-                robot.servoTallon.setPosition(.1);
-
-            }
-            else if (gamepad2.b)
-            {
-                robot.servoHandR.setPosition(0.6);//OPEN
-                robot.servoHandL.setPosition(0.2);//CLOSED
-                robot.servoTallon.setPosition(.1);
-            }
-            else if(gamepad2.y)
-            {
-                robot.servoTallon.setPosition(.26);//.3
-                robot.servoHandL.setPosition(.37);
-                robot.servoHandR.setPosition(.43);
-                sleep(400);
-                robot.servoHandR.setPosition(robot.CLOSED);
-                robot.servoHandL.setPosition(robot.OPEN);
-
-            }
 
             if(gamepad2.left_bumper && opModeIsActive())//drone
             {
