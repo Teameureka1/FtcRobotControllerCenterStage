@@ -273,6 +273,7 @@ public class Master extends LinearOpMode {
         telemetry.update();
 
         //Code here
+        generalShort();
     }
 
     private void generalLong() {
@@ -313,6 +314,65 @@ public class Master extends LinearOpMode {
         telemetry.update();
 
         //Code here
+        // Cross
+        robot.TweetyBird.speedLimit(0.9);
+
+        robot.TweetyBird.straightLineTo(-0.5,3.5,90);
+
+        robot.TweetyBird.waitWhileBusy();
+        robot.TweetyBird.waitWhileBusy();
+        robot.TweetyBird.waitWhileBusy();
+
+        robot.TweetyBird.straightLineTo(47.7,3.5,90);
+
+        robot.TweetyBird.waitWhileBusy();
+        robot.TweetyBird.waitWhileBusy();
+        robot.TweetyBird.waitWhileBusy();
+
+        robot.TweetyBird.straightLineTo(68.3,21.7,90);
+
+        robot.TweetyBird.waitWhileBusy();
+        robot.TweetyBird.waitWhileBusy();
+        robot.TweetyBird.waitWhileBusy();
+
+        robot.TweetyBird.straightLineTo(68.3,28.7,90);
+
+        robot.TweetyBird.waitWhileBusy();
+        robot.TweetyBird.waitWhileBusy();
+        robot.TweetyBird.waitWhileBusy();
+
+        robot.TweetyBird.straightLineTo(71.7,28.7,90);
+
+        robot.TweetyBird.waitWhileBusy();
+        robot.TweetyBird.waitWhileBusy();
+        robot.TweetyBird.waitWhileBusy();
+
+        // Returning
+        robot.TweetyBird.straightLineTo(68.3,28.7,90);
+
+        robot.TweetyBird.waitWhileBusy();
+        robot.TweetyBird.waitWhileBusy();
+        robot.TweetyBird.waitWhileBusy();
+        
+        robot.TweetyBird.straightLineTo(68.3,21.7,90);
+
+        robot.TweetyBird.waitWhileBusy();
+        robot.TweetyBird.waitWhileBusy();
+        robot.TweetyBird.waitWhileBusy();
+
+        robot.TweetyBird.straightLineTo(47.7,3.5,90);
+
+        robot.TweetyBird.waitWhileBusy();
+        robot.TweetyBird.waitWhileBusy();
+        robot.TweetyBird.waitWhileBusy();
+
+        robot.TweetyBird.straightLineTo(-0.5,5,90);
+
+        robot.TweetyBird.waitWhileBusy();
+        robot.TweetyBird.waitWhileBusy();
+        robot.TweetyBird.waitWhileBusy();
+
+        while (opModeIsActive());
 
         // Placing
         placePixel();
