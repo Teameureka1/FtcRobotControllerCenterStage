@@ -176,14 +176,16 @@ public class Teleop extends LinearOpMode
              }
 
 
-            if(gamepad2.left_bumper && opModeIsActive())//drone
+            if(gamepad1.dpad_up)//drone
             {
-                robot.motorDrone.setPower(1);
-                if(gamepad2.x)
+                robot.motorDrone.setPower(-1);
+                if(gamepad1.y)
                 {
                     robot.servoD.setPosition(.9);
+                    sleep(200);
+                    robot.servoD.setPosition(.1); 
                 }
-                //robot.servoD.setPosition(.9);
+
             } else
             {
                 robot.motorDrone.setPower(0);
@@ -191,7 +193,7 @@ public class Teleop extends LinearOpMode
 
             if(gamepad1.x)
             {
-                robot.servoD.setPosition(.1);
+
             }
 
             if(!robot.MagIn.isPressed() && !robot.MagOut.isPressed())
