@@ -17,24 +17,30 @@ import dev.narlyx.ftc.tweetybird.TweetyBirdProcessor;
 
 public class NewHardwareMap {
 
+    // OpMode definition
     private LinearOpMode opMode = null;
 
+    // TweetyBird definition
+    public TweetyBirdProcessor TweetyBird;
+
+    // Vision definitions
     public VisionPortal visionPortal;
     public TfodProcessor tfod;
 
-    public TweetyBirdProcessor TweetyBird;
-
+    // Vision variables
     private String tfodAssetName = "Combined.tflite";
     public static final String[] tfodLables = {
             "blue hat", "red hat", "white pixel", "yellow pixel"
     };
 
+    // Global Enums
     public enum ClawPositions {
             OPEN,
             SINGLE,
             CLOSED
     }
 
+    // Hardware definitions
     public DcMotor motorFrontRight = null;
     public DcMotor motorFrontLeft = null;
     public DcMotor motorBackRight = null;
@@ -65,10 +71,17 @@ public class NewHardwareMap {
 
     public WebcamName mainCam = null;
 
+    /**
+     * Constructor
+     * @param opMode pass in the linear opmode
+     */
     public NewHardwareMap(LinearOpMode opMode) {
         this.opMode = opMode;
     }
 
+    /**
+     * Initializes the core functions of the robot
+     */
     public void initGeneral() {
         HardwareMap hwMap = opMode.hardwareMap;
 
@@ -97,8 +110,6 @@ public class NewHardwareMap {
         servoD = hwMap.servo.get("servoD");
         servoTallon = hwMap.servo.get("servoTallon");
 
-        setClawPosition(ClawPositions.SINGLE);
-        opMode.sleep(500);
         setClawPosition(ClawPositions.OPEN);
 
         servoTallon.setPosition(.3);
@@ -133,6 +144,9 @@ public class NewHardwareMap {
         mainCam = hwMap.get(WebcamName.class, "Webcam 1");
     }
 
+    /**
+     * Initializes vision
+     */
     public void initVision() {
         tfod = new TfodProcessor.Builder()
                 .setModelAssetName(tfodAssetName)
@@ -147,6 +161,9 @@ public class NewHardwareMap {
         tfod.setMinResultConfidence(0.6F);
     }
 
+    /**
+     * Initializes TweetyBird
+     */
     public void initTweetyBird() {
         TweetyBird = new TweetyBirdProcessor.Builder()
                 //Setting opmode
@@ -186,6 +203,10 @@ public class NewHardwareMap {
                 .build();
     }
 
+    /**
+     * Sets the position of the claw via a enum
+     * @param position target position/mode
+     */
     public void setClawPosition(ClawPositions position) {
         switch(position) {
             case OPEN:
@@ -208,6 +229,10 @@ public class NewHardwareMap {
         }
     }
 
+    /**
+     * Sets the height of the arm with ticks
+     * @param ticks target ticks
+     */
     public void setArmHeight(int ticks) {
         motorBottomArm.setTargetPosition(ticks);
         if (motorBottomArm.getMode() != DcMotor.RunMode.RUN_TO_POSITION) {

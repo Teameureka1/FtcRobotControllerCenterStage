@@ -239,9 +239,14 @@ public class Master extends LinearOpMode {
         //Code here
         propPosition position = scanProp();
 
-        if (position == propPosition.LEFT) { // Left
-        } else if (position == propPosition.CENTER) { // Center
-        } else { // Right
+        // Heading to spike mark
+        switch (position) {
+            case LEFT:
+                break;
+            case CENTER:
+                break;
+            case RIGHT:
+                break;
         }
 
         robot.TweetyBird.straightLineTo(0,10,0); //TODO TEMP
@@ -254,64 +259,22 @@ public class Master extends LinearOpMode {
         //Code here
         propPosition position = scanProp();
 
-        if (position == propPosition.LEFT) { // Left
-            robot.TweetyBird.straightLineTo(0.9,34,-90);
-
-            robot.TweetyBird.waitWhileBusy();
-            robot.TweetyBird.waitWhileBusy();
-            robot.TweetyBird.waitWhileBusy();
-
-            robot.TweetyBird.straightLineTo(-3,34,-90);
-
-            robot.TweetyBird.waitWhileBusy();
-            robot.TweetyBird.waitWhileBusy();
-            robot.TweetyBird.waitWhileBusy();
-
-            robot.setClawPosition(NewHardwareMap.ClawPositions.SINGLE);
-            robot.setArmHeight(300);
-
-            robot.TweetyBird.straightLineTo(0.9,45,-90);
-
-            robot.TweetyBird.waitWhileBusy();
-            robot.TweetyBird.waitWhileBusy();
-            robot.TweetyBird.waitWhileBusy();
-        } else if (position == propPosition.CENTER) { // Center
-            robot.TweetyBird.straightLineTo(0,32,0);
-
-            robot.TweetyBird.waitWhileBusy();
-            robot.TweetyBird.waitWhileBusy();
-            robot.TweetyBird.waitWhileBusy();
-
-            robot.setClawPosition(NewHardwareMap.ClawPositions.SINGLE);
-            robot.setArmHeight(300);
-
-            robot.TweetyBird.straightLineTo(-28,28,0);
-
-            robot.TweetyBird.waitWhileBusy();
-            robot.TweetyBird.waitWhileBusy();
-            robot.TweetyBird.waitWhileBusy();
-        } else { // Right
-            robot.TweetyBird.straightLineTo(-1,32,90);
-
-            robot.TweetyBird.waitWhileBusy();
-            robot.TweetyBird.waitWhileBusy();
-            robot.TweetyBird.waitWhileBusy();
-
-            robot.TweetyBird.straightLineTo(2,32,90);
-
-            robot.TweetyBird.waitWhileBusy();
-            robot.TweetyBird.waitWhileBusy();
-            robot.TweetyBird.waitWhileBusy();
-
-            robot.setClawPosition(NewHardwareMap.ClawPositions.SINGLE);
-            robot.setArmHeight(300);
-
-            robot.TweetyBird.straightLineTo(-10,32,90);
-
-            robot.TweetyBird.waitWhileBusy();
-            robot.TweetyBird.waitWhileBusy();
-            robot.TweetyBird.waitWhileBusy();
+        // Heading to spike mark
+        switch (position) {
+            case LEFT:
+                break;
+            case CENTER:
+                break;
+            case RIGHT:
+                break;
         }
+
+        robot.setClawPosition(NewHardwareMap.ClawPositions.SINGLE);
+        robot.setArmHeight(300);
+
+        robot.TweetyBird.waitWhileBusy();
+        robot.TweetyBird.waitWhileBusy();
+        robot.TweetyBird.waitWhileBusy();
     }
 
     private void cycleLong() {
