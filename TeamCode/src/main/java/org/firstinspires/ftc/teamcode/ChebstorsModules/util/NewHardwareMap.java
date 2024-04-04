@@ -197,11 +197,13 @@ public class NewHardwareMap {
                 servoHandL.setPosition(.3);
                 servoHandR.setPosition(.45);
                 servoHandLB.setPosition(.6);
+                servoTallon.setPosition(.3);
                 break;
             case CLOSED:
                 servoHandL.setPosition(.3);
                 servoHandR.setPosition(.45);
                 servoHandLB.setPosition(.41);
+                servoTallon.setPosition(.1);
                 break;
         }
     }

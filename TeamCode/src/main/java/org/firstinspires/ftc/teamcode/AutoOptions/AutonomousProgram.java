@@ -263,7 +263,9 @@ public class AutonomousProgram extends LinearOpMode {
             telemetry.update();
             List<Recognition> currentRecognitions = tfod.getRecognitions();
             telemetry.addData("# Objects Detected", currentRecognitions.size());
-
+            CloseClaw();
+            armMove(-.8,-200);
+            armHold();
             boolean detectedProp = false;
 
             if(allianceColor.getValue().equals("blue"))
@@ -314,6 +316,13 @@ public class AutonomousProgram extends LinearOpMode {
                         //no truss
                         robot.TweetyBird.straightLineTo(-10,19,0);
                         goodWait();
+                        partialOpen();
+                        sleep(200);
+                        if(startPos.getValue().equals("front"))
+                        {
+                            robot.TweetyBird.straightLineTo(0,16,0);
+                            goodWait();
+                        }
                         //release purple
                     }
                     else
@@ -363,11 +372,11 @@ public class AutonomousProgram extends LinearOpMode {
             //sperate by front and back
             if(startPos.getValue().equals("front"))
             {
-                robot.TweetyBird.straightLineTo(0,48,0);
+                robot.TweetyBird.straightLineTo(2,49,0);
                 goodWait();
-                robot.TweetyBird.straightLineTo(0,48,90);
+                robot.TweetyBird.straightLineTo(2,48,90);
                 goodWait();
-                robot.TweetyBird.straightLineTo(70,48,95);
+                robot.TweetyBird.straightLineTo(70,48,90);
                 goodWait();
                 robot.TweetyBird.straightLineTo(70,40,90);
                 armMove(-.8,-500);
@@ -418,8 +427,18 @@ public class AutonomousProgram extends LinearOpMode {
                 {
                     if(hatPos.equals("right"))
                     {
-                        robot.TweetyBird.straightLineTo(-70,35,-90);
+                        robot.TweetyBird.straightLineTo(-80,35,-90);
                         goodWait();
+                        armMove(-.8, -300);
+                        armHold();
+                        extendArm(.8);
+                        robot.TweetyBird.straightLineTo(-90,33,-90);
+                        goodWait();
+                        armMove(.3,100);
+                        OpenClaw();
+                        sleep(200);
+                        armMove(-.8,-200);
+                        robot.TweetyBird.straightLineTo(-80,48,-90);
                     }
                     else if(hatPos.equals("left"))
                     {
@@ -508,11 +527,10 @@ public class AutonomousProgram extends LinearOpMode {
             //seperate by right/left/center
             //deliver yellow
 
-
-
         }
 
     //region robot methods
+
     public void extendArm(double power)
     {
         robot.motorTopArm.setPower(power);
@@ -521,24 +539,19 @@ public class AutonomousProgram extends LinearOpMode {
     }
     public void partialOpen()
     {
-        robot.servoTallon.setPosition(.26);//.3
-        robot.servoHandL.setPosition(.37);
-        robot.servoHandR.setPosition(.43);
+        robot.servoHandLB.setPosition(.6);
     }
     public void OpenClaw()
     {
-        sleep(5000);
-        armHold();
-        robot.servoHandR.setPosition(robot.CLOSED); //note: uses servo instead of motor.
-        robot.servoHandL.setPosition(robot.OPEN);
-        sleep(500);
-
+            robot.servoTallon.setPosition(.3);
+            robot.servoHandLB.setPosition(.6);
     }
     public void CloseClaw()
     {
-        robot.servoHandR.setPosition(robot.OPEN);
-        robot.servoHandL.setPosition(robot.CLOSED);
-        sleep(200);
+        robot.servoHandL.setPosition(.35);
+        robot.servoHandR.setPosition(.45);
+        robot.servoHandLB.setPosition(.43);
+        robot.servoTallon.setPosition(.1);
 
     }
     private void armHold()

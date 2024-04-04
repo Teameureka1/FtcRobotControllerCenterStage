@@ -184,10 +184,10 @@ public class HardwareSetup
         servoTallon = hwMap.servo.get("servoTallon");
 
         //open claw
-        servoHandL.setPosition(.8);
-        servoHandLB.setPosition(.5);
         servoHandR.setPosition(.3);
-        servoTallon.setPosition(.3);
+        servoHandL.setPosition(.5);
+        servoHandLB.setPosition(.43);
+        servoTallon.setPosition(.1);
         servoP.setPosition(.5);
         servoD.setPosition(.1);
         //endregion
