@@ -6,7 +6,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.teamcode.ChebstorsModules.util.NewHardwareMap;
-import org.firstinspires.ftc.teamcode.HardwareSetup;
 import org.firstinspires.ftc.teamcode.ChebstorsModules.modules.TelemetrySelector;
 
 import java.util.List;
@@ -35,15 +34,16 @@ public class Master extends LinearOpMode {
     }
 
     public enum parkPositions {
-        FRONT,
-        BACK,
+        CENTER,
+        CORNER,
         NULL
     }
 
     public enum propPosition {
         LEFT,
         CENTER,
-        RIGHT
+        RIGHT,
+        NULL
     }
 
     public enum placementPositions {
@@ -58,6 +58,8 @@ public class Master extends LinearOpMode {
     autoStyles autoStyle;
     placementPositions pixelPlacement;
     parkPositions parkPosition;
+    propPosition currentPropPosition = propPosition.NULL;
+
 
     /**
      * Start of opmode
@@ -85,14 +87,14 @@ public class Master extends LinearOpMode {
         startPosSelect = telemetrySelector.simpleSelector("What is your current position",startPositionOptions);
 
         String autoStyleSelect = autoStyleOptions[0];
-        autoStyleSelect = telemetrySelector.simpleSelector("What style of auto to run",autoStyleOptions);
+        autoStyleSelect = telemetrySelector.simpleSelector("What style of auto to run (The bot will grab the pixel after this selection)",autoStyleOptions);
+
+        robot.setClawPosition(NewHardwareMap.ClawPositions.CLOSED);
 
         String placementSelect = null;
         if (autoStyleSelect!=autoStyleOptions[2]) {
-            placementSelect = telemetrySelector.simpleSelector("Where should the pixels be placed (The bot will grab the pixel after this selection)",pixelPlacementOptions);
+            placementSelect = telemetrySelector.simpleSelector("Where should the pixels be placed",pixelPlacementOptions);
         }
-
-        robot.setClawPosition(NewHardwareMap.ClawPositions.CLOSED);
 
         String parkSelect = null;
         if (autoStyleSelect!=autoStyleOptions[2]) {
@@ -134,9 +136,9 @@ public class Master extends LinearOpMode {
 
         if (parkSelect != null) {
             if (parkSelect.equals(parkOptions[0])) {
-                parkPosition = parkPositions.FRONT;
+                parkPosition = parkPositions.CENTER;
             } else if (parkSelect.equals(parkOptions[1])) {
-                parkPosition = parkPositions.BACK;
+                parkPosition = parkPositions.CORNER;
             }
         } else {
             parkPosition = parkPositions.NULL;
@@ -194,9 +196,9 @@ public class Master extends LinearOpMode {
          * Parking
          */
         // Methods
-        if (parkPosition == parkPositions.FRONT) {
+        if (parkPosition == parkPositions.CENTER) {
             parkCenter();
-        } else if (parkPosition == parkPositions.BACK) {
+        } else if (parkPosition == parkPositions.CORNER) {
             parkCorner();
         }
 
@@ -216,6 +218,13 @@ public class Master extends LinearOpMode {
         //Code here
         List<Recognition> currentRecognitions = robot.tfod.getRecognitions();
 
+        for (int i = 0; i<5; i++) {
+            if (currentRecognitions.size()>0) {
+                break;
+            }
+            currentRecognitions = robot.tfod.getRecognitions();
+        }
+
         for (Recognition recognition : currentRecognitions) {
             // Filter
             if ((recognition.getLabel().equals("blue hat") && currentColor==positions.BLUE) || (recognition.getLabel().equals("red hat") && currentColor==positions.RED)) {
@@ -223,7 +232,7 @@ public class Master extends LinearOpMode {
                 if (x<=200) {
                     return propPosition.LEFT;
                 }
-                return propPosition.RIGHT;
+                return propPosition.CENTER;
             }
         }
 
@@ -237,19 +246,31 @@ public class Master extends LinearOpMode {
         telemetry.update();
 
         //Code here
-        propPosition position = scanProp();
+        currentPropPosition = scanProp();
 
         // Heading to spike mark
-        switch (position) {
+        switch (currentPropPosition) {
             case LEFT:
+                robot.TweetyBird.straightLineTo(0,10,0);
+                robot.TweetyBird.straightLineTo(0,30,-90);
+                robot.TweetyBird.straightLineTo(-2,30,-90);
                 break;
             case CENTER:
+                robot.TweetyBird.straightLineTo(5,30,0);
                 break;
             case RIGHT:
+                robot.TweetyBird.straightLineTo(0,10,0);
+                robot.TweetyBird.straightLineTo(0,30,90);
+                robot.TweetyBird.straightLineTo(2,30,90);
                 break;
         }
 
-        robot.TweetyBird.straightLineTo(0,10,0); //TODO TEMP
+        robot.TweetyBird.waitWhileBusy();
+        robot.TweetyBird.waitWhileBusy();
+        robot.TweetyBird.waitWhileBusy();
+
+        robot.setClawPosition(NewHardwareMap.ClawPositions.SINGLE);
+        robot.setArmHeight(300);
     }
 
     private void placePropTrussRight() {
@@ -257,24 +278,31 @@ public class Master extends LinearOpMode {
         telemetry.update();
 
         //Code here
-        propPosition position = scanProp();
+        currentPropPosition = scanProp();
 
         // Heading to spike mark
-        switch (position) {
+        switch (currentPropPosition) {
             case LEFT:
+                robot.TweetyBird.straightLineTo(0,10,0);
+                robot.TweetyBird.straightLineTo(0,30,-90);
+                robot.TweetyBird.straightLineTo(-2,30,-90);
                 break;
             case CENTER:
+                robot.TweetyBird.straightLineTo(-5,30,0);
                 break;
             case RIGHT:
+                robot.TweetyBird.straightLineTo(0,10,0);
+                robot.TweetyBird.straightLineTo(0,30,90);
+                robot.TweetyBird.straightLineTo(2,30,90);
                 break;
         }
 
+        robot.TweetyBird.waitWhileBusy();
+        robot.TweetyBird.waitWhileBusy();
+        robot.TweetyBird.waitWhileBusy();
+
         robot.setClawPosition(NewHardwareMap.ClawPositions.SINGLE);
         robot.setArmHeight(300);
-
-        robot.TweetyBird.waitWhileBusy();
-        robot.TweetyBird.waitWhileBusy();
-        robot.TweetyBird.waitWhileBusy();
     }
 
     private void cycleLong() {
@@ -282,25 +310,6 @@ public class Master extends LinearOpMode {
         telemetry.update();
 
         //Code here
-        ElapsedTime cycleTimer = new ElapsedTime();
-        cycleTimer.reset();
-
-        robot.TweetyBird.speedLimit(0.9);
-
-        while(opModeIsActive()) {
-            // Auto
-            generalLong();
-
-            // Catch
-            if (cycleTimer.seconds()>20) {
-                break;
-            }
-
-            // Return
-            robot.TweetyBird.straightLineTo(-72,52,90);
-        }
-
-        robot.TweetyBird.straightLineTo(-72,52,-90);
     }
 
     private void cycleShort() {
@@ -308,7 +317,6 @@ public class Master extends LinearOpMode {
         telemetry.update();
 
         //Code here
-        generalShort();
     }
 
     private void generalLong() {
@@ -316,17 +324,22 @@ public class Master extends LinearOpMode {
         telemetry.update();
 
         //Code here
-        robot.TweetyBird.speedLimit(0.9);
 
         // Approach pixel stack
-        robot.TweetyBird.straightLineTo(20,49,90);
+        robot.setArmHeight(250);
+        robot.TweetyBird.straightLineTo(24,51,90);
+        robot.TweetyBird.speedLimit(0.5);
 
         robot.TweetyBird.waitWhileBusy();
         robot.TweetyBird.waitWhileBusy();
         robot.TweetyBird.waitWhileBusy();
+
+        robot.TweetyBird.speedLimit(0.9);
+
+        sleep(200);
 
         // Pickup Pixel
-        robot.setArmHeight(200);
+        robot.setArmHeight(150);
         sleep(200);
         robot.setClawPosition(NewHardwareMap.ClawPositions.CLOSED);
 
@@ -352,65 +365,18 @@ public class Master extends LinearOpMode {
         telemetry.update();
 
         //Code here
-        // Cross
-        robot.TweetyBird.speedLimit(0.9);
-
-        robot.TweetyBird.straightLineTo(-0.5,3.5,90);
-
-        robot.TweetyBird.waitWhileBusy();
-        robot.TweetyBird.waitWhileBusy();
-        robot.TweetyBird.waitWhileBusy();
-
-        robot.TweetyBird.straightLineTo(47.7,3.5,90);
-
-        robot.TweetyBird.waitWhileBusy();
-        robot.TweetyBird.waitWhileBusy();
-        robot.TweetyBird.waitWhileBusy();
-
-        robot.TweetyBird.straightLineTo(68.3,21.7,90);
-
-        robot.TweetyBird.waitWhileBusy();
-        robot.TweetyBird.waitWhileBusy();
-        robot.TweetyBird.waitWhileBusy();
-
-        robot.TweetyBird.straightLineTo(68.3,28.7,90);
-
-        robot.TweetyBird.waitWhileBusy();
-        robot.TweetyBird.waitWhileBusy();
-        robot.TweetyBird.waitWhileBusy();
-
-        robot.TweetyBird.straightLineTo(71.7,28.7,90);
-
-        robot.TweetyBird.waitWhileBusy();
-        robot.TweetyBird.waitWhileBusy();
-        robot.TweetyBird.waitWhileBusy();
-
-        // Returning
-        robot.TweetyBird.straightLineTo(68.3,28.7,90);
-
-        robot.TweetyBird.waitWhileBusy();
-        robot.TweetyBird.waitWhileBusy();
-        robot.TweetyBird.waitWhileBusy();
-        
-        robot.TweetyBird.straightLineTo(68.3,21.7,90);
-
-        robot.TweetyBird.waitWhileBusy();
-        robot.TweetyBird.waitWhileBusy();
-        robot.TweetyBird.waitWhileBusy();
-
-        robot.TweetyBird.straightLineTo(47.7,3.5,90);
-
-        robot.TweetyBird.waitWhileBusy();
-        robot.TweetyBird.waitWhileBusy();
-        robot.TweetyBird.waitWhileBusy();
-
-        robot.TweetyBird.straightLineTo(-0.5,5,90);
-
-        robot.TweetyBird.waitWhileBusy();
-        robot.TweetyBird.waitWhileBusy();
-        robot.TweetyBird.waitWhileBusy();
-
-        while (opModeIsActive());
+        if ((currentColor == positions.RED && currentPropPosition == propPosition.RIGHT) ||
+                (currentColor == positions.BLUE && currentPropPosition == propPosition.LEFT)) {
+            robot.TweetyBird.straightLineTo(0,5,-90);
+            robot.TweetyBird.waitWhileBusy();
+            robot.TweetyBird.waitWhileBusy();
+            robot.TweetyBird.waitWhileBusy();
+        } else if (currentPropPosition == propPosition.CENTER) {
+            robot.TweetyBird.straightLineTo(0,28,0);
+            robot.TweetyBird.waitWhileBusy();
+            robot.TweetyBird.waitWhileBusy();
+            robot.TweetyBird.waitWhileBusy();
+        }
 
         // Placing
         placePixel();
@@ -448,7 +414,7 @@ public class Master extends LinearOpMode {
         //Code here
 
         if (pixelPlacement==placementPositions.BACKDROP) {
-            double xDistance = currentDistance==positions.LONG?-80:-30;
+            double xDistance = currentDistance==positions.LONG?-80:-32;
 
             // Go to center of backdrop
             robot.TweetyBird.straightLineTo(xDistance,28,-90);
@@ -457,11 +423,45 @@ public class Master extends LinearOpMode {
             robot.TweetyBird.waitWhileBusy();
             robot.TweetyBird.waitWhileBusy();
 
-            //TODO Drop Pixel
+            robot.setArmHeight(800);
+            robot.setArmDistance(1);
+
+            if ((currentColor == positions.RED && currentPropPosition == propPosition.LEFT) ||
+                    (currentColor == positions.BLUE && currentPropPosition == propPosition.RIGHT)) {
+                robot.TweetyBird.straightLineTo(xDistance,30,-90);
+            } else if (currentPropPosition == propPosition.CENTER) {
+                robot.TweetyBird.straightLineTo(xDistance,28,-90);
+            } else if ((currentColor == positions.RED && currentPropPosition == propPosition.RIGHT) ||
+                    (currentColor == positions.BLUE && currentPropPosition == propPosition.LEFT)) {
+                robot.TweetyBird.straightLineTo(xDistance,23,-90);
+            }
+
+            robot.TweetyBird.waitWhileBusy();
+            robot.TweetyBird.waitWhileBusy();
+            robot.TweetyBird.waitWhileBusy();
+
+            robot.TweetyBird.adjustTo(-5,0,0);
+
+            robot.TweetyBird.waitWhileBusy();
+            robot.TweetyBird.waitWhileBusy();
+            robot.TweetyBird.waitWhileBusy();
+
+            robot.setClawPosition(NewHardwareMap.ClawPositions.OPEN);
+            sleep(200);
+
+            robot.TweetyBird.adjustTo(8,0,0);
+
+            robot.TweetyBird.waitWhileBusy();
+            robot.TweetyBird.waitWhileBusy();
+            robot.TweetyBird.waitWhileBusy();
+
+            robot.setArmHeight(200);
+            robot.setArmDistance(0);
+
         } else {
             double xDistance = currentDistance==positions.LONG?-90:-50;
 
-            if (parkPosition==parkPositions.FRONT) {
+            if (parkPosition==parkPositions.CENTER) {
                 robot.TweetyBird.straightLineTo(xDistance+10,52,-90);
 
                 robot.TweetyBird.waitWhileBusy();
@@ -474,7 +474,7 @@ public class Master extends LinearOpMode {
                 robot.TweetyBird.waitWhileBusy();
                 robot.TweetyBird.waitWhileBusy();
 
-                //TODO Drop Pixel
+                robot.setClawPosition(NewHardwareMap.ClawPositions.OPEN);
             } else {
                 robot.TweetyBird.straightLineTo(xDistance+10,5,-90);
 
@@ -487,7 +487,8 @@ public class Master extends LinearOpMode {
                 robot.TweetyBird.waitWhileBusy();
                 robot.TweetyBird.waitWhileBusy();
                 robot.TweetyBird.waitWhileBusy();
-                //TODO Drop Pixel
+
+                robot.setClawPosition(NewHardwareMap.ClawPositions.OPEN);
             }
         }
 

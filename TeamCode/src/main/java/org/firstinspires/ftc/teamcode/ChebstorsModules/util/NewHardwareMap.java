@@ -203,6 +203,17 @@ public class NewHardwareMap {
                 .build();
     }
 
+    public void movementPower(double axial, double lateral, double yaw, double speed) {
+        double frontLeftPower = (axial + lateral) * speed + yaw;
+        double frontRightPower = (axial - lateral) * speed - yaw;
+        double backLeftPower = (axial - lateral) * speed + yaw;
+        double backRightPower = (axial + lateral) * speed - yaw;
+        motorFrontLeft.setPower(frontLeftPower);
+        motorFrontRight.setPower(frontRightPower);
+        motorBackLeft.setPower(backLeftPower);
+        motorBackRight.setPower(backRightPower);
+    }
+
     /**
      * Sets the position of the claw via a enum
      * @param position target position/mode
@@ -239,5 +250,22 @@ public class NewHardwareMap {
             motorBottomArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         }
         motorBottomArm.setPower(1);
+    }
+
+    public void setArmDistance(int ticks) {
+        /*
+        motorTopArm.setTargetPosition(ticks);
+        if (motorTopArm.getMode() != DcMotor.RunMode.RUN_TO_POSITION) {
+            motorTopArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        }
+        motorTopArm.setPower(1);
+         */
+        if (ticks>0) {
+            motorTopArm.setPower(1);
+            opMode.sleep(400);
+            motorTopArm.setPower(0);
+        } else {
+            motorTopArm.setPower(-.5);
+        }
     }
 }
