@@ -459,7 +459,7 @@ public class Master extends LinearOpMode {
             robot.setArmDistance(0);
 
         } else {
-            double xDistance = currentDistance==positions.LONG?-90:-50;
+            double xDistance = currentDistance==positions.LONG?-90:-36;
 
             if (parkPosition==parkPositions.CENTER) {
                 robot.TweetyBird.straightLineTo(xDistance+10,52,-90);
@@ -476,13 +476,13 @@ public class Master extends LinearOpMode {
 
                 robot.setClawPosition(NewHardwareMap.ClawPositions.OPEN);
             } else {
-                robot.TweetyBird.straightLineTo(xDistance+10,5,-90);
+                robot.TweetyBird.straightLineTo(xDistance+10,2,-90);
 
                 robot.TweetyBird.waitWhileBusy();
                 robot.TweetyBird.waitWhileBusy();
                 robot.TweetyBird.waitWhileBusy();
 
-                robot.TweetyBird.straightLineTo(xDistance,5,-90);
+                robot.TweetyBird.straightLineTo(xDistance,2,-90);
 
                 robot.TweetyBird.waitWhileBusy();
                 robot.TweetyBird.waitWhileBusy();
