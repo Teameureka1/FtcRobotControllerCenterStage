@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.ChebstorsModules.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.teamcode.ChebstorsModules.util.NewHardwareMap;
@@ -144,6 +144,10 @@ public class Master extends LinearOpMode {
             parkPosition = parkPositions.NULL;
         }
 
+        // Startup Sequence
+        telemetry.addLine("[+] Startup Sequence is Running");
+        telemetry.update();
+        startupSequence();
 
         //Telemetry
         telemetry.addLine("[*] Bot fully initialized and ready to start");
@@ -440,7 +444,7 @@ public class Master extends LinearOpMode {
             robot.TweetyBird.waitWhileBusy();
             robot.TweetyBird.waitWhileBusy();
 
-            robot.TweetyBird.adjustTo(-5,0,0);
+            robot.TweetyBird.adjustTo(-6,0,0);
 
             robot.TweetyBird.waitWhileBusy();
             robot.TweetyBird.waitWhileBusy();
@@ -492,5 +496,23 @@ public class Master extends LinearOpMode {
             }
         }
 
+    }
+
+    public void startupSequence() {
+        // Resetting extension
+        robot.motorTopArm.setPower(1);
+        sleep(200);
+
+        // Retracting extension
+        robot.motorTopArm.setPower(-1);
+        while ((opModeIsActive() || opModeInInit()) && !robot.MagIn.isPressed());
+        robot.motorTopArm.setPower(0);
+
+        // Restting arm
+        robot.motorBottomArm.setPower(-1);
+        sleep(500);
+        robot.motorBottomArm.setPower(0);
+        robot.motorBottomArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.setArmHeight(0);
     }
 }

@@ -60,8 +60,8 @@ public class NewHardwareMap {
 
     public Servo servoTallon = null;
 
-    public TouchSensor MagIn = null;
     public TouchSensor MagOut = null;
+    public TouchSensor MagIn = null;
 
     public IMU imu = null;
 
@@ -116,8 +116,8 @@ public class NewHardwareMap {
         servoP.setPosition(.5);
         servoD.setPosition(.1);
 
-        MagIn = hwMap.touchSensor.get("MagIn");
-        MagOut = hwMap.touchSensor.get("MagOut");
+        MagOut = hwMap.touchSensor.get("MagIn");
+        MagIn = hwMap.touchSensor.get("MagOut");
 
         imu = hwMap.get(IMU.class, "imu");
         imu.initialize(new IMU.Parameters(new RevHubOrientationOnRobot(
