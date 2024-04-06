@@ -87,9 +87,7 @@ public class Master extends LinearOpMode {
         startPosSelect = telemetrySelector.simpleSelector("What is your current position",startPositionOptions);
 
         String autoStyleSelect = autoStyleOptions[0];
-        autoStyleSelect = telemetrySelector.simpleSelector("What style of auto to run (The bot will grab the pixel after this selection)",autoStyleOptions);
-
-        robot.setClawPosition(NewHardwareMap.ClawPositions.CLOSED);
+        autoStyleSelect = telemetrySelector.simpleSelector("What style of auto to run",autoStyleOptions);
 
         String placementSelect = null;
         if (autoStyleSelect!=autoStyleOptions[2]) {
@@ -154,6 +152,9 @@ public class Master extends LinearOpMode {
 
         // Wait for Start
         waitForStart();
+
+        // Grab the pixel
+        robot.setClawPosition(NewHardwareMap.ClawPositions.CLOSED);
 
         // Starting Tweetybird
         robot.TweetyBird.engage();
@@ -402,7 +403,7 @@ public class Master extends LinearOpMode {
         //Code here
         double xDistance = currentDistance==positions.LONG?-85:-37;
 
-        robot.TweetyBird.straightLineTo(xDistance,52,0);
+        robot.TweetyBird.straightLineTo(xDistance,49,0);
 
         robot.TweetyBird.waitWhileBusy();
         robot.TweetyBird.waitWhileBusy();

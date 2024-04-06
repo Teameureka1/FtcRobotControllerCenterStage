@@ -35,9 +35,14 @@ public class NewHardwareMap {
 
     // Global Enums
     public enum ClawPositions {
-            OPEN,
-            SINGLE,
-            CLOSED
+        OPEN,
+        SINGLE,
+        CLOSED
+    }
+
+    public enum TallonPositions {
+        OPEN,
+        CLOSED
     }
 
     // Hardware definitions
@@ -100,6 +105,7 @@ public class NewHardwareMap {
 
         // Opening Claw
         setClawPosition(ClawPositions.OPEN);
+        setTallonPosition(TallonPositions.CLOSED);
     }
 
     /**
@@ -134,8 +140,8 @@ public class NewHardwareMap {
         servoTallon = hwMap.servo.get("servoTallon");
 
         setClawPosition(ClawPositions.OPEN);
+        setTallonPosition(TallonPositions.CLOSED);
 
-        servoTallon.setPosition(.3);
         servoP.setPosition(.5);
         servoD.setPosition(.1);
 
@@ -166,11 +172,12 @@ public class NewHardwareMap {
 
         mainCam = hwMap.get(WebcamName.class, "Webcam 1");
 
+        /*
         opMode.telemetry.addLine("[+] Robot is being initialized...");
         opMode.telemetry.update();
         startupSequence();
         opMode.telemetry.addLine("[*] Robot has been fully initialized");
-        opMode.telemetry.update();
+        opMode.telemetry.update();*/
 
     }
 
@@ -251,20 +258,31 @@ public class NewHardwareMap {
     public void setClawPosition(ClawPositions position) {
         switch(position) {
             case OPEN:
-                servoHandL.setPosition(.44);
-                servoHandR.setPosition(.35);
+                servoHandL.setPosition(.5);
+                servoHandR.setPosition(.3);
                 servoHandLB.setPosition(.41);
                 break;
             case SINGLE:
                 servoHandL.setPosition(.3);
                 servoHandR.setPosition(.45);
                 servoHandLB.setPosition(.6);
-                servoTallon.setPosition(.3);
+                setTallonPosition(TallonPositions.OPEN);
                 break;
             case CLOSED:
                 servoHandL.setPosition(.3);
                 servoHandR.setPosition(.45);
                 servoHandLB.setPosition(.41);
+                setTallonPosition(TallonPositions.CLOSED);
+                break;
+        }
+    }
+
+    public void setTallonPosition(TallonPositions position) {
+        switch(position) {
+            case OPEN:
+                servoTallon.setPosition(.3);
+                break;
+            case CLOSED:
                 servoTallon.setPosition(.1);
                 break;
         }
