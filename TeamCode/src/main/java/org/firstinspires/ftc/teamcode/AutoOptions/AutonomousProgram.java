@@ -336,6 +336,7 @@ public class AutonomousProgram extends LinearOpMode {
                         robot.TweetyBird.straightLineTo(8,30,-90);
                         goodWait();
                         robot.TweetyBird.straightLineTo(-10,30,-90);
+                        partialOpen();
                         //release purple
                         goodWait();
                         robot.TweetyBird.straightLineTo(5,30,-90);
@@ -355,7 +356,7 @@ public class AutonomousProgram extends LinearOpMode {
                     goodWait();
                     robot.TweetyBird.straightLineTo(-10,25,-90);
                     goodWait();
-                    //release purple
+                    partialOpen();
                     robot.TweetyBird.straightLineTo(5,25,-90);
                     goodWait();
                     robot.TweetyBird.straightLineTo(5,25,0);
@@ -364,9 +365,14 @@ public class AutonomousProgram extends LinearOpMode {
                 else
                 {
                     //no truss
-                    robot.TweetyBird.straightLineTo(10,19,0);
+                    robot.TweetyBird.straightLineTo(-9,19,0);
                     goodWait();
-                    //release purple
+                    partialOpen();
+                    sleep(200);
+                    robot.TweetyBird.straightLineTo(-9,25,0);
+                    goodWait();
+                    robot.TweetyBird.straightLineTo(-9,48,0);
+                    goodWait();
 
                 }
                // robot.TweetyBird.straightLineTo();
@@ -375,9 +381,9 @@ public class AutonomousProgram extends LinearOpMode {
             //sperate by front and back
             if(startPos.getValue().equals("front"))
             {
-                robot.TweetyBird.straightLineTo(2,47,0);
+                robot.TweetyBird.straightLineTo(-2,47,0);
                 goodWait();
-                robot.TweetyBird.straightLineTo(0,46,90);
+                robot.TweetyBird.straightLineTo(-2,48,90);
                 goodWait();
                 robot.TweetyBird.straightLineTo(70,49,90);
                 goodWait();
@@ -459,17 +465,23 @@ public class AutonomousProgram extends LinearOpMode {
                         armMove(-.8,-200);
                         armHold();
                         robot.TweetyBird.straightLineTo(-80,48,-90);
-
                     }
                     else
                     {
                         robot.TweetyBird.straightLineTo(-80,25,-90);
                         goodWait();
-
+                        armMove(-.8,-400);
+                        armHold();
+                        extendArm(.8);
+                        robot.TweetyBird.straightLineTo(-90,20,-90);
+                        goodWait();
+                        armMove(.3,100);
+                        OpenClaw();
+                        armMove(-.8,-200);
+                        armHold();
+                        robot.TweetyBird.straightLineTo(-80,48,-90);
                     }
-
                 }
-
             }
             robot.TweetyBird.flipInput(false);
             if(startPos.getValue().equals("back"))//allready delivered purple now deliver yellow
