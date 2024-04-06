@@ -507,8 +507,10 @@ public class Master extends LinearOpMode {
         robot.motorTopArm.setPower(-1);
         while ((opModeIsActive() || opModeInInit()) && !robot.MagIn.isPressed());
         robot.motorTopArm.setPower(0);
+        //robot.motorTopArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER); TODO: Fix this once the encoder wire is added
+        robot.setArmDistance(0);
 
-        // Restting arm
+        // Resetting arm
         robot.motorBottomArm.setPower(-1);
         sleep(500);
         robot.motorBottomArm.setPower(0);

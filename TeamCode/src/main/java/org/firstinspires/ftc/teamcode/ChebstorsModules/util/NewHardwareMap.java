@@ -265,7 +265,9 @@ public class NewHardwareMap {
             opMode.sleep(400);
             motorTopArm.setPower(0);
         } else {
-            motorTopArm.setPower(-.5);
+            motorTopArm.setPower(-1);
+            while ((opMode.opModeIsActive() || opMode.opModeInInit()) && !MagIn.isPressed());
+            motorTopArm.setPower(0);
         }
     }
 }
