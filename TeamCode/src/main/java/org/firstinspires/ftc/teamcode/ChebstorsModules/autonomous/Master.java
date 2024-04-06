@@ -339,11 +339,11 @@ public class Master extends LinearOpMode {
             robot.TweetyBird.waitWhileBusy();
             robot.TweetyBird.waitWhileBusy();
         } else if (currentPropPosition == propPosition.CENTER) {
-            robot.TweetyBird.straightLineTo(0,28,0);
+            robot.TweetyBird.straightLineTo(20,25,-90);
             robot.TweetyBird.waitWhileBusy();
             robot.TweetyBird.waitWhileBusy();
             robot.TweetyBird.waitWhileBusy();
-            robot.TweetyBird.straightLineTo(24,52,-90);
+            robot.TweetyBird.straightLineTo(20,50,-90);
             robot.TweetyBird.waitWhileBusy();
             robot.TweetyBird.waitWhileBusy();
             robot.TweetyBird.waitWhileBusy();
