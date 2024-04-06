@@ -147,7 +147,6 @@ public class Master extends LinearOpMode {
         // Startup Sequence
         telemetry.addLine("[+] Startup Sequence is Running");
         telemetry.update();
-        startupSequence();
 
         //Telemetry
         telemetry.addLine("[*] Bot fully initialized and ready to start");
@@ -328,24 +327,34 @@ public class Master extends LinearOpMode {
         telemetry.update();
 
         //Code here
-
-        // Approach pixel stack
-        robot.setArmHeight(250);
-        robot.TweetyBird.straightLineTo(24,51,90);
-        robot.TweetyBird.speedLimit(0.5);
-
-        robot.TweetyBird.waitWhileBusy();
-        robot.TweetyBird.waitWhileBusy();
-        robot.TweetyBird.waitWhileBusy();
-
-        robot.TweetyBird.speedLimit(0.9);
-
-        sleep(200);
-
-        // Pickup Pixel
-        robot.setArmHeight(150);
-        sleep(200);
-        robot.setClawPosition(NewHardwareMap.ClawPositions.CLOSED);
+        if ((currentColor == positions.RED && currentPropPosition == propPosition.LEFT) ||
+                (currentColor == positions.BLUE && currentPropPosition == propPosition.RIGHT)) {
+            robot.setArmHeight(400);
+            robot.TweetyBird.straightLineTo(0,30,90);
+            robot.TweetyBird.waitWhileBusy();
+            robot.TweetyBird.waitWhileBusy();
+            robot.TweetyBird.waitWhileBusy();
+            robot.TweetyBird.straightLineTo(0,52,-90);
+            robot.TweetyBird.waitWhileBusy();
+            robot.TweetyBird.waitWhileBusy();
+            robot.TweetyBird.waitWhileBusy();
+        } else if (currentPropPosition == propPosition.CENTER) {
+            robot.TweetyBird.straightLineTo(0,28,0);
+            robot.TweetyBird.waitWhileBusy();
+            robot.TweetyBird.waitWhileBusy();
+            robot.TweetyBird.waitWhileBusy();
+            robot.TweetyBird.straightLineTo(24,52,-90);
+            robot.TweetyBird.waitWhileBusy();
+            robot.TweetyBird.waitWhileBusy();
+            robot.TweetyBird.waitWhileBusy();
+        } if ((currentColor == positions.RED && currentPropPosition == propPosition.RIGHT) ||
+                (currentColor == positions.BLUE && currentPropPosition == propPosition.LEFT)) {
+            robot.TweetyBird.straightLineTo(5,40,-90);
+            robot.TweetyBird.waitWhileBusy();
+            robot.TweetyBird.waitWhileBusy();
+            robot.TweetyBird.waitWhileBusy();
+        }
+        robot.setArmHeight(0);
 
         // Backup and turn around
         robot.TweetyBird.straightLineTo(0,52,-90);
@@ -418,7 +427,7 @@ public class Master extends LinearOpMode {
         //Code here
 
         if (pixelPlacement==placementPositions.BACKDROP) {
-            double xDistance = currentDistance==positions.LONG?-80:-32;
+            double xDistance = currentDistance==positions.LONG?-81:-32;
 
             // Go to center of backdrop
             robot.TweetyBird.straightLineTo(xDistance,28,-90);
@@ -432,7 +441,7 @@ public class Master extends LinearOpMode {
 
             if ((currentColor == positions.RED && currentPropPosition == propPosition.LEFT) ||
                     (currentColor == positions.BLUE && currentPropPosition == propPosition.RIGHT)) {
-                robot.TweetyBird.straightLineTo(xDistance,30,-90);
+                robot.TweetyBird.straightLineTo(xDistance,34,-90);
             } else if (currentPropPosition == propPosition.CENTER) {
                 robot.TweetyBird.straightLineTo(xDistance,28,-90);
             } else if ((currentColor == positions.RED && currentPropPosition == propPosition.RIGHT) ||
@@ -496,25 +505,5 @@ public class Master extends LinearOpMode {
             }
         }
 
-    }
-
-    public void startupSequence() {
-        // Resetting extension
-        robot.motorTopArm.setPower(1);
-        sleep(200);
-
-        // Retracting extension
-        robot.motorTopArm.setPower(-1);
-        while ((opModeIsActive() || opModeInInit()) && !robot.MagIn.isPressed());
-        robot.motorTopArm.setPower(0);
-        //robot.motorTopArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER); TODO: Fix this once the encoder wire is added
-        robot.setArmDistance(0);
-
-        // Resetting arm
-        robot.motorBottomArm.setPower(-1);
-        sleep(500);
-        robot.motorBottomArm.setPower(0);
-        robot.motorBottomArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.setArmHeight(0);
     }
 }

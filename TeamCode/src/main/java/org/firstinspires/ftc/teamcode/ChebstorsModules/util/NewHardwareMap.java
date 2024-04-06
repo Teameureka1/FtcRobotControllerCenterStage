@@ -79,6 +79,29 @@ public class NewHardwareMap {
         this.opMode = opMode;
     }
 
+    public void startupSequence() {
+        // Resetting extension
+        motorTopArm.setPower(1);
+        opMode.sleep(200);
+
+        // Retracting extension
+        motorTopArm.setPower(-1);
+        while ((opMode.opModeInInit() || opMode.opModeIsActive()) && !MagIn.isPressed());
+        motorTopArm.setPower(0);
+        //robot.motorTopArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER); TODO: Fix this once the encoder wire is added
+        setArmDistance(0);
+
+        // Resetting arm
+        motorBottomArm.setPower(-1);
+        opMode.sleep(500);
+        motorBottomArm.setPower(0);
+        motorBottomArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //setArmHeight(0);
+
+        // Opening Claw
+        setClawPosition(ClawPositions.OPEN);
+    }
+
     /**
      * Initializes the core functions of the robot
      */
@@ -142,6 +165,13 @@ public class NewHardwareMap {
         middleEncoder.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         mainCam = hwMap.get(WebcamName.class, "Webcam 1");
+
+        opMode.telemetry.addLine("[+] Robot is being initialized...");
+        opMode.telemetry.update();
+        startupSequence();
+        opMode.telemetry.addLine("[*] Robot has been fully initialized");
+        opMode.telemetry.update();
+
     }
 
     /**
