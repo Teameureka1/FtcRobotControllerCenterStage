@@ -5,11 +5,10 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.teamcode.ChebstorsModules.util.NewHardwareMap;
+import org.firstinspires.ftc.teamcode.ChebstorsModules.modules.util.NewHardwareMap;
 
 import java.io.File;
 import java.io.FileWriter;
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 

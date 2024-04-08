@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.ChebstorsModules.util;
+package org.firstinspires.ftc.teamcode.ChebstorsModules.modules.util;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -10,8 +10,13 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.vision.VisionPortal;
+import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
+import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
+import org.openftc.apriltag.AprilTagDetection;
 
 import dev.narlyx.ftc.tweetybird.TweetyBirdProcessor;
 
@@ -26,6 +31,7 @@ public class NewHardwareMap {
     // Vision definitions
     public VisionPortal visionPortal;
     public TfodProcessor tfod;
+    public AprilTagProcessor aprilTag;
 
     // Vision variables
     private String tfodAssetName = "Combined.tflite";
@@ -101,7 +107,7 @@ public class NewHardwareMap {
         opMode.sleep(500);
         motorBottomArm.setPower(0);
         motorBottomArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        //setArmHeight(0);
+        setArmHeight(0);
 
         // Opening Claw
         setClawPosition(ClawPositions.OPEN);
@@ -145,8 +151,8 @@ public class NewHardwareMap {
         servoP.setPosition(.5);
         servoD.setPosition(.1);
 
-        MagOut = hwMap.touchSensor.get("MagIn");
-        MagIn = hwMap.touchSensor.get("MagOut");
+        MagOut = hwMap.touchSensor.get("MagOut");
+        MagIn = hwMap.touchSensor.get("MagIn");
 
         imu = hwMap.get(IMU.class, "imu");
         imu.initialize(new IMU.Parameters(new RevHubOrientationOnRobot(
@@ -185,6 +191,15 @@ public class NewHardwareMap {
      * Initializes vision
      */
     public void initVision() {
+        aprilTag = new AprilTagProcessor.Builder()
+                .setDrawAxes(true)
+                .setDrawCubeProjection(false)
+                .setDrawTagOutline(true)
+                .setTagFamily(AprilTagProcessor.TagFamily.TAG_36h11)
+                .setTagLibrary(AprilTagGameDatabase.getCenterStageTagLibrary())
+                .setOutputUnits(DistanceUnit.INCH, AngleUnit.DEGREES)
+                .build();
+
         tfod = new TfodProcessor.Builder()
                 .setModelAssetName(tfodAssetName)
                 .setModelLabels(tfodLables)
@@ -193,6 +208,7 @@ public class NewHardwareMap {
         visionPortal = new VisionPortal.Builder()
                 .setCamera(mainCam)
                 .addProcessor(tfod)
+                .addProcessor(aprilTag)
                 .build();
 
         tfod.setMinResultConfidence(0.6F);
@@ -220,17 +236,17 @@ public class NewHardwareMap {
                 .flipRightEncoder(true)
                 .flipMiddleEncoder(false)
 
-                .setSideEncoderDistance(14+(3.0/8.0))
+                .setSideEncoderDistance(14+(1/4))
                 .setMiddleEncoderOffset(5+(5.0/8.0))
 
                 .setTicksPerEncoderRotation(2000)
                 .setEncoderWheelRadius(1.88976/2.0)
 
                 //Other Config
-                .setMinSpeed(0.25)
+                .setMinSpeed(0.3)
                 .setMaxSpeed(0.8)
-                .setStartSpeed(0.4)
-                .setSpeedModifier(0.04)
+                .setStartSpeed(0.6)
+                .setSpeedModifier(0.07)
                 .setStopForceSpeed(0.25)
 
                 .setCorrectionOverpowerDistance(5)

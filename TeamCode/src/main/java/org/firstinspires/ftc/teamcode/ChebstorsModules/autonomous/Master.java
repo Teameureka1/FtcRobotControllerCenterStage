@@ -2,11 +2,12 @@ package org.firstinspires.ftc.teamcode.ChebstorsModules.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
-import org.firstinspires.ftc.teamcode.ChebstorsModules.util.NewHardwareMap;
+import org.firstinspires.ftc.teamcode.ChebstorsModules.modules.util.NewHardwareMap;
 import org.firstinspires.ftc.teamcode.ChebstorsModules.modules.TelemetrySelector;
+import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
 import java.util.List;
 
@@ -59,6 +60,7 @@ public class Master extends LinearOpMode {
     placementPositions pixelPlacement;
     parkPositions parkPosition;
     propPosition currentPropPosition = propPosition.NULL;
+    double startDelay = 0;
 
 
     /**
@@ -73,6 +75,8 @@ public class Master extends LinearOpMode {
         robot.initVision();
         robot.TweetyBird.disengage();
 
+
+
         // Setting up TelemetrySelector
         telemetrySelector = new TelemetrySelector(this);
 
@@ -81,6 +85,7 @@ public class Master extends LinearOpMode {
         String[] autoStyleOptions = { "Cycle", "General", "Only-Spike" };
         String[] pixelPlacementOptions = { "Backdrop", "Backstage" };
         String[] parkOptions = { "Center", "Corner" };
+        String[] waitOptions = { "0", "1", "2", "3", "5", "7", "10"};
 
         // Asking
         String startPosSelect = startPositionOptions[0];
@@ -98,6 +103,9 @@ public class Master extends LinearOpMode {
         if (autoStyleSelect!=autoStyleOptions[2]) {
             parkSelect = telemetrySelector.simpleSelector("Where should the bot park",parkOptions);
         }
+
+        String waitTimeSelect = "0";
+        waitTimeSelect = telemetrySelector.simpleSelector("How long should the start be deleyed",waitOptions);
 
         // Setting global variables
         if (startPosSelect.equals(startPositionOptions[0])) {
@@ -142,6 +150,8 @@ public class Master extends LinearOpMode {
             parkPosition = parkPositions.NULL;
         }
 
+        startDelay = Double.parseDouble(waitTimeSelect);
+
         // Startup Sequence
         telemetry.addLine("[+] Startup Sequence is Running");
         telemetry.update();
@@ -155,6 +165,17 @@ public class Master extends LinearOpMode {
 
         // Grab the pixel
         robot.setClawPosition(NewHardwareMap.ClawPositions.CLOSED);
+
+        /**
+         * Waiting
+         */
+        ElapsedTime waitTimer = new ElapsedTime();
+        while (waitTimer.seconds()<startDelay) {
+            telemetry.addLine("[*] Waiting... '"+(startDelay-waitTimer.seconds())+"' seconds remaining...");
+            telemetry.update();
+        }
+        waitTimer = null;
+
 
         // Starting Tweetybird
         robot.TweetyBird.engage();
@@ -275,6 +296,7 @@ public class Master extends LinearOpMode {
 
         robot.setClawPosition(NewHardwareMap.ClawPositions.SINGLE);
         robot.setArmHeight(300);
+        robot.setClawPosition(NewHardwareMap.ClawPositions.CLOSED);
     }
 
     private void placePropTrussRight() {
@@ -307,6 +329,7 @@ public class Master extends LinearOpMode {
 
         robot.setClawPosition(NewHardwareMap.ClawPositions.SINGLE);
         robot.setArmHeight(300);
+        robot.setClawPosition(NewHardwareMap.ClawPositions.CLOSED);
     }
 
     private void cycleLong() {
@@ -314,6 +337,9 @@ public class Master extends LinearOpMode {
         telemetry.update();
 
         //Code here
+        generalLong();
+
+        // Beginning cycles
     }
 
     private void cycleShort() {
@@ -321,6 +347,54 @@ public class Master extends LinearOpMode {
         telemetry.update();
 
         //Code here
+        generalShort();
+
+        // Beginning cycles
+        while (opModeIsActive()) {
+            // Navigating to stack
+            robot.TweetyBird.straightLineTo(-0.5,3,90);
+            robot.TweetyBird.waitWhileBusy();
+            robot.TweetyBird.waitWhileBusy();
+            robot.TweetyBird.waitWhileBusy();
+
+            robot.TweetyBird.speedLimit(0.6);
+            robot.TweetyBird.straightLineTo(46.5,3,90);
+            robot.TweetyBird.waitWhileBusy();
+            robot.TweetyBird.waitWhileBusy();
+            robot.TweetyBird.waitWhileBusy();
+
+            robot.TweetyBird.speedLimit(0.8);
+
+            robot.TweetyBird.straightLineTo(48,3,45);
+            robot.TweetyBird.waitWhileBusy();
+            robot.TweetyBird.waitWhileBusy();
+            robot.TweetyBird.waitWhileBusy();
+
+            //TODO Pixel
+            lineAgainstApriltag(8,-4,0,0);
+            robot.TweetyBird.waitWhileBusy();
+            robot.TweetyBird.waitWhileBusy();
+            robot.TweetyBird.waitWhileBusy();
+
+            sleep(1000);
+
+            robot.TweetyBird.straightLineTo(65,10,0);
+            robot.TweetyBird.waitWhileBusy();
+            robot.TweetyBird.waitWhileBusy();
+            robot.TweetyBird.waitWhileBusy();
+
+            robot.TweetyBird.straightLineTo(50,3,90);
+            robot.TweetyBird.waitWhileBusy();
+            robot.TweetyBird.waitWhileBusy();
+            robot.TweetyBird.waitWhileBusy();
+
+            robot.TweetyBird.straightLineTo(-0.5,3,90);
+            robot.TweetyBird.waitWhileBusy();
+            robot.TweetyBird.waitWhileBusy();
+            robot.TweetyBird.waitWhileBusy();
+
+            placePixel();
+        }
     }
 
     private void generalLong() {
@@ -505,6 +579,36 @@ public class Master extends LinearOpMode {
                 robot.setClawPosition(NewHardwareMap.ClawPositions.OPEN);
             }
         }
+
+    }
+
+    public void lineAgainstApriltag(int id, double relX, double relY, double relZ) {
+        List<AprilTagDetection> currentDetections = robot.aprilTag.getDetections();
+
+        telemetry.addData("Detections",currentDetections.size());
+        telemetry.update();
+
+        for ( AprilTagDetection detection : currentDetections ) {
+            if (detection.id == id) {
+                double distance = detection.ftcPose.y;
+                double offset = detection.ftcPose.x;
+                double theta = Math.toRadians(detection.ftcPose.yaw);
+
+                double camX = ( (distance * Math.sin(theta) ) + (offset * Math.sin(theta + 90)) );
+                double camY = ( (distance * Math.cos(theta) ) + (offset * Math.cos(theta  + 90)) );
+                double camZ = theta;
+
+                double targetX = relX + camX;
+                double targetY = relY + camY;
+                double targetZ = relZ - camZ;
+
+                robot.TweetyBird.adjustTo(targetX,0,Math.toDegrees(targetZ));
+
+                telemetry.addData("HAPPY","test");
+                telemetry.update();
+            }
+        }
+
 
     }
 }

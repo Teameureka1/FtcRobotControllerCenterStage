@@ -196,8 +196,8 @@ public class HardwareSetup
          * SENSOR SECTION**************************************************
          ************************************************************/
             //Add sensors
-        MagIn = hwMap.touchSensor.get("MagIn");
-        MagOut = hwMap.touchSensor.get("MagOut");
+        MagIn = hwMap.touchSensor.get("MagOut");
+        MagOut = hwMap.touchSensor.get("MagIn");
 
         // Now initialize the IMU with this mounting orientation
         // This sample expects the IMU to be in a REV Hub and named "imu".
