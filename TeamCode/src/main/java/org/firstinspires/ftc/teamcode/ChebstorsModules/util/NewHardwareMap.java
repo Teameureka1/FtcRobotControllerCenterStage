@@ -276,7 +276,7 @@ public class NewHardwareMap {
             case OPEN:
                 servoHandL.setPosition(.5);
                 servoHandR.setPosition(.3);
-                servoHandLB.setPosition(.41);
+                servoHandLB.setPosition(.43);
                 break;
             case SINGLE:
                 servoHandL.setPosition(.3);

@@ -47,6 +47,20 @@ public class Master extends LinearOpMode {
             double armHeightControl = -gamepad2.left_stick_y;
             double armExtendControl = -gamepad2.right_stick_y;
 
+            // Claw Controls
+            boolean open = gamepad2.a;
+            boolean closed = gamepad2.b;
+            boolean partialOpen = gamepad2.x;
+            boolean talonOpen = gamepad2.y;
+
+            // Drone Controls
+            boolean launchDrone = gamepad1.dpad_up;
+            boolean launchConfirmation = gamepad1.y;
+
+            // Pusher Controls
+            boolean pusherUp = gamepad2.dpad_up;
+            boolean pusherDown = gamepad2.dpad_down;
+
             // Toggle FCD
             if (fcdToggleButton&&!fcdDebounce) {
                 fcdDebounce=true;
@@ -117,6 +131,54 @@ public class Master extends LinearOpMode {
                     robot.motorTopArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     robot.motorTopArm.setPower(1);
                 }
+            }
+
+            // Claw
+            if(open) {
+                //robot.setClawPosition(NewHardwareMap.ClawPositions.OPEN);
+                robot.servoHandR.setPosition(.3);
+                robot.servoHandL.setPosition(.5);
+                robot.servoHandLB.setPosition(.43);
+                robot.servoTallon.setPosition(.1);
+            }
+            else if(closed) {
+                //robot.setClawPosition(NewHardwareMap.ClawPositions.CLOSED);
+                robot.servoHandL.setPosition(.35);
+                robot.servoHandR.setPosition(.45);
+                robot.servoHandLB.setPosition(.43);
+                robot.servoTallon.setPosition(.1);
+            }
+            else if (partialOpen) {
+                //robot.setClawPosition(NewHardwareMap.ClawPositions.SINGLE);
+                robot.servoTallon.setPosition(.3);
+                robot.servoHandLB.setPosition(.6);
+            }
+            else if (talonOpen) {
+                //robot.setTallonPosition(NewHardwareMap.TallonPositions.OPEN);
+                robot.servoTallon.setPosition(.3);
+                robot.servoHandR.setPosition(.3);
+                robot.servoHandL.setPosition(.5);
+                robot.servoHandLB.setPosition(.43);
+            }
+
+            // Drone
+            if (launchDrone) {
+                robot.motorDrone.setPower(-1);
+                if(gamepad1.y)
+                {
+                    robot.servoD.setPosition(.9);
+                    sleep(200);
+                    robot.servoD.setPosition(.1);
+                }
+            } else {
+                robot.motorDrone.setPower(0);
+            }
+
+            // Pusher
+            if(pusherUp) {
+                robot.servoP.setPosition(.7);
+            } else if (pusherDown) {
+                robot.servoP.setPosition(.5);
             }
 
             // Telemetry
