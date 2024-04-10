@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.ChebstorsModules.autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.ChebstorsModules.modules.util.NewHardwareMap;
+import org.firstinspires.ftc.teamcode.ChebstorsModules.util.NewHardwareMap;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
 import java.util.List;

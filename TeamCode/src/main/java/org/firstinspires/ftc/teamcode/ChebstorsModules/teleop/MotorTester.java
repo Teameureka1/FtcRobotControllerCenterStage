@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.teamcode.HardwareSetup;
+import org.firstinspires.ftc.teamcode.ChebstorsModules.util.NewHardwareMap;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ public class MotorTester extends LinearOpMode {
     /**
      * HardwareMap Reference
      */
-    private final HardwareSetup robot = new HardwareSetup();
+    private NewHardwareMap robot = null;
 
     /**
      * Opmode Start
@@ -24,7 +24,8 @@ public class MotorTester extends LinearOpMode {
     @Override
     public void runOpMode() {
         //Initialize
-        robot.init(hardwareMap);
+        robot = new NewHardwareMap(this);
+        robot.initGeneral();
 
         //Don't clear
         telemetry.setAutoClear(false);

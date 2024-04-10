@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
-import org.firstinspires.ftc.teamcode.ChebstorsModules.modules.util.NewHardwareMap;
+import org.firstinspires.ftc.teamcode.ChebstorsModules.util.NewHardwareMap;
 import org.firstinspires.ftc.teamcode.ChebstorsModules.modules.TelemetrySelector;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 

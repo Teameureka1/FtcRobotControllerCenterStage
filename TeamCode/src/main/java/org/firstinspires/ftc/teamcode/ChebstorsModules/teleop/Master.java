@@ -3,17 +3,13 @@ package org.firstinspires.ftc.teamcode.ChebstorsModules.teleop;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.teamcode.ChebstorsModules.modules.util.NewHardwareMap;
-
-import java.io.File;
-import java.io.FileWriter;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import org.firstinspires.ftc.teamcode.ChebstorsModules.util.NewHardwareMap;
 
 @TeleOp(name = "Main Teleop", group = "Auto2")
-@Disabled
+//@Disabled
 public class Master extends LinearOpMode {
 
     // Defining HardwareMap
@@ -25,122 +21,107 @@ public class Master extends LinearOpMode {
         robot = new NewHardwareMap(this);
         robot.initGeneral();
         robot.initTweetyBird();
-        robot.initVision();
+        //robot.initVision();
         robot.TweetyBird.disengage();
-
-        teleopLogger logger = new teleopLogger(this, robot);
 
         waitForStart();
 
-        logger.start();
+        // Temp Vars
+        boolean fcdDebounce = false;
+        boolean fcdEnabled = false;
 
-        // Main
+        // Runtime
         while (opModeIsActive()) {
-            // Controls
+            // Basic Driving Controls
             double axialControl = -gamepad1.left_stick_y;
             double lateralControl = gamepad1.left_stick_x;
             double yawControl = gamepad1.right_stick_x;
-            double throttleControl = Range.clip(gamepad1.right_trigger*0.75,1.0/0.75,1);
+            double throttleControl = Range.clip(gamepad1.right_trigger,0.4,1);
+            boolean legacyThrottle = gamepad1.right_bumper;
 
-            // Movement
+            // FCD Controls
+            boolean fcdToggleButton = gamepad1.dpad_down;
+            boolean fcdResetButton = gamepad1.dpad_up;
+
+            // Arm Controls
+            double armHeightControl = -gamepad2.left_stick_y;
+            double armExtendControl = -gamepad2.right_stick_y;
+
+            // Toggle FCD
+            if (fcdToggleButton&&!fcdDebounce) {
+                fcdDebounce=true;
+                fcdEnabled=!fcdEnabled;
+            }
+            if (!fcdToggleButton&&fcdDebounce) {
+                fcdDebounce=false;
+            }
+
+            // Reset FCD
+            if (fcdResetButton) {
+                //robot.resetZ();
+            }
+
+            // FCD Functions
+            if (fcdEnabled) {
+                double gamepadRadians = Math.atan2(lateralControl, axialControl);
+                double gamepadHypot = Range.clip(Math.hypot(lateralControl, axialControl), 0, 1);
+                double robotRadians = -robot.getZ();
+                double targetRadians = gamepadRadians + robotRadians;
+                lateralControl = Math.sin(targetRadians)*gamepadHypot;
+                axialControl = Math.cos(targetRadians)*gamepadHypot;
+            }
+
+            // Bindings for legacy throttle
+            if (legacyThrottle) {
+                throttleControl = legacyThrottle?1:0;
+            }
+
+            // Anti Drift
+            robot.motorFrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            robot.motorFrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            robot.motorBackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            robot.motorBackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+
+            // Drivetrain Movement
             robot.movementPower(axialControl,lateralControl,yawControl,throttleControl);
+
+            // Arm Height
+            if (armHeightControl!=0) {
+                if (robot.motorBottomArm.getMode()!= DcMotor.RunMode.RUN_WITHOUT_ENCODER) {
+                    robot.motorBottomArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                }
+
+                robot.motorBottomArm.setPower(armHeightControl);
+            } else {
+                if (robot.motorBottomArm.getMode()!= DcMotor.RunMode.RUN_TO_POSITION) {
+                    robot.motorBottomArm.setTargetPosition(robot.motorBottomArm.getCurrentPosition());
+                    robot.motorBottomArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    robot.motorBottomArm.setPower(1);
+                }
+            }
+
+            // Arm Extension
+            if (armExtendControl!=0) {
+                if (robot.motorTopArm.getMode()!= DcMotor.RunMode.RUN_WITHOUT_ENCODER) {
+                    robot.motorTopArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                }
+
+                // Limit
+                armExtendControl = Range.clip(armExtendControl,robot.MagIn.isPressed()?0:-1,robot.MagOut.isPressed()?0:1);
+
+                robot.motorTopArm.setPower(armExtendControl);
+            } else {
+                if (robot.motorTopArm.getMode()!= DcMotor.RunMode.RUN_TO_POSITION) {
+                    robot.motorTopArm.setTargetPosition(robot.motorTopArm.getCurrentPosition());
+                    robot.motorTopArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    robot.motorTopArm.setPower(1);
+                }
+            }
 
             // Telemetry
 
 
         }
-    }
-}
-
-class teleopLogger extends Thread {
-    private LinearOpMode opMode = null;
-    private NewHardwareMap robot = null;
-
-    private String logString = "";
-
-    private Date date = new Date();
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss");
-
-    public teleopLogger(LinearOpMode opMode, NewHardwareMap robot) {
-        this.opMode = opMode;
-        this.robot = robot;
-    }
-
-    private double lastX = 0;
-    private double lastY = 0;
-    private double lastZ = 0;
-
-    private double lastHeading = 0;
-
-    private boolean lastMoving = false;
-
-    @Override
-    public void run() {
-        addLine("Logger started.");
-
-        // Runtime
-        while (opMode.opModeIsActive()) {
-            double currentX = robot.TweetyBird.getX();
-            double currentY = robot.TweetyBird.getY();
-            double currentZ = robot.TweetyBird.getZ();
-
-            double heading = Math.atan2(currentY,currentX);
-
-            boolean moving = false;
-
-            if (distanceForm(currentX,currentY,lastX,lastY)+Math.abs(currentZ+lastZ)<1) {
-                moving = false;
-            }
-
-            if (moving!=moving) {
-                if (!moving) {
-                    addLine("Position (STOP): "+currentX+", "+currentY+", "+currentZ);
-                }
-            } else {
-                if (Math.abs(heading+lastHeading)>Math.toRadians(2)) {
-                    addLine("Position: "+currentX+", "+currentY+", "+currentZ);
-                }
-            }
-
-            lastX = currentX;
-            lastY = currentY;
-            lastZ = currentZ;
-            lastHeading = heading;
-            lastMoving = moving;
-
-            try {
-                sleep(200);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-        // Write File
-        try {
-            String directoryName = "sdcard/FIRST/chebstor";
-            String fileName = "log.txt";
-
-            File directory = new File(directoryName);
-            if (!directory.exists()) {
-                directory.mkdirs();
-            }
-
-            FileWriter replay = new FileWriter(directoryName+"/"+fileName);
-
-            replay.write(logString);
-
-            replay.close();
-        } catch (Exception e) {
-            e.getStackTrace();
-        }
-    }
-
-    private void addLine(String input) {
-        String timestamp = dateFormat.format(date);
-        logString = logString+"\n"+"[ "+timestamp+" ]: "+input;
-    }
-
-    private double distanceForm(double x1, double y1, double x2, double y2) {
-        return Math.sqrt(Math.pow(x2 - x1, 2.0) + Math.pow(y2 - y1, 2.0));
     }
 }

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.ChebstorsModules.modules.util;
+package org.firstinspires.ftc.teamcode.ChebstorsModules.util;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -120,30 +120,30 @@ public class NewHardwareMap {
     public void initGeneral() {
         HardwareMap hwMap = opMode.hardwareMap;
 
-        motorFrontLeft = hwMap.get(DcMotor.class,"motorFL");
-        motorFrontRight = hwMap.get(DcMotor.class,"motorFR");
-        motorBackLeft = hwMap.get(DcMotor.class,"motorBL");
-        motorBackRight = hwMap.get(DcMotor.class,"motorBR");
+        motorFrontLeft = hwMap.get(DcMotor.class,"fl");
+        motorFrontRight = hwMap.get(DcMotor.class,"fr");
+        motorBackLeft = hwMap.get(DcMotor.class,"bl");
+        motorBackRight = hwMap.get(DcMotor.class,"br");
 
-        motorFrontLeft.setDirection(DcMotor.Direction.FORWARD);
+        motorFrontLeft.setDirection(DcMotor.Direction.REVERSE);
         motorFrontRight.setDirection(DcMotor.Direction.FORWARD);
-        motorBackLeft.setDirection(DcMotor.Direction.FORWARD);
+        motorBackLeft.setDirection(DcMotor.Direction.REVERSE);
         motorBackRight.setDirection(DcMotor.Direction.FORWARD);
 
-        motorBottomArm = hwMap.get(DcMotor.class, "armMotor");
-        motorTopArm = hwMap.get(DcMotor.class, "topArm");
-        motorDrone = hwMap.get(DcMotor.class, "Lpod");
+        motorBottomArm = hwMap.get(DcMotor.class, "armLift");
+        motorTopArm = hwMap.get(DcMotor.class, "armExtension");
+        motorDrone = hwMap.get(DcMotor.class, "drone");
 
         motorBottomArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorBottomArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motorBottomArm.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        servoHandR = hwMap.servo.get("servoHandR");
-        servoHandL = hwMap.servo.get("servoHandL");
-        servoHandLB = hwMap.servo.get("servoHandLB");
-        servoP = hwMap.servo.get("servoP");
-        servoD = hwMap.servo.get("servoD");
-        servoTallon = hwMap.servo.get("servoTallon");
+        servoHandR = hwMap.servo.get("handR");
+        servoHandL = hwMap.servo.get("handL");
+        servoHandLB = hwMap.servo.get("handLB");
+        servoP = hwMap.servo.get("pusher");
+        servoD = hwMap.servo.get("droneServo");
+        servoTallon = hwMap.servo.get("talon");
 
         setClawPosition(ClawPositions.OPEN);
         setTallonPosition(TallonPositions.CLOSED);
@@ -151,8 +151,8 @@ public class NewHardwareMap {
         servoP.setPosition(.5);
         servoD.setPosition(.1);
 
-        MagOut = hwMap.touchSensor.get("MagOut");
-        MagIn = hwMap.touchSensor.get("MagIn");
+        MagOut = hwMap.touchSensor.get("magOut");
+        MagIn = hwMap.touchSensor.get("magIn");
 
         imu = hwMap.get(IMU.class, "imu");
         imu.initialize(new IMU.Parameters(new RevHubOrientationOnRobot(
@@ -160,9 +160,9 @@ public class NewHardwareMap {
                 RevHubOrientationOnRobot.UsbFacingDirection.FORWARD
                 )));
 
-        leftEncoder = hwMap.get(DcMotor.class, "Lpod");
-        rightEncoder = hwMap.get(DcMotor.class, "Rpod");
-        middleEncoder = hwMap.get(DcMotor.class, "topArm");
+        leftEncoder = hwMap.get(DcMotor.class, "br");
+        rightEncoder = hwMap.get(DcMotor.class, "fl");
+        middleEncoder = hwMap.get(DcMotor.class, "fr");
 
         leftEncoder.setDirection(DcMotorSimple.Direction.FORWARD);
         //rightEncoder.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -233,8 +233,8 @@ public class NewHardwareMap {
                 .setMiddleEncoder(middleEncoder)
 
                 .flipLeftEncoder(false)
-                .flipRightEncoder(true)
-                .flipMiddleEncoder(false)
+                .flipRightEncoder(false)
+                .flipMiddleEncoder(true)
 
                 .setSideEncoderDistance(14+(1/4))
                 .setMiddleEncoderOffset(5+(5.0/8.0))
@@ -333,5 +333,13 @@ public class NewHardwareMap {
             while ((opMode.opModeIsActive() || opMode.opModeInInit()) && !MagIn.isPressed());
             motorTopArm.setPower(0);
         }
+    }
+
+    public double getZ() {
+        return 0;
+    }
+
+    public void resetZ() {
+
     }
 }
