@@ -1,27 +1,27 @@
-package org.firstinspires.ftc.teamcode.ChebstorsModules.autonomous;
+package org.firstinspires.ftc.teamcode.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.HardwareSetup;
+import org.firstinspires.ftc.teamcode.util.HardwareSetup;
 
-@Autonomous(name = "TweetyBird Tape Measure",group = "z")
+@Autonomous(name = "TweetyBird Debug",group = "z")
 //@Disabled //DO NOT FORGET TO UNCOMMENT THIS FOR USE
-public class TweetyMeasure extends LinearOpMode {
+public class TweetyDebug extends LinearOpMode {
     HardwareSetup robot;
 
     @Override
     public void runOpMode() {
         //Init Robot
-        robot = new HardwareSetup();
-        robot.init(this.hardwareMap);
-        robot.initTweetyBird(this);
+        robot = new HardwareSetup(this);
+        robot.initGeneral();
+        robot.initTweetyBird();
 
         robot.TweetyBird.disengage();
 
         //Waiting for start
         waitForStart();
-        robot.TweetyBird.disengage();
+        robot.TweetyBird.engage();
 
         while (opModeIsActive()) {
             telemetry.addData("X",robot.TweetyBird.getX());

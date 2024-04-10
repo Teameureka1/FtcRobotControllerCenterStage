@@ -1,21 +1,21 @@
-package org.firstinspires.ftc.teamcode.ChebstorsModules.autonomous;
+package org.firstinspires.ftc.teamcode.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
-import org.firstinspires.ftc.teamcode.ChebstorsModules.util.NewHardwareMap;
-import org.firstinspires.ftc.teamcode.ChebstorsModules.modules.TelemetrySelector;
+import org.firstinspires.ftc.teamcode.util.HardwareSetup;
+import org.firstinspires.ftc.teamcode.modules.TelemetrySelector;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
 import java.util.List;
 
-@Autonomous(name = "Main Autonomous", group = "Auto2")
+@Autonomous(name = "Main Autonomous")
 public class Master extends LinearOpMode {
 
     // Defining HardwareMap
-    NewHardwareMap robot;
+    HardwareSetup robot;
 
     // Defining TelemetrySelector
     TelemetrySelector telemetrySelector;
@@ -69,7 +69,7 @@ public class Master extends LinearOpMode {
     @Override
     public void runOpMode() {
         // Setting up and initializing robot
-        robot = new NewHardwareMap(this);
+        robot = new HardwareSetup(this);
         robot.initGeneral();
         robot.initTweetyBird();
         robot.initVision();
@@ -164,7 +164,7 @@ public class Master extends LinearOpMode {
         waitForStart();
 
         // Grab the pixel
-        robot.setClawPosition(NewHardwareMap.ClawPositions.CLOSED);
+        robot.setClawPosition(HardwareSetup.ClawPositions.CLOSED);
 
         /**
          * Waiting
@@ -294,9 +294,9 @@ public class Master extends LinearOpMode {
         robot.TweetyBird.waitWhileBusy();
         robot.TweetyBird.waitWhileBusy();
 
-        robot.setClawPosition(NewHardwareMap.ClawPositions.SINGLE);
+        robot.setClawPosition(HardwareSetup.ClawPositions.SINGLE);
         robot.setArmHeight(300);
-        robot.setClawPosition(NewHardwareMap.ClawPositions.CLOSED);
+        robot.setClawPosition(HardwareSetup.ClawPositions.CLOSED);
     }
 
     private void placePropTrussRight() {
@@ -327,9 +327,9 @@ public class Master extends LinearOpMode {
         robot.TweetyBird.waitWhileBusy();
         robot.TweetyBird.waitWhileBusy();
 
-        robot.setClawPosition(NewHardwareMap.ClawPositions.SINGLE);
+        robot.setClawPosition(HardwareSetup.ClawPositions.SINGLE);
         robot.setArmHeight(300);
-        robot.setClawPosition(NewHardwareMap.ClawPositions.CLOSED);
+        robot.setClawPosition(HardwareSetup.ClawPositions.CLOSED);
     }
 
     private void cycleLong() {
@@ -352,20 +352,25 @@ public class Master extends LinearOpMode {
         // Beginning cycles
         while (opModeIsActive()) {
             // Navigating to stack
-            robot.TweetyBird.straightLineTo(-0.5,3,90);
+            robot.TweetyBird.straightLineTo(-0.5,1,90);
             robot.TweetyBird.waitWhileBusy();
             robot.TweetyBird.waitWhileBusy();
             robot.TweetyBird.waitWhileBusy();
 
             robot.TweetyBird.speedLimit(0.6);
-            robot.TweetyBird.straightLineTo(46.5,3,90);
+            robot.TweetyBird.straightLineTo(46.5,1,90);
             robot.TweetyBird.waitWhileBusy();
             robot.TweetyBird.waitWhileBusy();
             robot.TweetyBird.waitWhileBusy();
 
             robot.TweetyBird.speedLimit(0.8);
 
-            robot.TweetyBird.straightLineTo(48,3,45);
+            robot.TweetyBird.straightLineTo(48,1,45);
+            robot.TweetyBird.waitWhileBusy();
+            robot.TweetyBird.waitWhileBusy();
+            robot.TweetyBird.waitWhileBusy();
+
+            robot.TweetyBird.straightLineTo(49,25,90);
             robot.TweetyBird.waitWhileBusy();
             robot.TweetyBird.waitWhileBusy();
             robot.TweetyBird.waitWhileBusy();
@@ -383,12 +388,12 @@ public class Master extends LinearOpMode {
             robot.TweetyBird.waitWhileBusy();
             robot.TweetyBird.waitWhileBusy();
 
-            robot.TweetyBird.straightLineTo(50,3,90);
+            robot.TweetyBird.straightLineTo(50,1,90);
             robot.TweetyBird.waitWhileBusy();
             robot.TweetyBird.waitWhileBusy();
             robot.TweetyBird.waitWhileBusy();
 
-            robot.TweetyBird.straightLineTo(-0.5,3,90);
+            robot.TweetyBird.straightLineTo(-0.5,1,90);
             robot.TweetyBird.waitWhileBusy();
             robot.TweetyBird.waitWhileBusy();
             robot.TweetyBird.waitWhileBusy();
@@ -512,7 +517,7 @@ public class Master extends LinearOpMode {
             robot.TweetyBird.waitWhileBusy();
 
             robot.setArmHeight(800);
-            robot.setArmDistance(1);
+            robot.setArmExtension(1);
 
             if ((currentColor == positions.RED && currentPropPosition == propPosition.LEFT) ||
                     (currentColor == positions.BLUE && currentPropPosition == propPosition.RIGHT)) {
@@ -534,7 +539,7 @@ public class Master extends LinearOpMode {
             robot.TweetyBird.waitWhileBusy();
             robot.TweetyBird.waitWhileBusy();
 
-            robot.setClawPosition(NewHardwareMap.ClawPositions.OPEN);
+            robot.setClawPosition(HardwareSetup.ClawPositions.OPEN);
             sleep(200);
 
             robot.TweetyBird.adjustTo(8,0,0);
@@ -544,7 +549,7 @@ public class Master extends LinearOpMode {
             robot.TweetyBird.waitWhileBusy();
 
             robot.setArmHeight(200);
-            robot.setArmDistance(0);
+            robot.setArmExtension(0);
 
         } else {
             double xDistance = currentDistance==positions.LONG?-90:-36;
@@ -562,7 +567,7 @@ public class Master extends LinearOpMode {
                 robot.TweetyBird.waitWhileBusy();
                 robot.TweetyBird.waitWhileBusy();
 
-                robot.setClawPosition(NewHardwareMap.ClawPositions.OPEN);
+                robot.setClawPosition(HardwareSetup.ClawPositions.OPEN);
             } else {
                 robot.TweetyBird.straightLineTo(xDistance+10,2,-90);
 
@@ -576,7 +581,7 @@ public class Master extends LinearOpMode {
                 robot.TweetyBird.waitWhileBusy();
                 robot.TweetyBird.waitWhileBusy();
 
-                robot.setClawPosition(NewHardwareMap.ClawPositions.OPEN);
+                robot.setClawPosition(HardwareSetup.ClawPositions.OPEN);
             }
         }
 
@@ -603,9 +608,6 @@ public class Master extends LinearOpMode {
                 double targetZ = relZ - camZ;
 
                 robot.TweetyBird.adjustTo(targetX,0,Math.toDegrees(targetZ));
-
-                telemetry.addData("HAPPY","test");
-                telemetry.update();
             }
         }
 

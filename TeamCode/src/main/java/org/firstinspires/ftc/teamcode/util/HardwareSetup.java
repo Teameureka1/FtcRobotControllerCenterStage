@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.ChebstorsModules.util;
+package org.firstinspires.ftc.teamcode.util;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -16,11 +16,10 @@ import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
-import org.openftc.apriltag.AprilTagDetection;
 
 import dev.narlyx.ftc.tweetybird.TweetyBirdProcessor;
 
-public class NewHardwareMap {
+public class HardwareSetup {
 
     // OpMode definition
     private LinearOpMode opMode = null;
@@ -52,27 +51,28 @@ public class NewHardwareMap {
     }
 
     // Hardware definitions
-    public DcMotor motorFrontRight = null;
-    public DcMotor motorFrontLeft = null;
-    public DcMotor motorBackRight = null;
-    public DcMotor motorBackLeft = null;
+    public DcMotor fr = null;
+    public DcMotor fl = null;
+    public DcMotor br = null;
+    public DcMotor bl = null;
 
-    public DcMotor motorBottomArm = null;
-    public DcMotor motorTopArm = null;
+    public DcMotor armLiftMotor = null;
+    public DcMotor armExtendMotor = null;
 
-    public DcMotor motorDrone = null;
+    public DcMotor droneLaunchMotor = null;
 
-    public Servo servoHandR = null;
-    public Servo servoHandL = null;
-    public Servo servoHandLB = null;
+    public Servo handRServo = null;
+    public Servo handLServo = null;
+    public Servo handLBServo = null;
 
-    public Servo servoP = null;
-    public Servo servoD = null;
+    public Servo pusherServo = null;
+    public Servo droneServo = null;
 
-    public Servo servoTallon = null;
+    public Servo tallonServo = null;
 
-    public TouchSensor MagOut = null;
-    public TouchSensor MagIn = null;
+    public TouchSensor extendSensor = null;
+    public TouchSensor retractedSensor = null;
+    public TouchSensor armSensorDown = null;
 
     public IMU imu = null;
 
@@ -86,32 +86,32 @@ public class NewHardwareMap {
      * Constructor
      * @param opMode pass in the linear opmode
      */
-    public NewHardwareMap(LinearOpMode opMode) {
+    public HardwareSetup(LinearOpMode opMode) {
         this.opMode = opMode;
     }
 
     public void startupSequence() {
         // Resetting extension
-        motorTopArm.setPower(1);
+        armExtendMotor.setPower(1);
         opMode.sleep(200);
 
         // Retracting extension
-        motorTopArm.setPower(-1);
-        while ((opMode.opModeInInit() || opMode.opModeIsActive()) && !MagIn.isPressed());
-        motorTopArm.setPower(0);
+        armExtendMotor.setPower(-1);
+        while ((opMode.opModeInInit() || opMode.opModeIsActive()) && !retractedSensor.isPressed());
+        armExtendMotor.setPower(0);
         //robot.motorTopArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER); TODO: Fix this once the encoder wire is added
-        setArmDistance(0);
+        setArmExtension(0);
 
         // Resetting arm
-        motorBottomArm.setPower(-1);
+        armLiftMotor.setPower(-1);
         opMode.sleep(500);
-        motorBottomArm.setPower(0);
-        motorBottomArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        armLiftMotor.setPower(0);
+        armLiftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         setArmHeight(0);
 
         // Opening Claw
         setClawPosition(ClawPositions.OPEN);
-        setTallonPosition(TallonPositions.CLOSED);
+        setTalonPosition(TallonPositions.CLOSED);
     }
 
     /**
@@ -120,39 +120,44 @@ public class NewHardwareMap {
     public void initGeneral() {
         HardwareMap hwMap = opMode.hardwareMap;
 
-        motorFrontLeft = hwMap.get(DcMotor.class,"fl");
-        motorFrontRight = hwMap.get(DcMotor.class,"fr");
-        motorBackLeft = hwMap.get(DcMotor.class,"bl");
-        motorBackRight = hwMap.get(DcMotor.class,"br");
+        fl = hwMap.get(DcMotor.class,"fl");
+        fr = hwMap.get(DcMotor.class,"fr");
+        bl = hwMap.get(DcMotor.class,"bl");
+        br = hwMap.get(DcMotor.class,"br");
 
-        motorFrontLeft.setDirection(DcMotor.Direction.REVERSE);
-        motorFrontRight.setDirection(DcMotor.Direction.FORWARD);
-        motorBackLeft.setDirection(DcMotor.Direction.REVERSE);
-        motorBackRight.setDirection(DcMotor.Direction.FORWARD);
+        fl.setDirection(DcMotor.Direction.REVERSE);
+        fr.setDirection(DcMotor.Direction.FORWARD);
+        bl.setDirection(DcMotor.Direction.REVERSE);
+        br.setDirection(DcMotor.Direction.FORWARD);
 
-        motorBottomArm = hwMap.get(DcMotor.class, "armLift");
-        motorTopArm = hwMap.get(DcMotor.class, "armExtension");
-        motorDrone = hwMap.get(DcMotor.class, "drone");
+        armLiftMotor = hwMap.get(DcMotor.class, "armLift");
+        armExtendMotor = hwMap.get(DcMotor.class, "armExtension");
+        droneLaunchMotor = hwMap.get(DcMotor.class, "drone");
 
-        motorBottomArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorBottomArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        motorBottomArm.setDirection(DcMotorSimple.Direction.REVERSE);
+        armLiftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        armLiftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        armLiftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        servoHandR = hwMap.servo.get("handR");
-        servoHandL = hwMap.servo.get("handL");
-        servoHandLB = hwMap.servo.get("handLB");
-        servoP = hwMap.servo.get("pusher");
-        servoD = hwMap.servo.get("droneServo");
-        servoTallon = hwMap.servo.get("talon");
+        armExtendMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        armExtendMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        armExtendMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+
+        handRServo = hwMap.servo.get("handR");
+        handLServo = hwMap.servo.get("handL");
+        handLBServo = hwMap.servo.get("handLB");
+        pusherServo = hwMap.servo.get("pusher");
+        droneServo = hwMap.servo.get("droneServo");
+        tallonServo = hwMap.servo.get("talon");
 
         setClawPosition(ClawPositions.OPEN);
-        setTallonPosition(TallonPositions.CLOSED);
+        setTalonPosition(TallonPositions.CLOSED);
 
-        servoP.setPosition(.5);
-        servoD.setPosition(.1);
+        pusherServo.setPosition(.5);
+        droneServo.setPosition(.1);
 
-        MagOut = hwMap.touchSensor.get("magOut");
-        MagIn = hwMap.touchSensor.get("magIn");
+        extendSensor = hwMap.touchSensor.get("magOut");
+        retractedSensor = hwMap.touchSensor.get("magIn");
+        armSensorDown = hwMap.touchSensor.get("magDown");
 
         imu = hwMap.get(IMU.class, "imu");
         imu.initialize(new IMU.Parameters(new RevHubOrientationOnRobot(
@@ -164,9 +169,9 @@ public class NewHardwareMap {
         rightEncoder = hwMap.get(DcMotor.class, "fl");
         middleEncoder = hwMap.get(DcMotor.class, "fr");
 
-        leftEncoder.setDirection(DcMotorSimple.Direction.FORWARD);
+        //leftEncoder.setDirection(DcMotorSimple.Direction.FORWARD);
         //rightEncoder.setDirection(DcMotorSimple.Direction.REVERSE);
-        motorDrone.setDirection(DcMotorSimple.Direction.FORWARD);
+        droneLaunchMotor.setDirection(DcMotorSimple.Direction.FORWARD);
 
         leftEncoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightEncoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -223,10 +228,10 @@ public class NewHardwareMap {
                 .setOpMode(opMode)
 
                 //Hardware Config
-                .setFrontLeftMotor(motorFrontLeft)
-                .setFrontRightMotor(motorFrontRight)
-                .setBackLeftMotor(motorBackLeft)
-                .setBackRightMotor(motorBackRight)
+                .setFrontLeftMotor(fl)
+                .setFrontRightMotor(fr)
+                .setBackLeftMotor(bl)
+                .setBackRightMotor(br)
 
                 .setLeftEncoder(leftEncoder)
                 .setRightEncoder(rightEncoder)
@@ -256,15 +261,18 @@ public class NewHardwareMap {
                 .build();
     }
 
+    /**
+     * Applies power to the drivetrain with a simple input
+     */
     public void movementPower(double axial, double lateral, double yaw, double speed) {
-        double frontLeftPower = (axial + lateral) * speed + yaw;
-        double frontRightPower = (axial - lateral) * speed - yaw;
-        double backLeftPower = (axial - lateral) * speed + yaw;
-        double backRightPower = (axial + lateral) * speed - yaw;
-        motorFrontLeft.setPower(frontLeftPower);
-        motorFrontRight.setPower(frontRightPower);
-        motorBackLeft.setPower(backLeftPower);
-        motorBackRight.setPower(backRightPower);
+        double frontLeftPower = (axial + lateral + yaw) * speed;
+        double frontRightPower = (axial - lateral - yaw) * speed;
+        double backLeftPower = (axial - lateral + yaw) * speed;
+        double backRightPower = (axial + lateral - yaw) * speed;
+        fl.setPower(frontLeftPower);
+        fr.setPower(frontRightPower);
+        bl.setPower(backLeftPower);
+        br.setPower(backRightPower);
     }
 
     /**
@@ -274,32 +282,36 @@ public class NewHardwareMap {
     public void setClawPosition(ClawPositions position) {
         switch(position) {
             case OPEN:
-                servoHandL.setPosition(.5);
-                servoHandR.setPosition(.3);
-                servoHandLB.setPosition(.43);
+                handLServo.setPosition(.5);
+                handRServo.setPosition(.3);
+                handLBServo.setPosition(.43);
                 break;
             case SINGLE:
-                servoHandL.setPosition(.3);
-                servoHandR.setPosition(.45);
-                servoHandLB.setPosition(.6);
-                setTallonPosition(TallonPositions.OPEN);
+                handLServo.setPosition(.3);
+                handRServo.setPosition(.45);
+                handLBServo.setPosition(.6);
+                setTalonPosition(TallonPositions.OPEN);
                 break;
             case CLOSED:
-                servoHandL.setPosition(.3);
-                servoHandR.setPosition(.45);
-                servoHandLB.setPosition(.41);
-                setTallonPosition(TallonPositions.CLOSED);
+                handLServo.setPosition(.3);
+                handRServo.setPosition(.45);
+                handLBServo.setPosition(.41);
+                setTalonPosition(TallonPositions.CLOSED);
                 break;
         }
     }
 
-    public void setTallonPosition(TallonPositions position) {
+    /**
+     * Sets the position of the talon via a enum
+     * @param position target position/mode
+     */
+    public void setTalonPosition(TallonPositions position) {
         switch(position) {
             case OPEN:
-                servoTallon.setPosition(.3);
+                tallonServo.setPosition(.3);
                 break;
             case CLOSED:
-                servoTallon.setPosition(.1);
+                tallonServo.setPosition(.1);
                 break;
         }
     }
@@ -309,34 +321,42 @@ public class NewHardwareMap {
      * @param ticks target ticks
      */
     public void setArmHeight(int ticks) {
-        motorBottomArm.setTargetPosition(ticks);
-        if (motorBottomArm.getMode() != DcMotor.RunMode.RUN_TO_POSITION) {
-            motorBottomArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        armLiftMotor.setTargetPosition(ticks);
+        if (armLiftMotor.getMode() != DcMotor.RunMode.RUN_TO_POSITION) {
+            armLiftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         }
-        motorBottomArm.setPower(1);
+        armLiftMotor.setPower(1);
     }
 
-    public void setArmDistance(int ticks) {
+    /**
+     * Sets the extension of the arm with ticks
+     * @param ticks target ticks
+     */
+    public void setArmExtension(int ticks) {
+        armExtendMotor.setTargetPosition(ticks);
+        if (armExtendMotor.getMode() != DcMotor.RunMode.RUN_TO_POSITION) {
+            armExtendMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        }
+        armExtendMotor.setPower(1);
+
         /*
-        motorTopArm.setTargetPosition(ticks);
-        if (motorTopArm.getMode() != DcMotor.RunMode.RUN_TO_POSITION) {
-            motorTopArm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        }
-        motorTopArm.setPower(1);
-         */
         if (ticks>0) {
-            motorTopArm.setPower(1);
+            armExtendMotor.setPower(1);
             opMode.sleep(400);
-            motorTopArm.setPower(0);
+            armExtendMotor.setPower(0);
         } else {
-            motorTopArm.setPower(-1);
-            while ((opMode.opModeIsActive() || opMode.opModeInInit()) && !MagIn.isPressed());
-            motorTopArm.setPower(0);
-        }
+            armExtendMotor.setPower(-1);
+            while ((opMode.opModeIsActive() || opMode.opModeInInit()) && !armSensorExtended.isPressed());
+            armExtendMotor.setPower(0);
+        }*/
     }
 
+    /**
+     * Returns the rotation of the bot
+     * @return rotation radians
+     */
     public double getZ() {
-        return 0;
+        return TweetyBird.getZ();
     }
 
     public void resetZ() {

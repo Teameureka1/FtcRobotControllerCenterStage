@@ -1,23 +1,23 @@
-package org.firstinspires.ftc.teamcode.ChebstorsModules.autonomous;
+package org.firstinspires.ftc.teamcode.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.ChebstorsModules.util.NewHardwareMap;
+import org.firstinspires.ftc.teamcode.util.HardwareSetup;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
 import java.util.List;
 
-@Autonomous (name = "Testing")
+@Autonomous (name = "Testing", group = "Testing")
 public class Testing extends LinearOpMode {
 
     // Defining HardwareMap
-    NewHardwareMap robot;
+    HardwareSetup robot;
 
     @Override
     public void runOpMode() {
         // Setting up and initializing robot
-        robot = new NewHardwareMap(this);
+        robot = new HardwareSetup(this);
         robot.initGeneral();
         robot.initTweetyBird();
         robot.initVision();
