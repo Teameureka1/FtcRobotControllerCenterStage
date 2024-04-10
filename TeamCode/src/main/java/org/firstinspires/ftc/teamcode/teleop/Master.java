@@ -32,6 +32,7 @@ public class Master extends LinearOpMode {
         boolean placeDebounce = false;
         boolean armHeightResetDebounce = false;
         boolean armExtendResetDebounce = false;
+        double headingOffset = 0;
 
         // Runtime
         while (opModeIsActive()) {
@@ -46,7 +47,7 @@ public class Master extends LinearOpMode {
 
             // FCD Controls
             boolean fcdToggleButton = gamepad1.back;
-            boolean fcdResetButton = false;
+            boolean fcdResetButton = gamepad1.right_stick_button;
 
             // Arm Controls
             double armHeightControl = -gamepad2.left_stick_y;
@@ -78,14 +79,14 @@ public class Master extends LinearOpMode {
 
             // Reset FCD
             if (fcdResetButton) {
-                //robot.resetZ();
+                headingOffset = robot.getZ();
             }
 
             // FCD Functions
             if (fcdEnabled) {
                 double gamepadRadians = Math.atan2(lateralControl, axialControl);
                 double gamepadHypot = Range.clip(Math.hypot(lateralControl, axialControl), 0, 1);
-                double robotRadians = -robot.getZ();
+                double robotRadians = -robot.getZ()+headingOffset;
                 double targetRadians = gamepadRadians + robotRadians;
                 lateralControl = Math.sin(targetRadians)*gamepadHypot;
                 axialControl = Math.cos(targetRadians)*gamepadHypot;
@@ -208,9 +209,10 @@ public class Master extends LinearOpMode {
 
             // Drone
             if (launchDrone) {
-                robot.droneLaunchMotor.setPower(-1);
-                if(gamepad1.y)
+                robot.droneLaunchMotor.setPower(-0.25);
+                if(launchConfirmation)
                 {
+                    robot.droneLaunchMotor.setPower(-1);
                     robot.droneServo.setPosition(.9);
                     sleep(200);
                     robot.droneServo.setPosition(.1);
