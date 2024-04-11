@@ -25,14 +25,14 @@ public class Master extends LinearOpMode {
 
         waitForStart();
 
-        // Temp Vars
+        // Temp Runtime Vars
         boolean fcdDebounce = false;
         boolean fcdEnabled = false;
         boolean placeMode = false;
         boolean placeDebounce = false;
+        double headingOffset = 0;
         boolean armHeightResetDebounce = false;
         boolean armExtendResetDebounce = false;
-        double headingOffset = 0;
 
         // Runtime
         while (opModeIsActive()) {
@@ -115,46 +115,25 @@ public class Master extends LinearOpMode {
                 placeDebounce=false;
             }
 
-            // Arm Lift Rest
-            if (robot.armSensorDown.isPressed()&&!armHeightResetDebounce) {
-                armHeightResetDebounce = true;
-                robot.armLiftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            }
-            if (!robot.armSensorDown.isPressed()&&armHeightResetDebounce) {
-                armHeightResetDebounce = false;
-            }
-
             // Arm Height
             if (placeMode) {
-                if (robot.armLiftMotor.getMode()!= DcMotor.RunMode.RUN_TO_POSITION) {
-                    robot.armLiftMotor.setTargetPosition(robot.armLiftMotor.getCurrentPosition());
-                    robot.armLiftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    robot.armLiftMotor.setPower(1);
-                }
                 double armLiftDown = 650;
                 double armLiftUp = 890;
                 double armExtendOut = 2900;
 
                 double targetPosition = armLiftDown + ((armLiftUp-armLiftDown)*(robot.armExtendMotor.getCurrentPosition()/armExtendOut));
-                robot.armLiftMotor.setTargetPosition((int) targetPosition);
+                robot.setArmLiftMotor((int) targetPosition);
             } else {
-                armHeightControl = Range.clip(armHeightControl,robot.armSensorDown.isPressed()?0:-1,1);
-                if (armHeightControl!=0) {
-                    if (robot.armLiftMotor.getMode()!= DcMotor.RunMode.RUN_WITHOUT_ENCODER) {
-                        robot.armLiftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                    }
-
-                    robot.armLiftMotor.setPower(armHeightControl*secondaryThrottle);
-                } else {
-                    if (robot.armLiftMotor.getMode()!= DcMotor.RunMode.RUN_TO_POSITION) {
-                        robot.armLiftMotor.setTargetPosition(robot.armLiftMotor.getCurrentPosition());
-                        robot.armLiftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                        robot.armLiftMotor.setPower(1);
-                    }
+                if (armHeightControl<0) {
+                    armHeightControl = armHeightControl/2;
                 }
+                robot.setArmLiftMotor(armHeightControl*secondaryThrottle);
             }
 
-            // Arm Extension Rest
+            // Arm Extension
+            robot.setArmExtendMotor(armExtendControl*secondaryThrottle);
+
+            // Arm Extension Reset
             if (robot.retractedSensor.isPressed()&&!armExtendResetDebounce) {
                 armExtendResetDebounce = true;
                 robot.armExtendMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -163,20 +142,13 @@ public class Master extends LinearOpMode {
                 armExtendResetDebounce = false;
             }
 
-            // Arm Extension
-            armExtendControl = Range.clip(armExtendControl,robot.retractedSensor.isPressed()?0:-1,robot.extendSensor.isPressed()?0:1);
-            if (armExtendControl!=0) {
-                if (robot.armExtendMotor.getMode()!= DcMotor.RunMode.RUN_WITHOUT_ENCODER) {
-                    robot.armExtendMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                }
-
-                robot.armExtendMotor.setPower(armExtendControl*secondaryThrottle);
-            } else {
-                if (robot.armExtendMotor.getMode()!= DcMotor.RunMode.RUN_TO_POSITION) {
-                    robot.armExtendMotor.setTargetPosition(robot.armExtendMotor.getCurrentPosition());
-                    robot.armExtendMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    robot.armExtendMotor.setPower(1);
-                }
+            // Arm Lift Reset
+            if (robot.armSensorDown.isPressed()&&!armHeightResetDebounce) {
+                armHeightResetDebounce = true;
+                robot.armLiftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            }
+            if (!robot.armSensorDown.isPressed()&&armHeightResetDebounce) {
+                armHeightResetDebounce = false;
             }
 
             // Claw

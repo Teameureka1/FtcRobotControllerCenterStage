@@ -307,7 +307,7 @@ public class Master extends LinearOpMode {
         robot.tweetyBird.waitWhileBusy();
 
         robot.setClawPosition(HardwareSetup.ClawPositions.SINGLE);
-        robot.setArmHeight(300);
+        robot.setArmLiftMotor(300);
         robot.setClawPosition(HardwareSetup.ClawPositions.CLOSED);
     }
 
@@ -352,7 +352,7 @@ public class Master extends LinearOpMode {
         robot.tweetyBird.waitWhileBusy();
 
         robot.setClawPosition(HardwareSetup.ClawPositions.SINGLE);
-        robot.setArmHeight(300);
+        robot.setArmLiftMotor(300);
         robot.setClawPosition(HardwareSetup.ClawPositions.CLOSED);
     }
 
@@ -434,7 +434,7 @@ public class Master extends LinearOpMode {
         //Code here
         if ((currentColor == positions.RED && currentPropPosition == propPosition.LEFT) ||
                 (currentColor == positions.BLUE && currentPropPosition == propPosition.RIGHT)) {
-            robot.setArmHeight(400);
+            robot.setArmLiftMotor(400);
             robot.tweetyBird.straightLineTo(0,30,90);
             robot.tweetyBird.waitWhileBusy();
             robot.tweetyBird.waitWhileBusy();
@@ -459,7 +459,7 @@ public class Master extends LinearOpMode {
             robot.tweetyBird.waitWhileBusy();
             robot.tweetyBird.waitWhileBusy();
         }
-        robot.setArmHeight(0);
+        robot.setArmLiftMotor(0);
 
         // Backup and turn around
         robot.tweetyBird.straightLineTo(0,52,-90);
@@ -541,8 +541,8 @@ public class Master extends LinearOpMode {
             robot.tweetyBird.waitWhileBusy();
             robot.tweetyBird.waitWhileBusy();
 
-            robot.setArmHeight(800);
-            robot.setArmExtension(1);
+            robot.setArmLiftMotor(800);
+            robot.setArmExtendMotor(1);
 
             if ((currentColor == positions.RED && currentPropPosition == propPosition.LEFT) ||
                     (currentColor == positions.BLUE && currentPropPosition == propPosition.RIGHT)) {
@@ -573,8 +573,8 @@ public class Master extends LinearOpMode {
             robot.tweetyBird.waitWhileBusy();
             robot.tweetyBird.waitWhileBusy();
 
-            robot.setArmHeight(200);
-            robot.setArmExtension(0);
+            robot.setArmLiftMotor(200);
+            robot.setArmExtendMotor(0);
 
         } else {
             double xDistance = currentDistance==positions.LONG?-90:-36;

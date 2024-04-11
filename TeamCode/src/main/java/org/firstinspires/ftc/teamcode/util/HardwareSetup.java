@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -25,12 +26,12 @@ public class HardwareSetup {
     private LinearOpMode opMode = null;
 
     // TweetyBird definition
-    public TweetyBirdProcessor tweetyBird;
+    public TweetyBirdProcessor tweetyBird = null;
 
     // Vision definitions
-    public VisionPortal visionPortal;
-    public TfodProcessor tfod;
-    public AprilTagProcessor aprilTag;
+    public VisionPortal visionPortal = null;
+    public TfodProcessor tfod = null;
+    public AprilTagProcessor aprilTag = null;
 
     // Vision variables
     private String tfodAssetName = "Combined.tflite";
@@ -45,7 +46,7 @@ public class HardwareSetup {
         CLOSED
     }
 
-    public enum TallonPositions {
+    public enum TalonPositions {
         OPEN,
         CLOSED
     }
@@ -90,30 +91,6 @@ public class HardwareSetup {
         this.opMode = opMode;
     }
 
-    public void startupSequence() {
-        // Resetting extension
-        armExtendMotor.setPower(1);
-        opMode.sleep(200);
-
-        // Retracting extension
-        armExtendMotor.setPower(-1);
-        while ((opMode.opModeInInit() || opMode.opModeIsActive()) && !retractedSensor.isPressed());
-        armExtendMotor.setPower(0);
-        //robot.motorTopArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER); TODO: Fix this once the encoder wire is added
-        setArmExtension(0);
-
-        // Resetting arm
-        armLiftMotor.setPower(-1);
-        opMode.sleep(500);
-        armLiftMotor.setPower(0);
-        armLiftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        setArmHeight(0);
-
-        // Opening Claw
-        setClawPosition(ClawPositions.OPEN);
-        setTalonPosition(TallonPositions.CLOSED);
-    }
-
     /**
      * Initializes the core functions of the robot
      */
@@ -134,6 +111,8 @@ public class HardwareSetup {
         armExtendMotor = hwMap.get(DcMotor.class, "armExtension");
         droneLaunchMotor = hwMap.get(DcMotor.class, "drone");
 
+        droneLaunchMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+
         armLiftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         armLiftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         armLiftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -150,7 +129,7 @@ public class HardwareSetup {
         tallonServo = hwMap.servo.get("talon");
 
         setClawPosition(ClawPositions.OPEN);
-        setTalonPosition(TallonPositions.CLOSED);
+        setTalonPosition(TalonPositions.CLOSED);
 
         pusherServo.setPosition(.5);
         droneServo.setPosition(.1);
@@ -169,10 +148,6 @@ public class HardwareSetup {
         rightEncoder = hwMap.get(DcMotor.class, "fl");
         middleEncoder = hwMap.get(DcMotor.class, "fr");
 
-        //leftEncoder.setDirection(DcMotorSimple.Direction.FORWARD);
-        //rightEncoder.setDirection(DcMotorSimple.Direction.REVERSE);
-        droneLaunchMotor.setDirection(DcMotorSimple.Direction.FORWARD);
-
         leftEncoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightEncoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         middleEncoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -182,14 +157,6 @@ public class HardwareSetup {
         middleEncoder.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         mainCam = hwMap.get(WebcamName.class, "Webcam 1");
-
-        /*
-        opMode.telemetry.addLine("[+] Robot is being initialized...");
-        opMode.telemetry.update();
-        startupSequence();
-        opMode.telemetry.addLine("[*] Robot has been fully initialized");
-        opMode.telemetry.update();*/
-
     }
 
     /**
@@ -290,13 +257,13 @@ public class HardwareSetup {
                 handLServo.setPosition(.3);
                 handRServo.setPosition(.45);
                 handLBServo.setPosition(.6);
-                setTalonPosition(TallonPositions.OPEN);
+                setTalonPosition(TalonPositions.OPEN);
                 break;
             case CLOSED:
                 handLServo.setPosition(.3);
                 handRServo.setPosition(.45);
                 handLBServo.setPosition(.41);
-                setTalonPosition(TallonPositions.CLOSED);
+                setTalonPosition(TalonPositions.CLOSED);
                 break;
         }
     }
@@ -305,7 +272,7 @@ public class HardwareSetup {
      * Sets the position of the talon via a enum
      * @param position target position/mode
      */
-    public void setTalonPosition(TallonPositions position) {
+    public void setTalonPosition(TalonPositions position) {
         switch(position) {
             case OPEN:
                 tallonServo.setPosition(.3);
@@ -320,7 +287,7 @@ public class HardwareSetup {
      * Sets the height of the arm with ticks
      * @param ticks target ticks
      */
-    public void setArmHeight(int ticks) {
+    public void setArmLiftMotor(int ticks) {
         armLiftMotor.setTargetPosition(ticks);
         if (armLiftMotor.getMode() != DcMotor.RunMode.RUN_TO_POSITION) {
             armLiftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -328,27 +295,46 @@ public class HardwareSetup {
         armLiftMotor.setPower(1);
     }
 
+    public void setArmLiftMotor(double power) {
+        if (power == 0) {
+            if (armLiftMotor.getMode() != DcMotor.RunMode.RUN_TO_POSITION) {
+                setArmLiftMotor(armLiftMotor.getCurrentPosition());
+            }
+        } else {
+            if (armLiftMotor.getMode() != DcMotor.RunMode.RUN_WITHOUT_ENCODER) {
+                armLiftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            }
+
+            armLiftMotor.setPower(power);
+        }
+    }
+
     /**
      * Sets the extension of the arm with ticks
      * @param ticks target ticks
      */
-    public void setArmExtension(int ticks) {
+    public void setArmExtendMotor(int ticks) {
         armExtendMotor.setTargetPosition(ticks);
         if (armExtendMotor.getMode() != DcMotor.RunMode.RUN_TO_POSITION) {
             armExtendMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         }
         armExtendMotor.setPower(1);
+    }
 
-        /*
-        if (ticks>0) {
-            armExtendMotor.setPower(1);
-            opMode.sleep(400);
-            armExtendMotor.setPower(0);
+    public void setArmExtendMotor(double power) {
+        power = Range.clip(power,retractedSensor.isPressed()?0:-1,extendSensor.isPressed()?0:1);
+
+        if (power == 0) {
+            if (armExtendMotor.getMode() != DcMotor.RunMode.RUN_TO_POSITION) {
+                setArmExtendMotor(armExtendMotor.getCurrentPosition());
+            }
         } else {
-            armExtendMotor.setPower(-1);
-            while ((opMode.opModeIsActive() || opMode.opModeInInit()) && !armSensorExtended.isPressed());
-            armExtendMotor.setPower(0);
-        }*/
+            if (armExtendMotor.getMode() != DcMotor.RunMode.RUN_WITHOUT_ENCODER) {
+                armExtendMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            }
+
+            armExtendMotor.setPower(power);
+        }
     }
 
     /**
