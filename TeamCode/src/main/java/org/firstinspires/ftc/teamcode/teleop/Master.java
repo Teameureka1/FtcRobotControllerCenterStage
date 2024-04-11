@@ -43,7 +43,7 @@ public class Master extends LinearOpMode {
             double throttleControl = Range.clip(gamepad1.right_trigger,0.4,1);
             boolean legacyThrottle = gamepad1.right_bumper;
 
-            double secondaryThrottle = Range.clip(gamepad2.right_trigger,0.4,1);
+            double secondaryThrottle = 1.0-Range.clip(gamepad2.right_trigger,0,0.6);
 
             // FCD Controls
             boolean fcdToggleButton = gamepad1.back;
