@@ -21,7 +21,7 @@ public class Master extends LinearOpMode {
         robot.initGeneral();
         robot.initTweetyBird();
         //robot.initVision();
-        robot.TweetyBird.disengage();
+        robot.tweetyBird.disengage();
 
         waitForStart();
 
@@ -236,5 +236,7 @@ public class Master extends LinearOpMode {
             telemetry.addData("Place Mode Enabled",placeMode);
             telemetry.update();
         }
+
+        robot.tweetyBird.stop();
     }
 }

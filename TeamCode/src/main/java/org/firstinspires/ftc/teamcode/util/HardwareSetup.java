@@ -25,7 +25,7 @@ public class HardwareSetup {
     private LinearOpMode opMode = null;
 
     // TweetyBird definition
-    public TweetyBirdProcessor TweetyBird;
+    public TweetyBirdProcessor tweetyBird;
 
     // Vision definitions
     public VisionPortal visionPortal;
@@ -223,7 +223,7 @@ public class HardwareSetup {
      * Initializes TweetyBird
      */
     public void initTweetyBird() {
-        TweetyBird = new TweetyBirdProcessor.Builder()
+        tweetyBird = new TweetyBirdProcessor.Builder()
                 //Setting opmode
                 .setOpMode(opMode)
 
@@ -356,7 +356,7 @@ public class HardwareSetup {
      * @return rotation radians
      */
     public double getZ() {
-        return TweetyBird.getZ();
+        return tweetyBird.getZ();
     }
 
     public void resetZ() {

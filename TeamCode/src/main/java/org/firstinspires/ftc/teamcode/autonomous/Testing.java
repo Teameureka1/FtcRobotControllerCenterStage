@@ -21,10 +21,10 @@ public class Testing extends LinearOpMode {
         robot.initGeneral();
         robot.initTweetyBird();
         robot.initVision();
-        robot.TweetyBird.disengage();
+        robot.tweetyBird.disengage();
 
         waitForStart();
-        robot.TweetyBird.engage();
+        robot.tweetyBird.engage();
 
         lineAgainstApriltag(7,-4,0,0);
 
@@ -32,17 +32,19 @@ public class Testing extends LinearOpMode {
 
         }
 
-        robot.TweetyBird.stop();
+        robot.tweetyBird.stop();
     }
 
     public void lineAgainstApriltag(int id, double relX, double relY, double relZ) {
         List<AprilTagDetection> currentDetections = robot.aprilTag.getDetections();
 
         telemetry.addData("Detections",currentDetections.size());
+        telemetry.addData("State",robot.visionPortal.getCameraState());
+        telemetry.addData("FPS",robot.visionPortal.getFps());
         telemetry.update();
 
         for ( AprilTagDetection detection : currentDetections ) {
-            if (true) {
+            if (detection.id == id) {
                 double distance = detection.ftcPose.y;
                 double offset = detection.ftcPose.x;
                 double theta = Math.toRadians(detection.ftcPose.yaw);
@@ -55,10 +57,7 @@ public class Testing extends LinearOpMode {
                 double targetY = relY + camY;
                 double targetZ = relZ - camZ;
 
-                robot.TweetyBird.adjustTo(targetX,0,Math.toDegrees(targetZ));
-
-                telemetry.addData("HAPPY","test");
-                telemetry.update();
+                robot.tweetyBird.adjustTo(targetX,0,Math.toDegrees(targetZ));
             }
         }
 

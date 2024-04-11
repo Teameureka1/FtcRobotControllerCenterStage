@@ -17,19 +17,19 @@ public class TweetyDebug extends LinearOpMode {
         robot.initGeneral();
         robot.initTweetyBird();
 
-        robot.TweetyBird.disengage();
+        robot.tweetyBird.disengage();
 
         //Waiting for start
         waitForStart();
-        robot.TweetyBird.engage();
+        robot.tweetyBird.engage();
 
         while (opModeIsActive()) {
-            telemetry.addData("X",robot.TweetyBird.getX());
-            telemetry.addData("Y",robot.TweetyBird.getY());
-            telemetry.addData("Z",robot.TweetyBird.getZ());
+            telemetry.addData("X",robot.tweetyBird.getX());
+            telemetry.addData("Y",robot.tweetyBird.getY());
+            telemetry.addData("Z",robot.tweetyBird.getZ());
             telemetry.update();
         }
 
-        robot.TweetyBird.stop();
+        robot.tweetyBird.stop();
     }
 }
