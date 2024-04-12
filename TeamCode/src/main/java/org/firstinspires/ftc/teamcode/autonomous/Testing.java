@@ -26,8 +26,6 @@ public class Testing extends LinearOpMode {
         waitForStart();
         robot.tweetyBird.engage();
 
-        robot.lineAgainstApriltag(5,-4,0,0);
-
         while (opModeIsActive()) {
 
         }

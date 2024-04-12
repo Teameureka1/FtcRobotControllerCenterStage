@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.util;
 
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -367,6 +368,8 @@ public class HardwareSetup {
         opMode.telemetry.addData("Detections",currentDetections.size());
         opMode.telemetry.update();
 
+        TelemetryPacket packet = new TelemetryPacket();
+
         for ( AprilTagDetection detection : currentDetections ) {
             if (detection.id == id) {
                 double distance = detection.ftcPose.y;
@@ -381,10 +384,13 @@ public class HardwareSetup {
                 double targetY = relY + camY;
                 double targetZ = relZ - camZ;
 
-                tweetyBird.adjustTo(targetX,0,Math.toDegrees(targetZ));
+                //tweetyBird.adjustTo(targetX,targetY,Math.toDegrees(targetZ));
+
+                packet.fieldOverlay()
+                        .fillCircle(targetX,targetY,2);
             }
         }
 
-
+        dashboard.sendTelemetryPacket(packet);
     }
 }
