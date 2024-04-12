@@ -362,6 +362,15 @@ public class HardwareSetup {
 
     }
 
+    public void launchDrone() {
+        droneLaunchMotor.setPower(-0.75);
+        opMode.sleep(750);
+        droneServo.setPosition(.9);
+        opMode.sleep(500);
+        droneServo.setPosition(.1);
+        droneLaunchMotor.setPower(0);
+    }
+
     public void lineAgainstApriltag(int id, double relX, double relY, double relZ) {
         List<AprilTagDetection> currentDetections = aprilTag.getDetections();
 

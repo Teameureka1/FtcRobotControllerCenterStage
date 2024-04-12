@@ -230,12 +230,7 @@ public class Master extends LinearOpMode {
             }
             if (launchConfirmation&&droneDebounce) {
                 droneDebounce = false;
-                robot.droneLaunchMotor.setPower(-0.75);
-                sleep(750);
-                robot.droneServo.setPosition(.9);
-                sleep(500);
-                robot.droneServo.setPosition(.1);
-                robot.droneLaunchMotor.setPower(0);
+                robot.launchDrone();
             }
             if (!launchDrone&&droneDebounce) {
                 droneDebounce = false;
