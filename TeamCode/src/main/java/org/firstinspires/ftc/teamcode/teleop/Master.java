@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -20,8 +21,12 @@ public class Master extends LinearOpMode {
         robot = new HardwareSetup(this);
         robot.initGeneral();
         robot.initTweetyBird();
-        //robot.initVision();
         robot.tweetyBird.disengage();
+
+        /*
+        robot.initVision();
+        robot.visionPortal.setProcessorEnabled(robot.tfod,false);
+        robot.visionPortal.setProcessorEnabled(robot.aprilTag,true);*/
 
         waitForStart();
 
@@ -30,12 +35,16 @@ public class Master extends LinearOpMode {
         boolean fcdEnabled = false;
         boolean placeMode = false;
         boolean placeDebounce = false;
+        boolean droneDebounce = false;
         double headingOffset = 0;
         boolean armHeightResetDebounce = false;
         boolean armExtendResetDebounce = false;
 
         // Runtime
         while (opModeIsActive()) {
+            // Creating a telemetry packet
+            TelemetryPacket packet = new TelemetryPacket();
+
             // Basic Driving Controls
             double axialControl = -gamepad1.left_stick_y;
             double lateralControl = gamepad1.left_stick_x;
@@ -77,10 +86,16 @@ public class Master extends LinearOpMode {
                 fcdDebounce=false;
             }
 
+            packet.put("Toggle Field Centric Driving Button",fcdToggleButton);
+            packet.put("Field Centric Driving Enabled",fcdEnabled);
+            packet.put("Field Centric Driving Debounce",fcdDebounce);
+
             // Reset FCD
             if (fcdResetButton) {
                 headingOffset = robot.getZ();
             }
+
+            packet.put("Reset Yaw Button",fcdResetButton);
 
             // FCD Functions
             if (fcdEnabled) {
@@ -91,6 +106,11 @@ public class Master extends LinearOpMode {
                 lateralControl = Math.sin(targetRadians)*gamepadHypot;
                 axialControl = Math.cos(targetRadians)*gamepadHypot;
             }
+
+            packet.put("Yaw",robot.getZ());
+            packet.put("Yaw Offset",headingOffset);
+            packet.put("Axial",robot.tweetyBird.getY());
+            packet.put("Lateral",robot.tweetyBird.getX());
 
             // Bindings for legacy throttle
             if (legacyThrottle) {
@@ -106,6 +126,11 @@ public class Master extends LinearOpMode {
             // Drivetrain Movement
             robot.movementPower(axialControl,lateralControl,yawControl,throttleControl);
 
+            packet.put("Axial Control",axialControl);
+            packet.put("Lateral Control",lateralControl);
+            packet.put("Yaw Control",yawControl);
+            packet.put("Primary Throttle Control",throttleControl);
+
             // Arm Mode Selector
             if (armModeControl&&!placeDebounce) {
                 placeDebounce=true;
@@ -114,6 +139,10 @@ public class Master extends LinearOpMode {
             if (!armModeControl&&placeDebounce) {
                 placeDebounce=false;
             }
+
+            packet.put("Place Mode Toggle Button",armModeControl);
+            packet.put("Place Mode Enabled",placeMode);
+            packet.put("Place Mode Debounce",placeDebounce);
 
             // Arm Height
             if (placeMode) {
@@ -130,8 +159,13 @@ public class Master extends LinearOpMode {
                 robot.setArmLiftMotor(armHeightControl*secondaryThrottle);
             }
 
+            packet.put("Arm Lift Control",armHeightControl);
+            packet.put("Secondary Throttle Control",secondaryThrottle);
+
             // Arm Extension
             robot.setArmExtendMotor(armExtendControl*secondaryThrottle);
+
+            packet.put("Arm Extention Control",armExtendControl);
 
             // Arm Extension Reset
             if (robot.retractedSensor.isPressed()&&!armExtendResetDebounce) {
@@ -142,6 +176,9 @@ public class Master extends LinearOpMode {
                 armExtendResetDebounce = false;
             }
 
+            packet.put("Arm Retracted Sensor",robot.retractedSensor.isPressed());
+            packet.put("Arm Extension Reset Debounce",armExtendResetDebounce);
+
             // Arm Lift Reset
             if (robot.armSensorDown.isPressed()&&!armHeightResetDebounce) {
                 armHeightResetDebounce = true;
@@ -150,6 +187,9 @@ public class Master extends LinearOpMode {
             if (!robot.armSensorDown.isPressed()&&armHeightResetDebounce) {
                 armHeightResetDebounce = false;
             }
+
+            packet.put("Arm Lowered Sensor",robot.armSensorDown.isPressed());
+            packet.put("Arm Lift Reset Debounce",armHeightResetDebounce);
 
             // Claw
             if(open) {
@@ -179,19 +219,32 @@ public class Master extends LinearOpMode {
                 robot.handLBServo.setPosition(.43);
             }
 
+            packet.put("Claw Open Button",open);
+            packet.put("Claw Close Button",closed);
+            packet.put("Claw Partial Open Button",partialOpen);
+            packet.put("Claw Talon Open Button",talonOpen);
+
             // Drone
-            if (launchDrone) {
-                robot.droneLaunchMotor.setPower(-0.25);
-                if(launchConfirmation)
-                {
-                    robot.droneLaunchMotor.setPower(-1);
-                    robot.droneServo.setPosition(.9);
-                    sleep(200);
-                    robot.droneServo.setPosition(.1);
-                }
-            } else {
+            if (launchDrone&&!droneDebounce) {
+                droneDebounce = true;
+            }
+            if (launchConfirmation&&droneDebounce) {
+                droneDebounce = false;
+                robot.droneLaunchMotor.setPower(-0.75);
+                sleep(750);
+                robot.droneServo.setPosition(.9);
+                sleep(500);
+                robot.droneServo.setPosition(.1);
                 robot.droneLaunchMotor.setPower(0);
             }
+            if (!launchDrone&&droneDebounce) {
+                droneDebounce = false;
+                robot.droneLaunchMotor.setPower(0);
+            }
+
+            packet.put("Drone Button 1",launchDrone);
+            packet.put("Drone Button 2",launchConfirmation);
+            packet.put("Drone Debounce",droneDebounce);
 
             // Pusher
             if(pusherUp) {
@@ -200,6 +253,9 @@ public class Master extends LinearOpMode {
                 robot.pusherServo.setPosition(.5);
             }
 
+            packet.put("Lift Pusher Button",pusherUp);
+            packet.put("Lower Pusher Button",pusherDown);
+
             // Telemetry
             telemetry.addLine("[*] General Section");
             telemetry.addLine("\n[*] Driver 1 Section");
@@ -207,6 +263,8 @@ public class Master extends LinearOpMode {
             telemetry.addLine("\n[*] Driver 2 Section");
             telemetry.addData("Place Mode Enabled",placeMode);
             telemetry.update();
+
+            robot.dashboard.sendTelemetryPacket(packet);
         }
 
         robot.tweetyBird.stop();

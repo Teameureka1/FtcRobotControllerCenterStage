@@ -401,7 +401,7 @@ public class Master extends LinearOpMode {
             robot.tweetyBird.waitWhileBusy();*/
 
             //TODO Pixel
-            lineAgainstApriltag(8,-4,0,0);
+            robot.lineAgainstApriltag(8,-4,0,0);
             robot.tweetyBird.waitWhileBusy();
             robot.tweetyBird.waitWhileBusy();
             robot.tweetyBird.waitWhileBusy();
@@ -541,8 +541,8 @@ public class Master extends LinearOpMode {
             robot.tweetyBird.waitWhileBusy();
             robot.tweetyBird.waitWhileBusy();
 
-            robot.setArmLiftMotor(800);
-            robot.setArmExtendMotor(1);
+            robot.setArmLiftMotor(850);
+            robot.setArmExtendMotor(2900);
 
             if ((currentColor == positions.RED && currentPropPosition == propPosition.LEFT) ||
                     (currentColor == positions.BLUE && currentPropPosition == propPosition.RIGHT)) {
@@ -609,33 +609,6 @@ public class Master extends LinearOpMode {
                 robot.setClawPosition(HardwareSetup.ClawPositions.OPEN);
             }
         }
-
-    }
-
-    public void lineAgainstApriltag(int id, double relX, double relY, double relZ) {
-        List<AprilTagDetection> currentDetections = robot.aprilTag.getDetections();
-
-        telemetry.addData("Detections",currentDetections.size());
-        telemetry.update();
-
-        for ( AprilTagDetection detection : currentDetections ) {
-            if (detection.id == id) {
-                double distance = detection.ftcPose.y;
-                double offset = detection.ftcPose.x;
-                double theta = Math.toRadians(detection.ftcPose.yaw);
-
-                double camX = ( (distance * Math.sin(theta) ) + (offset * Math.sin(theta + 90)) );
-                double camY = ( (distance * Math.cos(theta) ) + (offset * Math.cos(theta  + 90)) );
-                double camZ = theta;
-
-                double targetX = relX + camX;
-                double targetY = relY + camY;
-                double targetZ = relZ - camZ;
-
-                robot.tweetyBird.adjustTo(targetX,0,Math.toDegrees(targetZ));
-            }
-        }
-
 
     }
 }

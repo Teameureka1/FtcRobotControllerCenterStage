@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.util;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -14,9 +15,12 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.vision.VisionPortal;
+import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
+
+import java.util.List;
 
 import dev.narlyx.ftc.tweetybird.TweetyBirdProcessor;
 
@@ -27,6 +31,9 @@ public class HardwareSetup {
 
     // TweetyBird definition
     public TweetyBirdProcessor tweetyBird = null;
+
+    // Dashboard definition
+    public FtcDashboard dashboard = FtcDashboard.getInstance();
 
     // Vision definitions
     public VisionPortal visionPortal = null;
@@ -47,6 +54,11 @@ public class HardwareSetup {
     }
 
     public enum TalonPositions {
+        OPEN,
+        CLOSED
+    }
+
+    public enum PusherPositions {
         OPEN,
         CLOSED
     }
@@ -346,6 +358,33 @@ public class HardwareSetup {
     }
 
     public void resetZ() {
+
+    }
+
+    public void lineAgainstApriltag(int id, double relX, double relY, double relZ) {
+        List<AprilTagDetection> currentDetections = aprilTag.getDetections();
+
+        opMode.telemetry.addData("Detections",currentDetections.size());
+        opMode.telemetry.update();
+
+        for ( AprilTagDetection detection : currentDetections ) {
+            if (detection.id == id) {
+                double distance = detection.ftcPose.y;
+                double offset = detection.ftcPose.x;
+                double theta = Math.toRadians(detection.ftcPose.yaw);
+
+                double camX = ( (distance * Math.sin(theta) ) + (offset * Math.sin(theta + 90)) );
+                double camY = ( (distance * Math.cos(theta) ) + (offset * Math.cos(theta  + 90)) );
+                double camZ = theta;
+
+                double targetX = relX + camX;
+                double targetY = relY + camY;
+                double targetZ = relZ - camZ;
+
+                tweetyBird.adjustTo(targetX,0,Math.toDegrees(targetZ));
+            }
+        }
+
 
     }
 }
