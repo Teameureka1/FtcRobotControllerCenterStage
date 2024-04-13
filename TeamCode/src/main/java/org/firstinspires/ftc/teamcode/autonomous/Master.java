@@ -61,6 +61,7 @@ public class Master extends LinearOpMode {
     parkPositions parkPosition;
     propPosition currentPropPosition = propPosition.NULL;
     double startDelay = 0;
+    double purpleDelay = 0;
 
 
     /**
@@ -86,6 +87,7 @@ public class Master extends LinearOpMode {
         String[] pixelPlacementOptions = { "Backdrop", "Backstage" };
         String[] parkOptions = { "Center", "Corner" };
         String[] waitOptions = { "0", "1", "2", "3", "5", "7", "10"};
+        String[] purpleWaitOptions = { "0", "1", "2", "3", "5", "7", "10"};
 
         // Asking
         String startPosSelect = startPositionOptions[0];
@@ -106,6 +108,9 @@ public class Master extends LinearOpMode {
 
         String waitTimeSelect = "0";
         waitTimeSelect = telemetrySelector.simpleSelector("How long should the start be deleyed",waitOptions);
+
+        String purpleWaitTimeSelect = "0";
+        purpleWaitTimeSelect = telemetrySelector.simpleSelector("How long should the delay after placing purple be",purpleWaitOptions);
 
         // Setting global variables
         if (startPosSelect.equals(startPositionOptions[0])) {
@@ -151,6 +156,7 @@ public class Master extends LinearOpMode {
         }
 
         startDelay = Double.parseDouble(waitTimeSelect);
+        purpleDelay = Double.parseDouble(purpleWaitTimeSelect);
 
         // Startup Sequence
         telemetry.addLine("[+] Startup Sequence is Running");
@@ -174,7 +180,6 @@ public class Master extends LinearOpMode {
             telemetry.addLine("[*] Waiting... '"+(startDelay-waitTimer.seconds())+"' seconds remaining...");
             telemetry.update();
         }
-        waitTimer = null;
 
 
         // Starting Tweetybird
@@ -193,6 +198,13 @@ public class Master extends LinearOpMode {
                 currentColor == positions.RED && currentDistance == positions.LONG) {
             placePropTrussRight();
         }
+
+        waitTimer.reset();
+        while (waitTimer.seconds()<purpleDelay) {
+            telemetry.addLine("[*] Waiting... '"+(purpleDelay-waitTimer.seconds())+"' seconds remaining...");
+            telemetry.update();
+        }
+        waitTimer = null;
 
         /**
          * Main Action

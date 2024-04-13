@@ -144,8 +144,7 @@ public class HardwareSetup {
         setClawPosition(ClawPositions.OPEN);
         setTalonPosition(TalonPositions.CLOSED);
 
-        pusherServo.setPosition(.5);
-        droneServo.setPosition(.1);
+        setPusherServo(PusherPositions.OPEN);
 
         extendSensor = hwMap.touchSensor.get("magOut");
         retractedSensor = hwMap.touchSensor.get("magIn");
@@ -361,6 +360,18 @@ public class HardwareSetup {
     public void resetZ() {
 
     }
+
+    public void setPusherServo(PusherPositions position) {
+        switch (position) {
+            case OPEN:
+                pusherServo.setPosition(.7);
+                break;
+            case CLOSED:
+                pusherServo.setPosition(.5);
+                break;
+        }
+    }
+
 
     public void launchDrone() {
         droneLaunchMotor.setPower(-0.75);

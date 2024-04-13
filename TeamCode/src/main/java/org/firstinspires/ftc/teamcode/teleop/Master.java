@@ -243,9 +243,9 @@ public class Master extends LinearOpMode {
 
             // Pusher
             if(pusherUp) {
-                robot.pusherServo.setPosition(.7);
+                robot.setPusherServo(HardwareSetup.PusherPositions.OPEN);
             } else if (pusherDown) {
-                robot.pusherServo.setPosition(.5);
+                robot.setPusherServo(HardwareSetup.PusherPositions.CLOSED);
             }
 
             packet.put("Lift Pusher Button",pusherUp);
